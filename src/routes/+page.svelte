@@ -4,11 +4,13 @@
   // import BadgeCheck from "$lib/BadgeCheck.svelte";
 </script>
 
-<h1>Svelte Motion Icons for Svelte 5</h1>
+
 <div class="container">
-<AtSign size={50}/>
-<BadgeCheck size={50}/>
-<Bell size={50} swingCount={2}/>
+  <h1>Svelte Motion Icons for Svelte 5</h1>
+  <h2>Click to see Svelte Motion Icons</h2>
+  <AtSign size={50} color="purple"/>
+  <BadgeCheck size={50} color="green"/>
+  <Bell size={50} swingCount={2} color="red"/>
 </div>
 
 <style>
@@ -17,7 +19,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
     min-height: 100vh;
   }
 </style>
