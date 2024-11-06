@@ -1,104 +1,59 @@
 <script lang="ts">
-  import { ArrowLeft, AtSign, BadgeCheck, Bell, AcademicCap, Wrapper, ArrowDownLeft, Animate, ArrowBigUp, ArrowDownLeft2, ArrowDownOnSquare } from "$lib";
-  import { draw } from 'svelte/transition';
+  import {
+    removeHyphensAndCapitalize,
+    HomeCards,
+    SupportBanner,
+    TechInfo,
+    BellActiveAltOutline,
+    InfoCircleOutline,
+    cards,
+    info,
+    type CardType
+  } from 'runes-webkit';
+  const brand = {
+    title: `${removeHyphensAndCapitalize(__NAME__)}`,
+    description: `${__DESCRIPTION__}`,
+    Icon: BellActiveAltOutline,
+    icon_class: 'text-blue-500'
+  };
 
+  const filteredCards = [brand, ...cards];
+
+  // const originalSource = {
+  //   title: 'Original source',
+  //   description: 'original',
+  //   Icon: InfoCircleOutline,
+  //   href: 'original url',
+  //   icon_class: 'text-orange-500'
+  // };
+  const license = {
+    title: 'License',
+    description: 'Released under the MIT License.',
+    Icon: InfoCircleOutline,
+    href: `https://github.com/shinokada/${__NAME__}/blob/main/LICENSE`,
+    icon_class: 'text-lime-500'
+  };
+
+  const newInfo = [license, ...info];
+  /*eslint no-undef: "off"*/
+  const pkg = {
+    pkgName: __NAME__,
+    pkgVersion: __VERSION__,
+    repoUrl: __GITHUBURL__,
+    runaticsVersion: __RUNATICS_VERSION__,
+    runesMetaTagsVersion: __RUNES_METATAGS_VERSION__,
+    svelteVersion: __SVELTE_VERSION__,
+    svelteKitVersion: __SVELTEKIT_VERSION__,
+    svelte5uilib: __SVELTE_5_UI_LIB_VERSION__,
+    svelteRuneHighlight: __SVELTE_RUNE_HIGHLIGHT_VERSION__,
+    viteVersion: __VITE_VERSION__
+  };
 </script>
 
-<div class="container">
-  <h1>Svelte Animate for Svelte 5</h1>
-  <h2>Click to see animation</h2>
-  <AtSign size={50} color="purple"/>
-  <BadgeCheck size={50} color="green"/>
-  <Bell size={50} swingCount={2} color="red"/>
-  <AcademicCap size={50} color="blue"/>
-  <Wrapper event="onclick">
-    <ArrowDownOnSquare size={50} color="green"
-      params={{
-        duration: 500,
-        delay: 300
-      }}
-     
-    />
-  </Wrapper>
-  <Wrapper event="onclick">
-    <ArrowDownLeft2 size={50} color="skyblue"
-      params={{
-        duration: 500,
-        delay: 300
-      }}
-      params2={{
-        duration: 500,
-        delay: 800
-      }}
-    />
-  </Wrapper>
-  <Wrapper event="onclick">
-    <ArrowDownLeft size={50} color="orange"
-      params={{
-        duration: 500,
-        delay: 300
-      }}
-    />
-  </Wrapper>
-  <Animate 
-    animation="backInLeft" 
-    trigger="click" 
-    duration="0.5s"
-  >
-    <ArrowBigUp 
-    size="50"
-    color="#FF0000"
-    ariaLabel="Upward arrow"/>
-  </Animate>
-
-  <Animate 
-  animation="zoomIn" 
-  trigger="click" 
-  duration="0.5s"
->
-   <h1>Hello World!</h1>
-  </Animate>
-
-  <Animate
-    animation="zoomOutRight" 
-    trigger="click" 
-    duration="0.5s"
-    hideAfter={true}
-  >
-   <div style="height: 200px; width: 200px; background: #0055f0"></div>
-  </Animate>
-
-  <div class="animation-container">
-  
-      <Animate 
-      animation="backInUp" 
-      trigger="click" 
-      duration="0.5s"
-    >
-      <ArrowBigUp 
-      size="50"
-      color="#FF0000"
-      ariaLabel="Upward arrow"/>
-    </Animate>
-  </div>
-
+<div class="relative mx-auto mt-8 h-full max-w-7xl overflow-y-auto px-8 pb-20">
+  <h1 class="my-8 flex justify-center">Svelte Animate</h1>
+  <HomeCards cards={filteredCards as CardType[]} />
+  <h2 class="my-8 flex justify-center">Info</h2>
+  <HomeCards cards={newInfo as CardType[]} />
+  <TechInfo {...pkg} />
 </div>
-
-<style>
-  .container {
-  margin: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: center; */
-    min-height: 100vh;
-  }
-
-  .animation-container {
-    position: relative;
-    width: 300px;
-    height: 200px;
-    overflow: hidden;
-    background: #f0f0f0;
-  }
-</style>

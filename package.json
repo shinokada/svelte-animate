@@ -1,6 +1,19 @@
 {
-	"name": "svelte-icons",
+	"name": "svelte-animate",
 	"version": "0.0.1",
+	"description": "Svelte animation and icons",
+  "license": "MIT",
+	"homepage": "https://svelte-animate.codewithshin.com/",
+	"author": {
+    "name": "Shinichi Okada",
+    "email": "connect@codewithshin.com",
+    "url": "https://codewithshin.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shinokada/svelte-animate"
+  },
+	"bugs": "https://github.com/shinokada/svelte-animate/issues",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
@@ -26,12 +39,6 @@
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
-		}
-	},
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
@@ -58,6 +65,7 @@
 		"runes-meta-tags": "^0.4.0",
 		"runes-webkit": "^0.9.38",
 		"svelte": "^5.1.9",
+		"svelte-5-ui-lib": "^0.10.0",
 		"svelte-check": "^4.0.5",
 		"svelte-lib-helpers": "^0.4.16",
 		"svelte-rune-highlight": "^0.5.13",
@@ -70,5 +78,11 @@
 	},
 	"dependencies": {
 		"animate.css": "^4.1.1"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
 	}
 }
