@@ -1,61 +1,184 @@
 <script lang="ts">
-  import { draw } from 'svelte/transition';
-   import { getContext } from 'svelte';
-  import type { Props } from './types.ts'
-  
-  let {
-    size = 24,
-    role = 'img',
-    color = 'currentColor',
-    strokeWidth = 1.5,
-    title,
-    desc,
-    ariaLabel =  "backward" ,
-    ...restProps 
-  }: Props = $props();
+	import { draw } from 'svelte/transition';
+	import type { DrawParams } from 'svelte/transition';
+	import type { SVGAttributes } from 'svelte/elements';
 
-  const getTransitionParams = getContext<() => { 
-    params: any; 
-    shouldAnimate: boolean;
-    visible: boolean;
-  }>('transition-params');
+	type TitleType = {
+		id?: string;
+		title?: string;
+	};
+	type DescType = {
+		id?: string;
+		desc?: string;
+	};
 
-  const { params, shouldAnimate, visible } = $derived(getTransitionParams());
-  
-  let ariaDescribedby = `${title?.id || ''} ${desc?.id || ''}`;
-  const hasDescription = $derived(!!(title?.id || desc?.id));
+	interface Props extends SVGAttributes<SVGElement> {
+		pauseDuration?: number;
+		event?: 'onmouseenter' | 'onclick';
+		transitionParams?: DrawParams;
+		title?: TitleType;
+		desc?: DescType;
+		ariaLabel?: string;
+		size?: number;
+		role?: string;
+		color?: string;
+		strokeWidth?: number;
+	}
 
-  // Set CSS variable for the placeholder size
-  $effect(() => {
-    document.documentElement.style.setProperty('--size', `${size}px`);
-  });
+	let {
+		pauseDuration = 300,
+		event = 'onmouseenter',
+		transitionParams = {
+			duration: 800,
+			delay: 0
+		},
+		size = 24,
+		role = 'img',
+		color = 'currentColor',
+		strokeWidth = 1.5,
+		title,
+		desc,
+		ariaLabel = 'archive box',
+		...restProps
+	}: Props = $props();
+
+	const getDuration = (params?: DrawParams): number => {
+		if (!params?.duration) return 0;
+		if (typeof params.duration === 'function') {
+			return params.duration(0);
+		}
+		return params.duration;
+	};
+
+	let visible = $state(true);
+	let shouldAnimate = $state(true);
+	let totalDuration = $state(getDuration(transitionParams) + pauseDuration);
+
+	let ariaDescribedby = `${title?.id || ''} ${desc?.id || ''}`;
+	const hasDescription = $derived(!!(title?.id || desc?.id));
+
+	const handleEvent = () => {
+		if (!visible) return;
+		console.log('Hiding SVG');
+		visible = false;
+		setTimeout(() => {
+			console.log('Showing SVG with animation');
+			shouldAnimate = true;
+			visible = true;
+		}, totalDuration);
+	};
+
+	$effect(() => {
+		visible = true;
+		shouldAnimate = true;
+	});
+
+	// Set CSS variable for the placeholder size
+	$effect(() => {
+		document.documentElement.style.setProperty('--size', `${size}px`);
+	});
 </script>
 
-{#if visible}
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  {...restProps}
-  {role}
-  width={size}
-  height={size}
-  fill="none"
-  aria-label={ariaLabel}
-  aria-describedby={hasDescription ? ariaDescribedby : undefined}
-  viewBox="0 0 24 24"
-  stroke-width={strokeWidth}
->
-  {#if title?.id && title.title}
-    <title id="{title.id}">{title.title}</title>
-  {/if}
-  {#if desc?.id && desc.desc}
-    <desc id="{desc.id}">{desc.desc}</desc>
-  {/if}
-    
-   <path d="M21 16.8115C21 17.6753 20.0668 18.2169 19.3169 17.7883L12.2094 13.7269C11.4536 13.295 11.4536 12.2052 12.2094 11.7733L19.3169 7.7119C20.0668 7.28334 21 7.82487 21 8.68867V16.8115Z" stroke={color} stroke-width={strokeWidth} 
-     transition:draw={shouldAnimate ? params : undefined} stroke-linecap="round" stroke-linejoin="round"/> <path d="M11.25 16.8115C11.25 17.6753 10.3168 18.2169 9.56685 17.7883L2.45936 13.7269C1.70357 13.295 1.70357 12.2052 2.45936 11.7733L9.56685 7.7119C10.3168 7.28334 11.25 7.82487 11.25 8.68867L11.25 16.8115Z" stroke={color} stroke-width={strokeWidth} 
-     transition:draw={shouldAnimate ? params : undefined} stroke-linecap="round" stroke-linejoin="round"/>  
-  
-</svg>
+{#if event === 'onmouseenter'}
+	<button onmouseenter={handleEvent}>
+		<div class="placeholder">
+			{#if visible}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					{...restProps}
+					{role}
+					width={size}
+					height={size}
+					fill="none"
+					aria-label={ariaLabel}
+					aria-describedby={hasDescription ? ariaDescribedby : undefined}
+					viewBox="0 0 24 24"
+					stroke-width={strokeWidth}
+				>
+					{#if title?.id && title.title}
+						<title id={title.id}>{title.title}</title>
+					{/if}
+					{#if desc?.id && desc.desc}
+						<desc id={desc.id}>{desc.desc}</desc>
+					{/if}
+
+					<path
+						d="M21 16.8115C21 17.6753 20.0668 18.2169 19.3169 17.7883L12.2094 13.7269C11.4536 13.295 11.4536 12.2052 12.2094 11.7733L19.3169 7.7119C20.0668 7.28334 21 7.82487 21 8.68867V16.8115Z"
+						stroke={color}
+						stroke-width={strokeWidth}
+						transition:draw={shouldAnimate ? transitionParams : undefined}
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+					<path
+						d="M11.25 16.8115C11.25 17.6753 10.3168 18.2169 9.56685 17.7883L2.45936 13.7269C1.70357 13.295 1.70357 12.2052 2.45936 11.7733L9.56685 7.7119C10.3168 7.28334 11.25 7.82487 11.25 8.68867L11.25 16.8115Z"
+						stroke={color}
+						stroke-width={strokeWidth}
+						transition:draw={shouldAnimate ? transitionParams : undefined}
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			{/if}
+		</div>
+	</button>
+{:else}
+	<button onclick={handleEvent}>
+		<div class="placeholder">
+			{#if visible}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					{...restProps}
+					{role}
+					width={size}
+					height={size}
+					fill="none"
+					aria-label={ariaLabel}
+					aria-describedby={hasDescription ? ariaDescribedby : undefined}
+					viewBox="0 0 24 24"
+					stroke-width={strokeWidth}
+				>
+					{#if title?.id && title.title}
+						<title id={title.id}>{title.title}</title>
+					{/if}
+					{#if desc?.id && desc.desc}
+						<desc id={desc.id}>{desc.desc}</desc>
+					{/if}
+
+					<path
+						d="M21 16.8115C21 17.6753 20.0668 18.2169 19.3169 17.7883L12.2094 13.7269C11.4536 13.295 11.4536 12.2052 12.2094 11.7733L19.3169 7.7119C20.0668 7.28334 21 7.82487 21 8.68867V16.8115Z"
+						stroke={color}
+						stroke-width={strokeWidth}
+						transition:draw={shouldAnimate ? transitionParams : undefined}
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+					<path
+						d="M11.25 16.8115C11.25 17.6753 10.3168 18.2169 9.56685 17.7883L2.45936 13.7269C1.70357 13.295 1.70357 12.2052 2.45936 11.7733L9.56685 7.7119C10.3168 7.28334 11.25 7.82487 11.25 8.68867L11.25 16.8115Z"
+						stroke={color}
+						stroke-width={strokeWidth}
+						transition:draw={shouldAnimate ? transitionParams : undefined}
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			{/if}
+		</div>
+	</button>
 {/if}
 
-
+<style>
+	button {
+		background: none;
+		border: none;
+		padding: 0;
+		font: inherit;
+		cursor: pointer;
+		outline: inherit;
+	}
+	.placeholder {
+		display: inline-block;
+		min-width: var(--size, 24px);
+		min-height: var(--size, 24px);
+	}
+</style>

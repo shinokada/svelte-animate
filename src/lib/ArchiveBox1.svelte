@@ -1,8 +1,16 @@
 <script lang="ts">
 	import { draw } from 'svelte/transition';
-	import type { DrawParams } from 'svelte/transition';
+	import type {
+		FadeParams,
+		BlurParams,
+		FlyParams,
+		SlideParams,
+		ScaleParams,
+		DrawParams
+	} from 'svelte/transition';
 	import type { SVGAttributes } from 'svelte/elements';
 
+	type ParamsType = FadeParams | BlurParams | FlyParams | SlideParams | ScaleParams | DrawParams;
 	type TitleType = {
 		id?: string;
 		title?: string;
@@ -15,7 +23,7 @@
 	interface Props extends SVGAttributes<SVGElement> {
 		pauseDuration?: number;
 		event?: 'onmouseenter' | 'onclick';
-		transitionParams?: DrawParams;
+		transitionParams?: ParamsType;
 		title?: TitleType;
 		desc?: DescType;
 		ariaLabel?: string;
@@ -42,7 +50,7 @@
 		...restProps
 	}: Props = $props();
 
-	const getDuration = (params?: DrawParams): number => {
+	const getDuration = (params?: ParamsType): number => {
 		if (!params?.duration) return 0;
 		if (typeof params.duration === 'function') {
 			return params.duration(0);
@@ -103,7 +111,7 @@
 					{/if}
 
 					<path
-						d="M16.5 3.75V16.5L12 14.25L7.5 16.5V3.75M16.5 3.75H18C19.2426 3.75 20.25 4.75736 20.25 6V18C20.25 19.2426 19.2426 20.25 18 20.25H6C4.75736 20.25 3.75 19.2426 3.75 18V6C3.75 4.75736 4.75736 3.75 6 3.75H7.5M16.5 3.75H7.5"
+						d="M20.25 7.5L19.6246 18.1321C19.5546 19.3214 18.5698 20.25 17.3785 20.25H6.62154C5.43022 20.25 4.44538 19.3214 4.37542 18.1321L3.75 7.5M9.99976 11.25H13.9998M3.375 7.5H20.625C21.2463 7.5 21.75 6.99632 21.75 6.375V4.875C21.75 4.25368 21.2463 3.75 20.625 3.75H3.375C2.75368 3.75 2.25 4.25368 2.25 4.875V6.375C2.25 6.99632 2.75368 7.5 3.375 7.5Z"
 						stroke={color}
 						stroke-width={strokeWidth}
 						transition:draw={shouldAnimate ? transitionParams : undefined}
@@ -138,7 +146,7 @@
 					{/if}
 
 					<path
-						d="M16.5 3.75V16.5L12 14.25L7.5 16.5V3.75M16.5 3.75H18C19.2426 3.75 20.25 4.75736 20.25 6V18C20.25 19.2426 19.2426 20.25 18 20.25H6C4.75736 20.25 3.75 19.2426 3.75 18V6C3.75 4.75736 4.75736 3.75 6 3.75H7.5M16.5 3.75H7.5"
+						d="M20.25 7.5L19.6246 18.1321C19.5546 19.3214 18.5698 20.25 17.3785 20.25H6.62154C5.43022 20.25 4.44538 19.3214 4.37542 18.1321L3.75 7.5M9.99976 11.25H13.9998M3.375 7.5H20.625C21.2463 7.5 21.75 6.99632 21.75 6.375V4.875C21.75 4.25368 21.2463 3.75 20.625 3.75H3.375C2.75368 3.75 2.25 4.25368 2.25 4.875V6.375C2.25 6.99632 2.75368 7.5 3.375 7.5Z"
 						stroke={color}
 						stroke-width={strokeWidth}
 						transition:draw={shouldAnimate ? transitionParams : undefined}
