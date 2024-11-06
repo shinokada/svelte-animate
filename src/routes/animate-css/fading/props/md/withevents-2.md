@@ -1,1 +1,0 @@
-<AcademicCap tabindex="0" withEvents />

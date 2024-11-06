@@ -2,7 +2,7 @@ import type { MetaProps } from 'runes-meta-tags';
 import { ANALYTICS_ID_APP_TWO } from '$env/static/private';
 
 const title = 'Svelte Animate';
-const description = 'svelte-animate is offering animated components and icons. It includes a customizable animation wrapper and interactive SVG icons with options for triggers, duration, size, color, and accessibility features, ideal for adding responsive, accessible animations to Svelte projects effortlessly.';
+const description = 'A flexible wrapper that can animate any child element using animate.css animations, with support for multiple triggers like hover and click. Users can customize the animation type, duration, and visibility control, allowing the child elements to be shown temporarily or hidden after the animation completes.';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-animate';
 const keywords = 'svelte, sveltekit, animate.css, draw';
 

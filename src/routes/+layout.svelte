@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { DocPage } from 'runes-webkit';
 	import { sineIn } from 'svelte/easing';
 	import type { Component } from 'svelte';
 	import { page } from '$app/stores';
@@ -12,7 +13,7 @@
 		DotsHorizontalOutline,
 		GithubSolid,
 		random_tailwind_color,
-		XSolid
+		XSolid, Bluesky
 	} from 'runes-webkit';
 	import {
 		Navbar,
@@ -57,18 +58,18 @@
 	const hasPath = (key: string) => currentUrl.includes(key);
 
 	const lis: LiType[] = [
-		{ name: 'Animate-CSS', href: '/animate-css/attention-seekers' },
-		{ name: 'Draw', href: '/draw' }
+		{ name: 'Guide', href: '/attention-seekers' },
 	];
 	const brand = {
 		name: 'codewithshin.com',
 		href: 'https://codewithshin.com'
 	};
-	const urlsToIncludeSwitcherAndSidebar = ['/guide/', '/guide2/', '/how-to-use', '/quick-start'];
+	const urlsToIncludeSwitcherAndSidebar = [ '/', '/attention-seekers', '/back', '/bouncing', '/fading', '/fading', '/flippers', '/lightspeed', '/sliding', '/zooming'];
 	/*eslint no-undef: "off"*/
 	const siteName = removeHyphensAndCapitalize(__NAME__);
 	const githubUrl = `https://github.com/shinokada/${__NAME__}`;
 	const twitterUrl = 'https://twitter.com/shinokada';
+  const blueskyUrl = 'https://bsky.app/profile/shinichiokada.bsky.social';
 
 	// nav
 	let nav = uiHelpers();
@@ -84,7 +85,7 @@
 	function isIncluded(url: string, allowedUrls: string[]): boolean {
 		return allowedUrls.some((allowedUrl) => url.startsWith(allowedUrl));
 	}
-	let urlsToIncludeSwitcher = ['/guide', '/guide2', '/how-to-use', '/quick-start'];
+	let urlsToIncludeSwitcher = ['/', '/attention-seekers', '/back', '/bouncing', '/fading', '/fading', '/flippers', '/lightspeed', '/sliding', '/zooming'];
 	let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
 	// dropdown
 	let dropdown = uiHelpers();
@@ -164,14 +165,20 @@
 					class="ml-6 mr-4 dark:text-white"
 					size="lg"
 				/>
+				<Darkmode class="m-0 p-2" />
 				<div class="relative">
 					<Dropdown
 						{dropdownStatus}
 						{closeDropdown}
 						params={dropdownTransitionParams}
-						class="absolute -left-[50px] top-2 w-12 p-1.5"
+						class="absolute -left-[88px] top-2 w-12 p-1.5"
 					>
-						<DropdownUl>
+						<DropdownUl class="py-0">
+							{#if blueskyUrl}
+                <DropdownLi href={blueskyUrl} target="_blank" aClass="p-0.5 m-0">
+                  <Bluesky size="30" />
+                </DropdownLi>
+              {/if}
 							{#if twitterUrl}
 								<DropdownLi href={twitterUrl} target="_blank" aClass="p-2 m-0"
 									><XSolid /></DropdownLi
@@ -182,9 +189,6 @@
 									<GithubSolid />
 								</DropdownLi>
 							{/if}
-							<DropdownLi>
-								<Darkmode class="m-0 p-2" />
-							</DropdownLi>
 						</DropdownUl>
 					</Dropdown>
 				</div>
@@ -217,7 +221,7 @@
 			<SidebarGroup>
 				<SidebarBrand>
 					<span class="self-center whitespace-nowrap text-lg font-semibold dark:text-white"
-						>Runes Webkit</span
+						>Svelte Animate</span
 					>
 				</SidebarBrand>
 				{#each newSidebarList as { name, Icon, children, href }}
@@ -255,6 +259,8 @@
 			<OnThisPage {extract} headingSelector="#mainContent > :where(h2, h3)" />
 		</div>
 	{/if}
-	{@render children()}
+	<DocPage mainClass="mx-auto lg:pl-64" div2Class="w-full">
+		{@render children()}
+	</DocPage>
 </div>
 <Footer {brand} {lis} />

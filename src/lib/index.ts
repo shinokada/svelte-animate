@@ -10,4 +10,4 @@ export { default as ArrowDownLeft2 } from './ArrowDownLeft2.svelte';
 export { default as ArrowDownOnSquare1 } from './ArrowDownOnSquare1.svelte';
 export { default as Animate } from './Animate.svelte';
 export { default as ArchiveBox1 } from './ArchiveBox1.svelte';
-export * from './icons';
+// export * from './icons';

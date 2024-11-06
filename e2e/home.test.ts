@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 const title = 'Svelte Animate';
-const description = 'svelte-animate is offering animated components and icons. It includes a customizable animation wrapper and interactive SVG icons with options for triggers, duration, size, color, and accessibility features, ideal for adding responsive, accessible animations to Svelte projects effortlessly.';
+const description = 'Svelte-Animate includes a customizable animation wrapper and interactive SVG icons with options for triggers, duration, size, color, and accessibility features.';
 const keywords = 'svelte, sveltekit, animate.css, draw';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-animate';
 

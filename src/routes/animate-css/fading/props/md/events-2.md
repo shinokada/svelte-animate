@@ -1,1 +1,0 @@
-<AcademicCap on:click="{handleClick}" />
