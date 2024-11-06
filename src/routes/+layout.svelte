@@ -41,7 +41,7 @@
 		Icon?: Component;
 	};
 	let { children, data } = $props();
-	const analyticsId = data.ANALYTICS_ID_ICONS;
+	const analyticsId = data.ANALYTICS_ID_APP_TWO;
 	// metaTags
 	let metaTags = $state(
 		$page.data.pageMetaTags
