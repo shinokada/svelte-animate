@@ -1,12 +1,11 @@
 {
 	"name": "svelte-animate",
-	"version": "0.0.1",
-	"description": "A flexible wrapper that can animate any child element using animate.css animations, with support for multiple triggers like hover and click. Users can customize the animation type, duration, and visibility control, allowing the child elements to be shown temporarily or hidden after the animation completes.",
+	"version": "0.0.2",
+	"description": "A flexible wrapper that can animate any child element using animate.css animations.",
 	"license": "MIT",
 	"homepage": "https://svelte-animate.codewithshin.com/",
 	"author": {
 		"name": "Shinichi Okada",
-		"email": "connect@codewithshin.com",
 		"url": "https://codewithshin.com"
 	},
 	"repository": {
@@ -26,7 +25,12 @@
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"gen:exports": "svelte-lib-helpers exports",
+		"gen:docs5": "svelte-lib-helpers docs5",
+		"gen:docs5FromType": "svelte-lib-helpers docs5FromType",
+		"copy:packagejson": "svelte-lib-helpers package",
+		"lib-helpers": "pnpm format && pnpm gen:docs5 && pnpm build && pnpm copy:packagejson"
 	},
 	"files": [
 		"dist",
@@ -67,6 +71,7 @@
 		"svelte": "^5.1.11",
 		"svelte-5-ui-lib": "^0.10.0",
 		"svelte-check": "^4.0.5",
+		"svelte-heros-v2": "^2.0.1",
 		"svelte-lib-helpers": "^0.4.16",
 		"svelte-rune-highlight": "^0.5.13",
 		"svelte-shields": "^0.5.1",

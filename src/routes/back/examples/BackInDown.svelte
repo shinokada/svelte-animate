@@ -1,10 +1,5 @@
 <script>
-  import { setContext } from 'svelte';
-  import { Accessibility } from 'svelte-radix';
-  const iconCtx = {
-    size: '30'
-  };
-  setContext('iconCtx', iconCtx);
+	import { AdjustmentsHorizontal } from 'svelte-heros-v2';
 </script>
 
-<Accessibility color="#ff4488" />
+<AdjustmentsHorizontal color="#ff4488" />

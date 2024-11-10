@@ -1,73 +1,27 @@
 <script lang="ts">
-	import {
-		AtSign,
-		BadgeCheck,
-		Bell,
-		AcademicCap,
-		Wrapper,
-		ArrowDownLeft,
-		Animate,
-		ArrowBigUp,
-		ArrowDownLeft2,
-		ArrowDownOnSquare
-	} from '$lib';
+	import { Animate } from '$lib';
+	import { AcademicCap } from 'svelte-heros-v2';
+	// bounce, flash, pulse, rubberBand, shakeX, shakeY, headShake, swing, tada, wobble, jello, heartBeat
 </script>
 
 <div class="container">
 	<h1>Svelte Animate for Svelte 5</h1>
-	<h2>Click to see animation</h2>
 
-	<AtSign size={50} color="purple" />
-	<BadgeCheck size={50} color="green" />
-	<Bell size={50} color="red" />
-	<AcademicCap size={50} color="blue" />
-	<Wrapper
-		event="onclick"
-		params={{
-			duration: 500,
-			delay: 300
-		}}
-	>
-		<ArrowDownOnSquare size={50} color="green" />
-	</Wrapper>
-	<Wrapper event="onclick">
-		<ArrowDownLeft2
-			size={50}
-			color="skyblue"
-			params={{
-				duration: 500,
-				delay: 300
-			}}
-			params2={{
-				duration: 500,
-				delay: 800
-			}}
-		/>
-	</Wrapper>
-	<Wrapper
-		event="onclick"
-		params={{
-			duration: 500,
-			delay: 300
-		}}
-	>
-		<ArrowDownLeft size={50} color="orange" />
-	</Wrapper>
 	<Animate animation="backInLeft" trigger="click" duration="0.5s">
-		<ArrowBigUp size="50" color="#FF0000" ariaLabel="Upward arrow" />
+		<AcademicCap size="50" color="#FF0000" />
 	</Animate>
 
 	<Animate animation="zoomIn" trigger="click" duration="0.5s">
 		<h1>Hello World!</h1>
 	</Animate>
 
-	<Animate animation="zoomOutRight" trigger="click" duration="0.5s" hideAfter={true}>
+	<Animate animation="zoomOutRight" duration="0.5s">
 		<div style="height: 200px; width: 200px; background: #0055f0"></div>
 	</Animate>
 
 	<div class="animation-container">
 		<Animate animation="backInUp" trigger="click" duration="0.5s">
-			<ArrowBigUp size="50" color="#FF0000" ariaLabel="Upward arrow" />
+			<AcademicCap size="50" color="#FF0000" />
 		</Animate>
 	</div>
 </div>

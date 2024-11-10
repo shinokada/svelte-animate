@@ -47,6 +47,7 @@
 		import: 'default',
 		eager: true
 	});
+	// bounceIn, bounceInDown, bounceInLeft, bounceInRight, bounceInUp, bounceOut, bounceOutDown, bounceOutLeft, bounceOutRight, bounceOutUp,
 </script>
 
 <H1>Bouncing</H1>

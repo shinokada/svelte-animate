@@ -51,8 +51,4 @@
 
 <div class="relative mx-auto mt-8 h-full max-w-7xl overflow-y-auto px-8 pb-20">
 	<h1 class="my-8 flex justify-center">Svelte Animate</h1>
-	<HomeCards cards={filteredCards as CardType[]} />
-	<h2 class="my-8 flex justify-center">Info</h2>
-	<HomeCards cards={newInfo as CardType[]} />
-	<TechInfo {...pkg} />
 </div>

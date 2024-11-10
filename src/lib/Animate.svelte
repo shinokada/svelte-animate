@@ -72,3 +72,14 @@
 >
 	{@render children()}
 </button>
+
+<!--
+@component
+[Go to docs](https://svelte-animate.codewithshin.com/)
+## Props
+@prop children
+@prop animation = 'bounce'
+@prop trigger = 'hover'
+@prop duration = '1s'
+@prop hideAfter = false
+-->

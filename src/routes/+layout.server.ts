@@ -2,7 +2,8 @@ import type { MetaProps } from 'runes-meta-tags';
 import { ANALYTICS_ID_APP_TWO } from '$env/static/private';
 
 const title = 'Svelte Animate';
-const description = 'A flexible wrapper that can animate any child element using animate.css animations, with support for multiple triggers like hover and click. Users can customize the animation type, duration, and visibility control, allowing the child elements to be shown temporarily or hidden after the animation completes.';
+const description =
+	'A flexible wrapper that can animate any child element using animate.css animations, with support for multiple triggers like hover and click. Users can customize the animation type, duration, and visibility control, allowing the child elements to be shown temporarily or hidden after the animation completes.';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-animate';
 const keywords = 'svelte, sveltekit, animate.css, draw';
 

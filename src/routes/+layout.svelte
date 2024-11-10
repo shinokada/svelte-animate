@@ -13,7 +13,8 @@
 		DotsHorizontalOutline,
 		GithubSolid,
 		random_tailwind_color,
-		XSolid, Bluesky
+		XSolid,
+		Bluesky
 	} from 'runes-webkit';
 	import {
 		Navbar,
@@ -57,19 +58,28 @@
 	let currentUrl = $state($page.url.pathname);
 	const hasPath = (key: string) => currentUrl.includes(key);
 
-	const lis: LiType[] = [
-		{ name: 'Guide', href: '/attention-seekers' },
-	];
+	const lis: LiType[] = [{ name: 'Guide', href: '/attention-seekers' }];
 	const brand = {
 		name: 'codewithshin.com',
 		href: 'https://codewithshin.com'
 	};
-	const urlsToIncludeSwitcherAndSidebar = [ '/', '/attention-seekers', '/back', '/bouncing', '/fading', '/fading', '/flippers', '/lightspeed', '/sliding', '/zooming'];
+	const urlsToIncludeSwitcherAndSidebar = [
+		'/',
+		'/attention-seekers',
+		'/back',
+		'/bouncing',
+		'/fading',
+		'/fading',
+		'/flippers',
+		'/lightspeed',
+		'/sliding',
+		'/zooming'
+	];
 	/*eslint no-undef: "off"*/
 	const siteName = removeHyphensAndCapitalize(__NAME__);
 	const githubUrl = `https://github.com/shinokada/${__NAME__}`;
 	const twitterUrl = 'https://twitter.com/shinokada';
-  const blueskyUrl = 'https://bsky.app/profile/shinichiokada.bsky.social';
+	const blueskyUrl = 'https://bsky.app/profile/shinichiokada.bsky.social';
 
 	// nav
 	let nav = uiHelpers();
@@ -85,7 +95,18 @@
 	function isIncluded(url: string, allowedUrls: string[]): boolean {
 		return allowedUrls.some((allowedUrl) => url.startsWith(allowedUrl));
 	}
-	let urlsToIncludeSwitcher = ['/', '/attention-seekers', '/back', '/bouncing', '/fading', '/fading', '/flippers', '/lightspeed', '/sliding', '/zooming'];
+	let urlsToIncludeSwitcher = [
+		'/',
+		'/attention-seekers',
+		'/back',
+		'/bouncing',
+		'/fading',
+		'/fading',
+		'/flippers',
+		'/lightspeed',
+		'/sliding',
+		'/zooming'
+	];
 	let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
 	// dropdown
 	let dropdown = uiHelpers();
@@ -175,10 +196,10 @@
 					>
 						<DropdownUl class="py-0">
 							{#if blueskyUrl}
-                <DropdownLi href={blueskyUrl} target="_blank" aClass="p-0.5 m-0">
-                  <Bluesky size="30" />
-                </DropdownLi>
-              {/if}
+								<DropdownLi href={blueskyUrl} target="_blank" aClass="p-0.5 m-0">
+									<Bluesky size="30" />
+								</DropdownLi>
+							{/if}
 							{#if twitterUrl}
 								<DropdownLi href={twitterUrl} target="_blank" aClass="p-2 m-0"
 									><XSolid /></DropdownLi

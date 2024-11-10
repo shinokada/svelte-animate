@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { HighlightCompo, Code, H2 } from 'runes-webkit';
 	import { License, StaticBadge, NpmVersion, NpmDownload } from 'svelte-shields';
-	import { Animate } from "$lib"
+	import { Animate } from '$lib';
 
 	const modules = import.meta.glob('./examples/*.svelte', {
 		query: '?raw',
@@ -11,7 +11,6 @@
 </script>
 
 <h1>Zooming</h1>
-
 
 <Animate animation="zoomIn" trigger="click" duration="0.5s">
 	<h1>Hello World!</h1>
