@@ -3,9 +3,9 @@ import { ANALYTICS_ID_APP_TWO } from '$env/static/private';
 
 const title = 'Svelte Animate';
 const description =
-	'A flexible wrapper that can animate any child element using animate.css animations, with support for multiple triggers like hover and click. Users can customize the animation type, duration, and visibility control, allowing the child elements to be shown temporarily or hidden after the animation completes.';
+	'A lightweight Svelte component that adds beautiful CSS animations to any element using Animate.css library. Features include click/hover triggers, customizable duration, reduced motion support, and accessibility features. Perfect for creating engaging user interfaces with smooth animations in Svelte applications.';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-animate';
-const keywords = 'svelte, sveltekit, animate.css, draw';
+const keywords = 'svelte, animation, animate.css, web animation, UI components, front-end development, svelte animations, CSS animations, user interface, accessibility, reduced motion, UI/UX, motion effects, transition effects, animation library, svelte transitions';
 
 export const load = ({ url }) => {
 	const layoutMetaTags: MetaProps = {

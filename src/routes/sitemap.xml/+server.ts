@@ -14,52 +14,7 @@ const pages: Page[] = [
 		lastmod: '2024-05-20'
 	},
 	{
-		loc: 'guide/custom-icons',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'guide/global-icons',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'guide/svelte-4/getting-started',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'guide/svelte-4/props',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'guide/svelte-5/getting-started',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'how-to-use',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'no-tabs',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'quick-start',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'three-tabs',
-		changefreq: 'weekly',
-		priority: '0.5'
-	},
-	{
-		loc: 'three-tabs-sizebytailwind',
+		loc: 'guide',
 		changefreq: 'weekly',
 		priority: '0.5'
 	}

@@ -1,7 +1,7 @@
 import type { MetaProps } from 'runes-meta-tags';
 
 const title = 'Icons - Svelte Animate';
-const description = 'Easily Find & Copy SVG Icon name for Your Project';
+const description = 'A flexible wrapper that can animate any child element using animate.css animations.';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-remix';
 
 export const load = ({ url }) => {
