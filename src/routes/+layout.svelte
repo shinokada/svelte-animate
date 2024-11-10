@@ -58,7 +58,7 @@
 	let currentUrl = $state($page.url.pathname);
 	const hasPath = (key: string) => currentUrl.includes(key);
 
-	const lis: LiType[] = [{ name: 'Guide', href: '/attention-seekers' }];
+	const lis: LiType[] = [{ name: 'Guide', href: '/guide' }];
 	const brand = {
 		name: 'codewithshin.com',
 		href: 'https://codewithshin.com'
@@ -97,6 +97,7 @@
 	}
 	let urlsToIncludeSwitcher = [
 		'/',
+		"/guide",
 		'/attention-seekers',
 		'/back',
 		'/bouncing',
@@ -240,11 +241,6 @@
 				class="absolute right-1 top-3 p-2 lg:hidden"
 			/>
 			<SidebarGroup>
-				<SidebarBrand>
-					<span class="self-center whitespace-nowrap text-lg font-semibold dark:text-white"
-						>Svelte Animate</span
-					>
-				</SidebarBrand>
 				{#each newSidebarList as { name, Icon, children, href }}
 					{#if children}
 						<SidebarDropdownWrapper

@@ -23,6 +23,19 @@
 	<Animate animation="rubberBand">
 		<AcademicCap size="50" color="#FF0000" />
 	</Animate>
-	
+	<!-- Example 1: Works with keyboard -->
+<Animate animation="bounce" trigger="click">
+  <div>Press Tab to focus, then Enter/Space to animate</div>
+</Animate>
+
+<!-- Example 2: Works with keyboard -->
+<Animate animation="bounce" trigger="both">
+  <div>Press Tab to focus, then Enter/Space to animate (also works with hover)</div>
+</Animate>
+
+<!-- Example 3: No keyboard trigger -->
+<Animate animation="bounce" trigger="hover">
+  <div>Keyboard keys won't trigger animation, only hover will work</div>
+</Animate>
 </div>
 

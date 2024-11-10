@@ -2,6 +2,7 @@
 	import 'animate.css';
 	import type { Snippet } from 'svelte';
 	import type { AnimationProps } from './types.ts';
+	let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	interface Props extends AnimationProps {
 		children: Snippet;
@@ -20,6 +21,7 @@
 	let isVisible = $state(true);
 
 	async function startAnimation() {
+		if (prefersReducedMotion) return;
 		// Reset visibility if previously hidden
 		isVisible = true;
 		// Remove animation classes
@@ -35,6 +37,12 @@
 			isVisible = false;
 		}
 		animationClass = 'animate__animated';
+		// Add screen reader announcements for animation completion
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.textContent = `${animation} animation complete`;
+    document.body.appendChild(announcement);
+    setTimeout(() => announcement.remove(), 1000);
 	}
 
 	function handleClick() {
@@ -61,6 +69,8 @@
 
 <button
 	type="button"
+	aria-label={`Animate child element with ${animation} effect`}
+  aria-live="polite"
 	class={animationClass}
 	style="display: {isVisible
 		? 'inline-block'

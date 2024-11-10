@@ -1,3 +1,4 @@
+import type { HTMLButtonAttributes } from 'svelte/elements';
 export type AnimationType =
 	| 'bounce'
 	| 'flash'
@@ -99,7 +100,7 @@ export type AnimationType =
 
 export type TriggerType = 'hover' | 'click' | 'both';
 
-export interface AnimationProps {
+export interface AnimationProps extends HTMLButtonAttributes {
 	animation?: AnimationType;
 	trigger?: TriggerType;
 	duration?: string;
