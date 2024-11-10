@@ -1,6 +1,6 @@
 {
 	"name": "svelte-animate",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"description": "A flexible wrapper that can animate any child element using animate.css animations.",
 	"license": "MIT",
 	"homepage": "https://svelte-animate.codewithshin.com/",

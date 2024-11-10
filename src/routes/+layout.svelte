@@ -97,7 +97,7 @@
 	}
 	let urlsToIncludeSwitcher = [
 		'/',
-		"/guide",
+		'/guide',
 		'/attention-seekers',
 		'/back',
 		'/bouncing',

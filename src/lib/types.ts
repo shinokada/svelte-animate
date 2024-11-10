@@ -98,7 +98,7 @@ export type AnimationType =
 	| 'slideOutRight'
 	| 'slideOutUp';
 
-export type TriggerType = 'hover' | 'click' | 'both';
+export type TriggerType = 'hover' | 'click' | 'both' | undefined;
 
 export interface AnimationProps extends HTMLButtonAttributes {
 	animation?: AnimationType;
