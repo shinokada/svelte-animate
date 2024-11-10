@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { DocPage } from 'runes-webkit';
 	import { HighlightCompo, CodeWrapper, Code, H1, H2, H3 } from 'runes-webkit';
 	import { P, List, Li } from 'svelte-5-ui-lib';
 </script>
-
+<DocPage mainClass="mx-auto" div2Class="w-full">
 <div class="max-w-4xl mx-auto px-4 py-8">
 	<header class="mb-8">
 		<H1 class="text-4xl font-bold mb-4">Svelte-Animate</H1>
@@ -181,3 +182,4 @@ hideAfter={true}
 		</p>
 	</footer>
 </div>
+</DocPage>

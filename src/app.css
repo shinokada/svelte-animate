@@ -1,11 +1,14 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap');
+
 
 @layer base {
 	html {
 		-webkit-text-size-adjust: 100%;
 		font-family:
+		Bitter,
 			Inter,
 			ui-sans-serif,
 			system-ui,
@@ -36,15 +39,15 @@
 	}
 
 	h1 {
-		@apply my-8 text-3xl text-primary-800 dark:text-primary-400;
+		@apply my-8 text-4xl text-primary-800 dark:text-primary-400;
 	}
 
 	h2 {
-		@apply my-6 text-2xl;
+		@apply my-6 text-3xl;
 	}
 
 	h3 {
-		@apply my-5 text-xl;
+		@apply my-5 text-2xl;
 	}
 
 	p {

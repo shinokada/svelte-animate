@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 const title = 'Svelte Animate';
 const description =
 	'A lightweight Svelte component that adds beautiful CSS animations to any element using Animate.css library. Features include click/hover triggers, customizable duration, reduced motion support, and accessibility features. Perfect for creating engaging user interfaces with smooth animations in Svelte applications.';
-const keywords = 'svelte, animation, animate.css, web animation, UI components, front-end development, svelte animations, CSS animations, user interface, accessibility, reduced motion, UI/UX, motion effects, transition effects, animation library, svelte transitions';
+const keywords =
+	'svelte, animation, animate.css, web animation, UI components, front-end development, svelte animations, CSS animations, user interface, accessibility, reduced motion, UI/UX, motion effects, transition effects, animation library, svelte transitions';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-animate';
 
 test.beforeEach(async ({ page }) => {

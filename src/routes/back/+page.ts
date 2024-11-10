@@ -1,7 +1,8 @@
 import type { MetaProps } from 'runes-meta-tags';
 
 const title = 'Setting Global Icon - Svelte Animate';
-const description = 'A flexible wrapper that can animate any child element using animate.css animations.';
+const description =
+	'A flexible wrapper that can animate any child element using animate.css animations.';
 const imgUrl = 'https://open-graph-vercel.vercel.app/api/svelte-animate';
 
 export const load = ({ url }) => {

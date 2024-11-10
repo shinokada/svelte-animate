@@ -7,6 +7,10 @@
 <div class="space-y-8 flex flex-col justify-center items-center">
 	<h1>Svelte Animate for Svelte 5</h1>
 
+	<Animate animation="bounce" delay="2s" speed="faster" trigger="hover" repeat={2}>
+		<div>Animated content</div>
+	</Animate>
+
 	<Animate animation="bounce" trigger="hover" duration="0.5s">
 		<AcademicCap size="50" color="#FF0000" />
 	</Animate>

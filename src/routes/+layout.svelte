@@ -1,10 +1,9 @@
 <script lang="ts">
 	import '../app.css';
-	import { DocPage } from 'runes-webkit';
 	import { sineIn } from 'svelte/easing';
 	import type { Component } from 'svelte';
 	import { page } from '$app/stores';
-	import { newSidebarList } from './utils/helper.ts';
+	
 	import {
 		Footer,
 		OnThisPage,
@@ -25,13 +24,7 @@
 		Darkmode,
 		Dropdown,
 		DropdownUl,
-		DropdownLi,
-		Sidebar,
-		SidebarGroup,
-		SidebarDropdownWrapper,
-		SidebarItem,
-		CloseButton,
-		SidebarBrand
+		DropdownLi
 	} from 'svelte-5-ui-lib';
 	import { RunesMetaTags, deepMerge } from 'runes-meta-tags';
 	import { Runatics } from 'runatics';
@@ -64,16 +57,7 @@
 		href: 'https://codewithshin.com'
 	};
 	const urlsToIncludeSwitcherAndSidebar = [
-		'/',
-		'/attention-seekers',
-		'/back',
-		'/bouncing',
-		'/fading',
-		'/fading',
-		'/flippers',
-		'/lightspeed',
-		'/sliding',
-		'/zooming'
+		'/guide',
 	];
 	/*eslint no-undef: "off"*/
 	const siteName = removeHyphensAndCapitalize(__NAME__);
@@ -95,19 +79,7 @@
 	function isIncluded(url: string, allowedUrls: string[]): boolean {
 		return allowedUrls.some((allowedUrl) => url.startsWith(allowedUrl));
 	}
-	let urlsToIncludeSwitcher = [
-		'/',
-		'/guide',
-		'/attention-seekers',
-		'/back',
-		'/bouncing',
-		'/fading',
-		'/fading',
-		'/flippers',
-		'/lightspeed',
-		'/sliding',
-		'/zooming'
-	];
+	let urlsToIncludeSwitcher = [ '/guide'];
 	let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
 	// dropdown
 	let dropdown = uiHelpers();
@@ -145,31 +117,6 @@
 <header class={headerCls}>
 	<Navbar {navClass} {toggleNav} {closeNav} {navStatus} breakPoint="lg" fluid div2Class={divClass}>
 		{#snippet brand()}
-			{#if urlsToIncludeSwitcherAndSidebar.some((path) => currentUrl.startsWith(path))}
-				<button
-					onclick={sidebarUi.toggle}
-					type="button"
-					class="z-100 mr-4 mt-1 lg:hidden"
-					aria-controls="navbar-default"
-				>
-					<span class="sr-only">Toggle sidebar menu</span>
-					<svg
-						class="h-5 w-5"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 17 14"
-					>
-						<path
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M1 1h15M1 7h15M1 13h15"
-						/>
-					</svg>
-				</button>
-			{/if}
 			{#if siteName}
 				<NavBrand
 					{siteName}
@@ -226,58 +173,12 @@
 
 <div class="lg:flex">
 	{#if urlsToIncludeSwitcherAndSidebar.some((path) => currentUrl.startsWith(path))}
-		<Sidebar
-			{isOpen}
-			{closeSidebar}
-			breakpoint="lg"
-			activeClass="flex items-center p-1 text-base font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-			nonActiveClass="p-1 hover:bg-gray-200"
-			divClass="dark_bg_theme bg-gray-50"
-			class="dark_bg_theme h-screen border-r border-gray-50 lg:top-[58px] dark:border-gray-700"
-		>
-			<CloseButton
-				onclick={closeSidebar}
-				color="gray"
-				class="absolute right-1 top-3 p-2 lg:hidden"
-			/>
-			<SidebarGroup>
-				{#each newSidebarList as { name, Icon, children, href }}
-					{#if children}
-						<SidebarDropdownWrapper
-							label={name}
-							isOpen={hasPath('components')}
-							svgClass="me-4"
-							btnClass="p-1"
-						>
-							{#snippet iconSlot()}
-								<Icon />
-							{/snippet}
-							{#each children as { name, Icon, href }}
-								<SidebarItem label={name} onclick={closeSidebar} {href} aClass="ml-4">
-									{#snippet iconSlot()}
-										<Icon />
-									{/snippet}
-								</SidebarItem>
-							{/each}
-						</SidebarDropdownWrapper>
-					{:else}
-						<SidebarItem label={name} onclick={closeSidebar} {href}>
-							{#snippet iconSlot()}
-								<Icon />
-							{/snippet}
-						</SidebarItem>
-					{/if}
-				{/each}
-			</SidebarGroup>
-		</Sidebar>
-	{/if}
-	{#if urlsToIncludeSwitcherAndSidebar.some((path) => currentUrl.startsWith(path))}
 		<div class="relative">
 			<OnThisPage {extract} headingSelector="#mainContent > :where(h2, h3)" />
 		</div>
 	{/if}
-	<DocPage mainClass="mx-auto lg:pl-64" div2Class="w-full">
-		{@render children()}
-	</DocPage>
+	
+	{@render children()}
+	
 </div>
 <Footer {brand} {lis} />
