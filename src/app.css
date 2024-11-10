@@ -63,6 +63,6 @@
 @layer components {
 	/* overwrite default styles here */
 	.dark_bg_theme {
-		@apply dark:bg-stone-900 !important;
+		@apply dark:bg-gray-900 !important;
 	}
 }
