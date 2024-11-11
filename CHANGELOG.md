@@ -1,5 +1,11 @@
 # svelte-animate
 
+## 0.2.0
+
+### Minor Changes
+
+- feat: use duration remove speed, update delay and repeat
+
 ## 0.1.0
 
 ### Minor Changes

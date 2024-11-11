@@ -1,6 +1,6 @@
 <script lang="ts">
   import 'animate.css';
-  
+
   import type { AnimationProps as Props } from './types.ts';
 
   let prefersReducedMotion = $state();
@@ -133,4 +133,6 @@
 @prop trigger
 @prop duration = '1s'
 @prop hideAfter = false
+@prop delay
+@prop repeat
 -->

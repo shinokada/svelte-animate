@@ -35,7 +35,7 @@
       return url.startsWith(allowedUrl);
     });
   }
-  let urlsToIncludeSwitcher = ['/','/guide'];
+  let urlsToIncludeSwitcher = ['/', '/guide'];
   let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
 
   // const hasPath = (key: string) => currentUrl.includes(key);
@@ -61,7 +61,7 @@
   let navClass = 'w-full divide-gray-200 border-gray-200 bg-gray-50 dark_bg_theme text-gray-500 dark:divide-gray-700 dark:border-gray-700 dark:transparent dark:text-gray-400 sm:px-4';
   let divClass = 'ml-auto w-full';
   let ulclass = 'dark:lg:bg-transparent lg:space-x-4';
- 
+
   // dropdown
   let dropdown = uiHelpers();
   let dropdownStatus = $state(false);
