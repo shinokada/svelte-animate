@@ -1,4 +1,5 @@
 import type { HTMLButtonAttributes } from 'svelte/elements';
+import type { Snippet } from 'svelte';
 export type AnimationType =
   | 'bounce'
   | 'flash'
@@ -99,9 +100,16 @@ export type AnimationType =
   | 'slideOutUp';
 
 export type TriggerType = 'hover' | 'click' | 'both' | undefined;
+export type DurationType = '1s' | '2s' | '3s' | '800ms' | '500ms'
+export type DelayType = '0s' | '1s' | '2s' | '3s' | '4s' | '5s';
+export type RepeatType = '1' | '2' | '3' | 'infinite' ;
 
 export interface AnimationProps extends HTMLButtonAttributes {
   animation?: AnimationType;
   trigger?: TriggerType;
-  duration?: string;
+  duration?: DurationType;
+  children: Snippet;
+  hideAfter?: boolean;
+  delay?: DelayType;
+  repeat?: RepeatType;
 }

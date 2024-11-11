@@ -25,7 +25,20 @@
   const closeSidebar = sidebarUi.close;
 
   let currentUrl = $state($page.url.pathname);
-  const hasPath = (key: string) => currentUrl.includes(key);
+  function isIncluded(url: string, allowedUrls: string[]): boolean {
+    return allowedUrls.some((allowedUrl) => {
+      // For home page '/', do exact matching
+      if (allowedUrl === '/') {
+        return url === '/' || url === '';
+      }
+      // For other URLs, continue using startsWith
+      return url.startsWith(allowedUrl);
+    });
+  }
+  let urlsToIncludeSwitcher = ['/','/guide'];
+  let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
+
+  // const hasPath = (key: string) => currentUrl.includes(key);
 
   const lis: LiType[] = [{ name: 'Guide', href: '/guide' }];
   const brand = {
@@ -48,11 +61,7 @@
   let navClass = 'w-full divide-gray-200 border-gray-200 bg-gray-50 dark_bg_theme text-gray-500 dark:divide-gray-700 dark:border-gray-700 dark:transparent dark:text-gray-400 sm:px-4';
   let divClass = 'ml-auto w-full';
   let ulclass = 'dark:lg:bg-transparent lg:space-x-4';
-  function isIncluded(url: string, allowedUrls: string[]): boolean {
-    return allowedUrls.some((allowedUrl) => url.startsWith(allowedUrl));
-  }
-  let urlsToIncludeSwitcher = ['/guide'];
-  let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
+ 
   // dropdown
   let dropdown = uiHelpers();
   let dropdownStatus = $state(false);
@@ -127,13 +136,6 @@
   </Navbar>
 </header>
 
-<div class="lg:flex">
-  {#if urlsToIncludeSwitcherAndSidebar.some((path) => currentUrl.startsWith(path))}
-    <div class="relative">
-      <OnThisPage {extract} headingSelector="#mainContent > :where(h2, h3)" />
-    </div>
-  {/if}
+{@render children()}
 
-  {@render children()}
-</div>
 <Footer {brand} {lis} />

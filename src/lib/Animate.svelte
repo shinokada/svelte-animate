@@ -1,7 +1,7 @@
 <script lang="ts">
   import 'animate.css';
-  import type { Snippet } from 'svelte';
-  import type { AnimationProps } from './types.ts';
+  
+  import type { AnimationProps as Props } from './types.ts';
 
   let prefersReducedMotion = $state();
   let isAnimating = $state(false); // Add animation lock state
@@ -13,15 +13,7 @@
     }
   });
 
-  interface Props extends AnimationProps {
-    children: Snippet;
-    hideAfter?: boolean;
-    delay?: '1s' | '2s' | '3s' | '4s' | '5s';
-    speed?: 'slower' | 'slow' | 'fast' | 'faster';
-    repeat?: number;
-  }
-
-  let { children, animation = 'bounce', trigger, duration = '1s', hideAfter = false, delay, speed, repeat }: Props = $props();
+  let { children, animation = 'bounce', trigger, duration = '1s', hideAfter = false, delay, repeat }: Props = $props();
 
   let animationClass = $state('animate__animated');
   let isVisible = $state(true);
@@ -33,12 +25,21 @@
       classes.push(`animate__delay-${delay}`);
     }
 
-    if (speed) {
-      classes.push(`animate__${speed}`);
-    }
-
-    if (repeat && repeat > 0) {
-      classes.push(`animate__repeat-${repeat}`);
+    if (repeat) {
+      switch (repeat) {
+        case '1':
+          classes.push('animate__repeat-1');
+          break;
+        case '2':
+          classes.push('animate__repeat-2');
+          break;
+        case '3':
+          classes.push('animate__repeat-3');
+          break;
+        case 'infinite':
+          classes.push('animate__infinite');
+          break;
+      }
     }
 
     return classes.join(' ');
@@ -95,6 +96,10 @@
       }
     }
   }
+
+  $effect(() => {
+    $inspect('animationClass', animationClass);
+  });
 </script>
 
 {#if prefersReducedMotion}
