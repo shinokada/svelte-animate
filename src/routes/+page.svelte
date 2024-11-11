@@ -56,6 +56,7 @@
     (() => {
       let props = [];
       if (animateTrigger !== 'hover') props.push(` trigger="${animateTrigger}"`);
+      if (animationName !== 'bounce') props.push(` animation="${animationName}"`);
       if (animateDelay !== '0s') props.push(` delay="${animateDelay}"`);
       if (animateDuration !== '1s') props.push(` duration="${animateDuration}"`);
       if (animateRepeat !== '1') props.push(` repeat="${animateRepeat}"`);
