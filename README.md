@@ -42,23 +42,15 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate>
-	<div>This will bounce on hover!</div>
+  <div>This will bounce on hover!</div>
 </Animate>
 ```
 
 3. Advanced usage:
 
 ```svelte
-<Animate
-	animation="fadeIn"
-	trigger="click"
-	duration="2s"
-	delay="1s"
-	speed="slow"
-	repeat={2}
-	hideAfter={true}
->
-	<div>Click me for a customized animation experience!</div>
+<Animate animation="fadeIn" trigger="click" duration="2s" delay="1s" speed="slow" repeat={2} hideAfter={true}>
+  <div>Click me for a customized animation experience!</div>
 </Animate>
 ```
 
@@ -102,7 +94,7 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate>
-	<button>Hover to bounce!</button>
+  <button>Hover to bounce!</button>
 </Animate>
 ```
 
@@ -110,7 +102,7 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate animation="rubberBand" trigger="click" delay="2s" speed="slow">
-	<div>Click for a slow, delayed effect!</div>
+  <div>Click for a slow, delayed effect!</div>
 </Animate>
 ```
 
@@ -118,7 +110,7 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate animation="pulse" trigger="both" duration="0.5s" repeat={3}>
-	<span>I'll pulse three times!</span>
+  <span>I'll pulse three times!</span>
 </Animate>
 ```
 
@@ -126,7 +118,7 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate animation="fadeInUp" trigger="click" hideAfter={true} duration="1.5s">
-	<div>I'll fade in and then disappear!</div>
+  <div>I'll fade in and then disappear!</div>
 </Animate>
 ```
 
