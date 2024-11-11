@@ -5,7 +5,7 @@
   /*eslint no-undef: "off"*/
   const localStorageName = toUpperSnakeCase(__NAME__) + '_CODE_BLOCK_STYLE';
 
-  let selected: string = $state(browser ? (localStorage.getItem(localStorageName) ?? 'gigavolt') : 'gigavolt');
+  let selected: string = $state(browser ? (localStorage.getItem(localStorageName) ?? 'tokyo-night-dark') : 'tokyo-night-dark');
 
   const styles = Object.entries(stylesImport).map(([path]) => ({
     value: path.slice(path.lastIndexOf('/') + 1, -4),
