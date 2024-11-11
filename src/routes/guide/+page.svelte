@@ -3,21 +3,8 @@
   // import { page } from '$app/stores';
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
   import { P, List, Table } from 'svelte-5-ui-lib';
-
-  // let currentUrl = $state($page.url.pathname);
-  // function isIncluded(url: string, allowedUrls: string[]): boolean {
-  //   return allowedUrls.some((allowedUrl) => {
-  //     // For home page '/', do exact matching
-  //     if (allowedUrl === '/') {
-  //       return url === '/' || url === '';
-  //     }
-  //     // For other URLs, continue using startsWith
-  //     return url.startsWith(allowedUrl);
-  //   });
-  // }
-  // let urlsToIncludeSwitcher = ['/guide'];
-  // let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
-
+  import TypeList from '../../lib/types.ts?raw';
+  
   const modules = import.meta.glob('./md/*.md', {
     query: '?raw',
     import: 'default',
@@ -91,7 +78,7 @@
     <Table {tableItems} />
 
     <H2 class="text-2xl font-bold mb-4">Animation Types</H2>
-    <HighlightCompo codeLang="ts" code={modules['./md/types.md'] as string} />
+    <HighlightCompo codeLang="ts" code={TypeList as string} />
 
     <footer class="mt-12 pt-8 border-t border-gray-200">
       <p class="text-center text-gray-600">
