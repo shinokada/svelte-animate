@@ -39,7 +39,7 @@
   ];
 </script>
 
-<DocPage mainClass="mx-auto" div2Class="w-full">
+<div class="max-w-6xl mx-auto">
   <div class="max-w-4xl mx-auto px-4 py-8">
     <header class="mb-8">
       <H1 class="text-4xl font-bold mb-4">Svelte-Animate</H1>
@@ -86,4 +86,4 @@
       </p>
     </footer>
   </div>
-</DocPage>
+</div>
