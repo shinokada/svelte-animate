@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Animate, type TriggerType, type DurationType, type DelayType, type RepeatType } from '$lib';
-  import { TextGenerator } from './utils/textGenerator.ts';
+  import { TextGenerator } from '../utils/textGenerator.ts';
   import type { Component } from 'svelte';
   import { CodeWrapper, H1, DocPage } from 'runes-webkit';
   import type { AnimationType } from '$lib';
+  import Animations from '$lib/Animations.svelte';
   import { Sidebar, SidebarItem, SidebarGroup, Radio, Label, uiHelpers, Button } from 'svelte-5-ui-lib';
-  import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
-  import { isGeneratedCodeOverflow } from './utils/helper.ts';
+  import DynamicCodeBlockHighlight from '../utils/DynamicCodeBlockHighlight.svelte';
+  import { isGeneratedCodeOverflow } from '../utils/helper.ts';
 
   // random icon
   import * as icons from 'svelte-heros-v2';
@@ -32,15 +33,15 @@
     Sliding: ['slideInDown', 'slideInLeft', 'slideInRight', 'slideInUp'],
     Zooming: ['zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp']
   };
-  let animationName = $state('bounce');
+  let animationName: AnimationType[] = $state(['bounce']);
   const handleClick = (animation: AnimationType) => {
-    animationName = animation;
+    animationName = [animation];
   };
 
   const durations: DurationType[] = ['1s', '2s', '3s', '500ms', '800ms'];
   let animateDuration: DurationType = $state('1s');
-  const delays: DelayType[] = ['0s', '1s', '2s', '3s', '4s', '5s'];
-  let animateDelay: DelayType = $state('0s');
+  const delays: number[] = [ 0, 500, 1000, 1500, 2000, 2500 ];
+  let animateDelay: number = $state(0);
   const repeats: RepeatType[] = ['1', '2', '3', 'infinite'];
   let animateRepeat: RepeatType = $state('1');
 
@@ -56,15 +57,15 @@
     (() => {
       let props = [];
       if (animateTrigger !== 'hover') props.push(` trigger="${animateTrigger}"`);
-      if (animationName !== 'bounce') props.push(` animation="${animationName}"`);
-      if (animateDelay !== '0s') props.push(` delay="${animateDelay}"`);
+      if (animationName[0] !== 'bounce') props.push(` animation=["${animationName}"]`);
+      if (animateDelay !== 0) props.push(` delay="${animateDelay}"`);
       if (animateDuration !== '1s') props.push(` duration="${animateDuration}"`);
       if (animateRepeat !== '1') props.push(` repeat="${animateRepeat}"`);
       if (hideAfter) props.push(` hideAfter={true}`);
       const propsString = props.length > 0 ? props.map((prop) => `\n  ${prop}`).join('') + '\n' : '';
-      return `<Animate${propsString}>
+      return `<Animations${propsString}>
   My animation item
-</Animate>`;
+</Animations>`;
     })()
   );
   // end of code generator
@@ -91,15 +92,22 @@
       {#each Object.entries(animations) as [category, animationList]}
         <h3 class="category-title my-1">{category}</h3>
         {#each animationList as animation}
-          <SidebarItem onclick={() => handleClick(animation as AnimationType)} label={animation} />
+          <SidebarItem onclick={() => handleClick(animation as AnimationType)} label={animation as string} />
         {/each}
       {/each}
     </SidebarGroup>
   </Sidebar>
 
   <div class="w-full max-w-4xl mx-auto p-4 space-y-6">
-    <H1>Svelte Animate: {animationName}</H1>
+    <H1>Svelte Animate: {animationName} TEST</H1>
     <CodeWrapper>
+      <div class="overflow-hidden grid grid-cols-1 w-full gap-4 mb-4">
+        <div class="overflow-hidden flex flex-col justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
+          <Animations trigger={animateTrigger as TriggerType} animations={animationName} duration={animateDuration as DurationType} delay={animateDelay} repeat={animateRepeat} >
+            <p class="text-3xl font-bold">{randomText}</p>
+          </Animations>
+        </div>
+      </div>
       <div class="mb-4 flex flex-wrap space-x-4">
         <Label class="mb-4 w-full font-bold">Event</Label>
         {#each triggers as trigger}
@@ -128,23 +136,7 @@
       <div class="flex flex-wrap justify-center gap-2 md:justify-start mb-4">
         <Button class="w-48" color="blue" onclick={handleHideAfter}>{hideAfter ? 'Remove hideAfter' : 'Add hideAfter'}</Button>
       </div>
-      <div class="overflow-hidden grid grid-cols-1 w-full gap-4">
-        <div class="overflow-hidden flex flex-col justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animate trigger={animateTrigger as TriggerType} animation={animationName as AnimationType} duration={animateDuration as DurationType} delay={animateDelay as DelayType} repeat={animateRepeat} {hideAfter}>
-            <p class="text-3xl font-bold">{randomText}</p>
-          </Animate>
-        </div>
-        <div class="overflow-hidden flex flex-col items-center justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animate trigger={animateTrigger as TriggerType} animation={animationName as AnimationType} duration={animateDuration as DurationType} delay={animateDelay as DelayType} repeat={animateRepeat} {hideAfter}>
-            <img src="https://picsum.photos/200/200" alt="Demo" width="150" height="150" />
-          </Animate>
-        </div>
-        <div class="overflow-hidden flex flex-col items-center justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animate trigger={animateTrigger as TriggerType} animation={animationName as AnimationType} duration={animateDuration as DurationType} delay={animateDelay as DelayType} repeat={animateRepeat} {hideAfter}>
-            <RandomIcon size="50" color="blue" />
-          </Animate>
-        </div>
-      </div>
+      
       {#snippet codeblock()}
         <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
       {/snippet}

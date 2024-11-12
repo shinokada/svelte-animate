@@ -100,9 +100,12 @@ export type AnimationType =
   | 'slideOutUp';
 
 export type TriggerType = 'hover' | 'click' | 'both' | undefined;
+export type AutoTriggerType = 'hover' | 'click' | 'both' | 'auto' | undefined;
+
 export type DurationType = '1s' | '2s' | '3s' | '800ms' | '500ms';
 export type DelayType = '0s' | '1s' | '2s' | '3s' | '4s' | '5s';
 export type RepeatType = '1' | '2' | '3' | 'infinite';
+export type PauseDurationType = '0s'| '500ms'| '800ms'|'1s' | '2s';
 
 export interface AnimationProps extends HTMLButtonAttributes {
   animation?: AnimationType;
@@ -112,4 +115,17 @@ export interface AnimationProps extends HTMLButtonAttributes {
   hideAfter?: boolean;
   delay?: DelayType;
   repeat?: RepeatType;
+}
+
+export interface EnhancedAnimationProps extends HTMLButtonAttributes {
+  animations?: AnimationType[];
+  trigger?: AutoTriggerType;
+  duration?: string;
+  children: Snippet;
+  hideBetween?: boolean;
+  hideEnd?: boolean;
+  delay?: number;
+  repeat?: RepeatType;
+  pauseDuration?: number;
+  class?: string;
 }
