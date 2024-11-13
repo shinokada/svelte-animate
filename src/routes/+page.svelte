@@ -6,9 +6,9 @@
   import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
   import { TextGenerator } from './utils/textGenerator.ts';
-  import { animations } from "./utils/sidebarMenu.ts";
+  import { animations } from './utils/sidebarMenu.ts';
   import * as icons from 'flowbite-svelte-icons';
-  
+
   type IconType = typeof icons;
   type IconKey = keyof IconType;
   type ContentType = 'text' | 'image' | 'icon';
@@ -92,10 +92,13 @@
     isSidebarOpen = sidebarUi.isOpen;
   });
 </script>
+
 <SidebarButton onclick={sidebarUi.toggle} breakpoint="lg" class="mb-2" />
 <div class="mx-auto lg:pl-64">
   <Sidebar
-    backdrop={false} isOpen={isSidebarOpen} closeSidebar={closeSidebar}
+    backdrop={false}
+    isOpen={isSidebarOpen}
+    {closeSidebar}
     breakpoint="lg"
     activeClass="flex items-center p-1 text-base font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer"
     nonActiveClass="p-1 hover:bg-gray-200 hover:cursor-pointer"

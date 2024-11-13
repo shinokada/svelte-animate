@@ -3,18 +3,11 @@
   import { sineIn } from 'svelte/easing';
   import type { Component } from 'svelte';
   import { page } from '$app/stores';
-  import type { AnimationType } from '$lib';
-  import { Footer, OnThisPage, extract, removeHyphensAndCapitalize, DotsHorizontalOutline, GithubSolid, random_tailwind_color, XSolid, Bluesky } from 'runes-webkit';
-  import { Navbar, NavLi, NavBrand, NavUl, uiHelpers, Darkmode, Dropdown, DropdownUl, DropdownLi, Sidebar,
-    SidebarGroup,
-    SidebarDropdownWrapper,
-    SidebarItem,
-    CloseButton,
-    SidebarBrand } from 'svelte-5-ui-lib';
+  import { Footer, removeHyphensAndCapitalize, DotsHorizontalOutline, GithubSolid, random_tailwind_color, XSolid, Bluesky } from 'runes-webkit';
+  import { Navbar, NavLi, NavBrand, NavUl, uiHelpers, Darkmode, Dropdown, DropdownUl, DropdownLi } from 'svelte-5-ui-lib';
   import { RunesMetaTags, deepMerge } from 'runes-meta-tags';
   import { Runatics } from 'runatics';
   import DynamicCodeBlockStyle from './utils/DynamicCodeBlockStyle.svelte';
-  import {animations} from './utils/sidebarMenu.ts';
   type LiType = {
     name: string;
     href: string;
@@ -24,10 +17,6 @@
   const analyticsId = data.ANALYTICS_ID_APP_TWO;
   // metaTags
   let metaTags = $state($page.data.pageMetaTags ? deepMerge($page.data.layoutMetaTags, $page.data.pageMetaTags) : data.layoutMetaTags);
-  // sidebar
-  const sidebarUi = uiHelpers();
-  let isOpen = $state(false);
-  const closeSidebar = sidebarUi.close;
 
   let currentUrl = $state($page.url.pathname);
   function isIncluded(url: string, allowedUrls: string[]): boolean {
@@ -50,7 +39,7 @@
     name: 'codewithshin.com',
     href: 'https://codewithshin.com'
   };
-  const urlsToIncludeSwitcherAndSidebar = ['/'];
+
   /*eslint no-undef: "off"*/
   const siteName = removeHyphensAndCapitalize(__NAME__);
   const githubUrl = `https://github.com/shinokada/${__NAME__}`;
@@ -77,17 +66,11 @@
     easing: sineIn
   };
 
-  let animationName: AnimationType | AnimationType[] = $state(['bounce']);
-  const handleClick = (animation: AnimationType | AnimationType[]) => {
-    animationName = animation;
-  };
-
   $effect(() => {
     navStatus = nav.isOpen;
     dropdownStatus = dropdown.isOpen;
     currentUrl = $page.url.pathname;
     metaTags = $page.data.pageMetaTags ? deepMerge($page.data.layoutMetaTags, $page.data.pageMetaTags) : data.layoutMetaTags;
-    isOpen = sidebarUi.isOpen;
   });
 </script>
 
