@@ -36,6 +36,9 @@
   let animationName: AnimationType | AnimationType[] = $state(['bounce']);
   const handleClick = (animation: AnimationType | AnimationType[]) => {
     animationName = animation;
+    if (isSidebarOpen) {
+      closeSidebar();
+    }
   };
 
   const durations: string[] = ['1s', '2s', '3s', '500ms', '800ms'];
@@ -94,16 +97,16 @@
 </script>
 
 <SidebarButton onclick={sidebarUi.toggle} breakpoint="lg" class="mb-2" />
-<div class="mx-auto lg:pl-64">
+<div class="mx-auto lg:pl-80">
   <Sidebar
     backdrop={false}
     isOpen={isSidebarOpen}
     {closeSidebar}
     breakpoint="lg"
-    activeClass="flex items-center p-1 text-base font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer"
-    nonActiveClass="p-1 hover:bg-gray-200 hover:cursor-pointer"
+    activeClass="flex items-center p-0.5 text-sm font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer"
+    nonActiveClass="p-0.5 hover:bg-gray-200 hover:cursor-pointer"
     divClass="dark_bg_theme bg-gray-50"
-    class="dark_bg_theme h-screen border-r border-gray-50 lg:top-[58px] dark:border-gray-700 mb-8"
+    class="dark_bg_theme h-screen border-r border-gray-50 lg:top-[58px] dark:border-gray-700 mb-8 w-80"
   >
     <SidebarGroup>
       {#each Object.entries(animations) as [category, animationList]}
