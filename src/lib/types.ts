@@ -105,7 +105,7 @@ export type AutoTriggerType = 'hover' | 'click' | 'both' | 'auto' | undefined;
 export type DurationType = '1s' | '2s' | '3s' | '800ms' | '500ms';
 export type DelayType = '0s' | '1s' | '2s' | '3s' | '4s' | '5s';
 export type RepeatType = '1' | '2' | '3' | 'infinite';
-export type PauseDurationType = '0s'| '500ms'| '800ms'|'1s' | '2s';
+export type PauseDurationType = '0s' | '500ms' | '800ms' | '1s' | '2s';
 
 export interface AnimationProps extends HTMLButtonAttributes {
   animation?: AnimationType;
@@ -118,7 +118,7 @@ export interface AnimationProps extends HTMLButtonAttributes {
 }
 
 export interface EnhancedAnimationProps extends HTMLButtonAttributes {
-  animations?: AnimationType[];
+  animations?: AnimationType[] | AnimationType;
   trigger?: AutoTriggerType;
   duration?: string;
   children: Snippet;

@@ -38,7 +38,7 @@
   let duration: DurationType = $state('1s');
   const delays = [0, 500, 1000, 1500, 2000, 3000];
   let delay: number = $state(0);
-  const repeats = ['1', '2', '3', 'infinite']
+  const repeats = ['1', '2', '3', 'infinite'];
   let animationRepeat: RepeatType = $state('1');
   const pauseDurations = [0, 500, 800, 1000, 2000];
   let pauseDuration = $state(0);
@@ -54,35 +54,27 @@
 </script>
 
 <DocPage mainClass="mx-auto lg:pl-64" div2Class="w-full">
-  <h1 class="text-3xl font-bold">Svelte Animations</h1>
-
+  <h1 class="text-3xl font-bold">Multiple Animations</h1>
   <Sidebar
-  backdrop={false}
-  breakpoint="lg"
-  activeClass="flex items-center p-1 text-base font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer"
-  nonActiveClass="p-1 hover:bg-gray-200 hover:cursor-pointer"
-  divClass="dark_bg_theme bg-gray-50"
-  class="dark_bg_theme h-screen border-r border-gray-50 lg:top-[58px] dark:border-gray-700 mb-8"
->
-  <SidebarGroup>
-    {#each Object.entries(animations) as [category,]}
-        <SidebarItem onclick={() => handleAnimationListChange(category)} label={category} />
-    {/each}
-  </SidebarGroup>
-</Sidebar>
-
-<div class="overflow-hidden grid grid-cols-1 w-full gap-4 h-48">
-  <Animations
-    animations={animationList}
-    {trigger}
-    {duration}
-    {delay}
-    {pauseDuration}
-    hideBetween={true}
+    backdrop={false}
+    breakpoint="lg"
+    activeClass="flex items-center p-1 text-base font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer"
+    nonActiveClass="p-1 hover:bg-gray-200 hover:cursor-pointer"
+    divClass="dark_bg_theme bg-gray-50"
+    class="dark_bg_theme h-screen border-r border-gray-50 lg:top-[58px] dark:border-gray-700 mb-8"
   >
-    <p class="text-3xl font-bold">{animationList}</p>
-  </Animations>
-</div>
+    <SidebarGroup>
+      {#each Object.entries(animations) as [category]}
+        <SidebarItem onclick={() => handleAnimationListChange(category)} label={category} />
+      {/each}
+    </SidebarGroup>
+  </Sidebar>
+
+  <div class="overflow-hidden grid grid-cols-1 w-full gap-4 h-48">
+    <Animations animations={animationList} {trigger} {duration} {delay} {pauseDuration} hideBetween={true}>
+      <p class="text-3xl font-bold">{animationList}</p>
+    </Animations>
+  </div>
 
   <div class="mb-4 flex flex-wrap space-x-4">
     <Label class="mb-4 w-full font-bold">Event</Label>
@@ -118,25 +110,14 @@
 
   <div class="overflow-hidden grid grid-cols-1 w-full gap-4">
     <h2>Repeat 2</h2>
-    <Animations
-      animations={['slideInLeft', 'tada', 'slideOutRight']}
-      repeat="2"
-      trigger="click"
-      hideBetween={true}
-    >
+    <Animations animations={['slideInLeft', 'tada', 'slideOutRight']} repeat="2" trigger="click" hideBetween={true}>
       <p class="text-3xl font-bold">Animations</p>
     </Animations>
   </div>
 
   <div class="overflow-hidden grid grid-cols-1 w-full gap-4">
     <h2>Repeat & hideEnd</h2>
-    <Animations
-      animations={['slideInLeft', 'tada', 'slideOutRight']}
-      repeat="2"
-      trigger="click"
-      hideBetween={true}
-      hideEnd={true}
-    >
+    <Animations animations={['slideInLeft', 'tada', 'slideOutRight']} repeat="2" trigger="click" hideBetween={true} hideEnd={true}>
       <p class="text-3xl font-bold">Animations</p>
     </Animations>
   </div>

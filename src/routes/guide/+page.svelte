@@ -4,7 +4,7 @@
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
   import { P, List, Table } from 'svelte-5-ui-lib';
   import TypeList from '../../lib/types.ts?raw';
-  
+
   const modules = import.meta.glob('./md/*.md', {
     query: '?raw',
     import: 'default',

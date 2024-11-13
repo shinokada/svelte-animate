@@ -26,6 +26,10 @@
   let randomText: string = myGenerator.getGreetingWithQuestion();
 
   const animations = {
+    '2 Combinations': [['backInDown', 'backOutUp'], ['rotateInDownLeft', 'rotateOutUpRight'], ['slideInLeft', 'slideOutRight'], ['jackInTheBox', 'rollIn'],
+    ['backInDown', 'backOutUp'],['fadeIn', 'fadeOut'], ['zoomIn', 'zoomOut']],
+    '3 Combinations': [['zoomIn', 'swing', 'zoomOut'],['slideInLeft', 'tada', 'slideOutRight'],['rotateInDownLeft', 'rubberBand', 'rotateOutUpRight'],['jackInTheBox', 'headShake', 'rollOut'],['backInDown', 'jello', 'backOutUp']],
+
     'Attention Seekers': ['bounce', 'flash', 'pulse', 'rubberBand', 'shakeX', 'shakeY', 'headShake', 'swing', 'tada', 'wobble', 'jello', 'heartBeat'],
     Bouncing: ['bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp'],
     Fading: ['fadeIn', 'fadeInDown', 'fadeInLeft', 'fadeInRight', 'fadeInUp'],
@@ -33,14 +37,14 @@
     Sliding: ['slideInDown', 'slideInLeft', 'slideInRight', 'slideInUp'],
     Zooming: ['zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp']
   };
-  let animationName: AnimationType[] = $state(['bounce']);
-  const handleClick = (animation: AnimationType) => {
-    animationName = [animation];
+  let animationName: AnimationType | AnimationType[] = $state(['bounce']);
+  const handleClick = (animation: AnimationType | AnimationType[]) => {
+    animationName = animation;
   };
 
   const durations: DurationType[] = ['1s', '2s', '3s', '500ms', '800ms'];
   let animateDuration: DurationType = $state('1s');
-  const delays: number[] = [ 0, 500, 1000, 1500, 2000, 2500 ];
+  const delays: number[] = [0, 500, 1000, 1500, 2000, 2500];
   let animateDelay: number = $state(0);
   const repeats: RepeatType[] = ['1', '2', '3', 'infinite'];
   let animateRepeat: RepeatType = $state('1');
@@ -92,18 +96,18 @@
       {#each Object.entries(animations) as [category, animationList]}
         <h3 class="category-title my-1">{category}</h3>
         {#each animationList as animation}
-          <SidebarItem onclick={() => handleClick(animation as AnimationType)} label={animation as string} />
+          <SidebarItem onclick={() => handleClick(animation as AnimationType | AnimationType[])} label={animation as string} />
         {/each}
       {/each}
     </SidebarGroup>
   </Sidebar>
 
   <div class="w-full max-w-4xl mx-auto p-4 space-y-6">
-    <H1>Svelte Animate: {animationName} TEST</H1>
+    <H1>Single Animatation: {animationName}</H1>
     <CodeWrapper>
       <div class="overflow-hidden grid grid-cols-1 w-full gap-4 mb-4">
         <div class="overflow-hidden flex flex-col justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animations trigger={animateTrigger as TriggerType} animations={animationName} duration={animateDuration as DurationType} delay={animateDelay} repeat={animateRepeat} >
+          <Animations trigger={animateTrigger as TriggerType} animations={animationName} duration={animateDuration as DurationType} delay={animateDelay} repeat={animateRepeat} hideBetween={true}>
             <p class="text-3xl font-bold">{randomText}</p>
           </Animations>
         </div>
@@ -136,7 +140,7 @@
       <div class="flex flex-wrap justify-center gap-2 md:justify-start mb-4">
         <Button class="w-48" color="blue" onclick={handleHideAfter}>{hideAfter ? 'Remove hideAfter' : 'Add hideAfter'}</Button>
       </div>
-      
+
       {#snippet codeblock()}
         <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
       {/snippet}

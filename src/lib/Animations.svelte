@@ -14,22 +14,13 @@
     }
   });
 
-  let {
-    children,
-    animations = ['bounce'],
-    trigger = 'hover',
-    duration = '1s',
-    hideBetween = false,
-    hideEnd = false,
-    delay = 0,
-    repeat = '1',
-    pauseDuration = 0,
-    class: className = '',
-  }: Props = $props();
+  let { children, animations = 'bounce', trigger = 'hover', duration = '1s', hideBetween = false, hideEnd = false, delay = 0, repeat = '1', pauseDuration = 0, class: className = '' }: Props = $props();
 
   let animationClass = $state('animate__animated');
   let isVisible = $state(true);
-  let totalRepeats = parseInt(repeat) || 1;
+  let totalRepeats = $derived(parseInt(repeat) || 1);
+
+  let animationsArray: AnimationType[] = $derived(Array.isArray(animations) ? animations : [animations as AnimationType]);
 
   function getAnimationClasses(animation: AnimationType) {
     const classes = [`animate__animated`, `animate__${animation}`];
@@ -44,7 +35,7 @@
 
   async function startAnimation(startFromIndex = 0) {
     if (!canStartNewAnimation()) return;
-    
+
     isAnimating = true;
     isVisible = true;
     currentAnimationIndex = startFromIndex;
@@ -55,27 +46,27 @@
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
 
-      for (let i = startFromIndex; i < animations.length; i++) {
+      for (let i = startFromIndex; i < animationsArray.length; i++) {
         console.log('i', i);
         if (!isAnimating) break; // Allow for interruption
-        
+
         currentAnimationIndex = i;
-        
+
         // Remove animation classes
         animationClass = '';
         // Force a browser reflow
         await new Promise((resolve) => setTimeout(resolve, 1));
         // Add animation classes back
-        animationClass = getAnimationClasses(animations[i]);
-        
+        animationClass = getAnimationClasses(animationsArray[i]);
+
         // Wait for animation to complete
         await new Promise((resolve) => {
           const durationMs = parseDuration(duration);
           setTimeout(resolve, durationMs);
         });
-        
+
         // Add pause between animations if not the last animation
-        if (i < animations.length - 1 && pauseDuration > 0) {
+        if (i < animationsArray.length - 1 && pauseDuration > 0) {
           await new Promise((resolve) => setTimeout(resolve, pauseDuration));
         }
       }
@@ -105,7 +96,7 @@
       }
       // isVisible = true;
     }
-    
+
     // Announce completion
     const announcement = document.createElement('div');
     announcement.setAttribute('aria-live', 'polite');
@@ -116,7 +107,7 @@
     // Start next repetition if needed
     if (canStartNewAnimation()) {
       // Add a small delay before starting the next sequence
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
       startAnimation(0);
     }
   }
@@ -181,7 +172,7 @@
 {:else if trigger && trigger !== 'auto'}
   <button
     type="button"
-    aria-label={`Animate child element with ${animations[currentAnimationIndex]} effect`}
+    aria-label={`Animate child element with ${animationsArray[currentAnimationIndex]} effect`}
     aria-live="polite"
     class="{animationClass} {className}"
     style="opacity: {isVisible ? 1 : 0}; animation-duration: {duration}; background: none; border: none; padding: 0; cursor: pointer;"
@@ -192,12 +183,7 @@
     {@render children()}
   </button>
 {:else}
-  <span
-    aria-label={`Animate child element with ${animations[currentAnimationIndex]} effect`}
-    aria-live="polite"
-    class="{animationClass} {className}"
-    style="opacity: {isVisible ? 1 : 0}; animation-duration: {duration};"
-  >
+  <span aria-label={`Animate child element with ${animationsArray[currentAnimationIndex]} effect`} aria-live="polite" class="{animationClass} {className}" style="opacity: {isVisible ? 1 : 0}; animation-duration: {duration};">
     {@render children()}
   </span>
 {/if}
