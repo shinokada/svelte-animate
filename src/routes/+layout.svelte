@@ -3,13 +3,18 @@
   import { sineIn } from 'svelte/easing';
   import type { Component } from 'svelte';
   import { page } from '$app/stores';
-
+  import type { AnimationType } from '$lib';
   import { Footer, OnThisPage, extract, removeHyphensAndCapitalize, DotsHorizontalOutline, GithubSolid, random_tailwind_color, XSolid, Bluesky } from 'runes-webkit';
-  import { Navbar, NavLi, NavBrand, NavUl, uiHelpers, Darkmode, Dropdown, DropdownUl, DropdownLi } from 'svelte-5-ui-lib';
+  import { Navbar, NavLi, NavBrand, NavUl, uiHelpers, Darkmode, Dropdown, DropdownUl, DropdownLi, Sidebar,
+    SidebarGroup,
+    SidebarDropdownWrapper,
+    SidebarItem,
+    CloseButton,
+    SidebarBrand } from 'svelte-5-ui-lib';
   import { RunesMetaTags, deepMerge } from 'runes-meta-tags';
   import { Runatics } from 'runatics';
   import DynamicCodeBlockStyle from './utils/DynamicCodeBlockStyle.svelte';
-
+  import {animations} from './utils/sidebarMenu.ts';
   type LiType = {
     name: string;
     href: string;
@@ -45,7 +50,7 @@
     name: 'codewithshin.com',
     href: 'https://codewithshin.com'
   };
-  const urlsToIncludeSwitcherAndSidebar = ['/guide'];
+  const urlsToIncludeSwitcherAndSidebar = ['/'];
   /*eslint no-undef: "off"*/
   const siteName = removeHyphensAndCapitalize(__NAME__);
   const githubUrl = `https://github.com/shinokada/${__NAME__}`;
@@ -70,6 +75,11 @@
     y: 0,
     duration: 200,
     easing: sineIn
+  };
+
+  let animationName: AnimationType | AnimationType[] = $state(['bounce']);
+  const handleClick = (animation: AnimationType | AnimationType[]) => {
+    animationName = animation;
   };
 
   $effect(() => {

@@ -1,5 +1,5 @@
 import type { Component } from 'svelte';
-import { type ListType, sidebarList, CogOutline, ExpandOutline, BellActiveAltOutline, BadgeCheckOutline, GridPlusOutline } from 'runes-webkit';
+import { type ListType, CogOutline, BadgeCheckOutline } from 'runes-webkit';
 
 export const newSidebarList: ListType[] = [
   {

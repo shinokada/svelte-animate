@@ -48,6 +48,9 @@ importers:
       eslint-plugin-svelte:
         specifier: ^2.46.0
         version: 2.46.0(eslint@9.14.0(jiti@1.21.6))(svelte@5.1.14)
+      flowbite-svelte-icons:
+        specifier: ^2.0.2
+        version: 2.0.2(svelte@5.1.14)(tailwind-merge@2.5.4)(tailwindcss@3.4.14)
       globals:
         specifier: ^15.12.0
         version: 15.12.0

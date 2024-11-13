@@ -1,6 +1,6 @@
 {
   "name": "svelte-animate",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A lightweight Svelte component that adds beautiful CSS animations to any element using Animate.css library. Features include click/hover triggers, customizable duration, reduced motion support, and accessibility features. Perfect for creating engaging user interfaces with smooth animations in Svelte applications.",
   "keywords": [
     "svelte",
@@ -77,6 +77,7 @@
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.46.0",
+    "flowbite-svelte-icons": "^2.0.2",
     "globals": "^15.12.0",
     "highlight.js": "^11.10.0",
     "prettier": "^3.3.3",

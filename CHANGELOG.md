@@ -1,5 +1,11 @@
 # svelte-animate
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: animations prop with string or array of animations
+
 ## 0.2.0
 
 ### Minor Changes
