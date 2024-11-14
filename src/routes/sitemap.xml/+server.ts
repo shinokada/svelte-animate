@@ -5,7 +5,7 @@ interface Page {
   lastmod?: string;
 }
 
-const site = 'https://runes-webkit-starter.codewithshin.com';
+const site = 'https://svelte-animate.codewithshin.com';
 const pages: Page[] = [
   {
     loc: '',
