@@ -3,10 +3,10 @@
   import type { Component } from 'svelte';
   import { CodeWrapper, H1 } from 'runes-webkit';
   import { Sidebar, SidebarItem, SidebarGroup, Radio, Label, SidebarButton, uiHelpers, Button } from 'svelte-5-ui-lib';
-  import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
-  import { isGeneratedCodeOverflow } from './utils/helper.ts';
-  import { TextGenerator } from './utils/textGenerator.ts';
-  import { animations } from './utils/sidebarMenu.ts';
+  import DynamicCodeBlockHighlight from '../utils/DynamicCodeBlockHighlight.svelte';
+  import { isGeneratedCodeOverflow } from '../utils/helper.ts';
+  import { TextGenerator } from '../utils/textGenerator.ts';
+  import { animations } from '../utils/sidebarMenu.ts';
   import * as icons from 'flowbite-svelte-icons';
 
   type IconType = typeof icons;
