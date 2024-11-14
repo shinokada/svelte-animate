@@ -1,6 +1,5 @@
 <script lang="ts">
   import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
-  import { H1, DocPage } from 'runes-webkit';
   import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
   import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
@@ -84,7 +83,7 @@
 </script>
 
 <div class="max-w-4xl mx-auto p-4">
-  <H1>Animation Sequence Builder</H1>
+  <h1>Animation Sequence Builder</h1>
   
   <!-- Preview Section -->
   <div class="mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
@@ -113,7 +112,45 @@
     </div>
   </div>
 
+  <!-- Animation Sequence Builder -->
+  <div class="space-y-4 mb-8">
+    <h2 class="text-xl font-bold mb-4">Animation Sequence</h2>
+    <span class="text-sm text-gray-600 dark:text-white">
+      {remainingAnimations} of {MAX_ANIMATIONS} animations remaining
+    </span>
+    {#each selectedAnimations as animation, index}
+      <div class="flex items-center space-x-2">
+        <span class="dark:text-white w-32 font-medium">Animation {index + 1}:</span>
+        <Select 
+          bind:value={selectedAnimations[index]}
+          class="flex-grow px-3 py-2 border rounded"
+        >
+          <option value="">Select an animation</option>
+          {#each animations as anim}
+            <option value={anim}>{anim}</option>
+          {/each}
+        </Select>
+        <button 
+          onclick={() => removeAnimation(index)}
+          class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          disabled={selectedAnimations.length === 1}
+        >
+          Remove
+        </button>
+      </div>
+    {/each}
+
+    <button 
+      onclick={addAnimation}
+      disabled={selectedAnimations.length >= MAX_ANIMATIONS}
+      class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+      Add Animation
+    </button>
+  </div>
+
   <!-- Controls Section -->
+  <h3>Controls</h3>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <!-- Trigger Selection -->
     <div class="space-y-2">
@@ -191,42 +228,6 @@
     </div>
   </div>
 
-  <!-- Animation Sequence Builder -->
-  <div class="space-y-4">
-    <h2 class="text-xl font-bold mb-4">Animation Sequence</h2>
-    <span class="text-sm text-gray-600 dark:text-white">
-      {remainingAnimations} of {MAX_ANIMATIONS} animations remaining
-    </span>
-    {#each selectedAnimations as animation, index}
-      <div class="flex items-center space-x-2">
-        <span class="dark:text-white w-32 font-medium">Animation {index + 1}:</span>
-        <Select 
-          bind:value={selectedAnimations[index]}
-          class="flex-grow px-3 py-2 border rounded"
-        >
-          <option value="">Select an animation</option>
-          {#each animations as anim}
-            <option value={anim}>{anim}</option>
-          {/each}
-        </Select>
-        <button 
-          onclick={() => removeAnimation(index)}
-          class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          disabled={selectedAnimations.length === 1}
-        >
-          Remove
-        </button>
-      </div>
-    {/each}
-
-    <button 
-      onclick={addAnimation}
-      disabled={selectedAnimations.length >= MAX_ANIMATIONS}
-      class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-      Add Animation
-    </button>
-  </div>
-
+  <h3>Codes</h3>
   <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
 </div>
