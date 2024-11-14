@@ -1,192 +1,199 @@
 <script lang="ts">
-  import { Animate, type AutoTriggerType, type RepeatType, type AnimationType } from '$lib';
-  import type { Component } from 'svelte';
-  import { CodeWrapper, H1 } from 'runes-webkit';
-  import { Sidebar, SidebarItem, SidebarGroup, Radio, Label, SidebarButton, uiHelpers, Button } from 'svelte-5-ui-lib';
-  import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
-  import { isGeneratedCodeOverflow } from './utils/helper.ts';
-  import { TextGenerator } from './utils/textGenerator.ts';
-  import { animations } from './utils/sidebarMenu.ts';
-  import * as icons from 'flowbite-svelte-icons';
+  import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
+  import { H1, H2 } from 'runes-webkit';
+  import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
+  
+  const MAX_ANIMATIONS = 10;
+  const animations: AnimationType[] = [
+    'bounce', 'flash', 'pulse', 'rubberBand', 'shakeX', 'shakeY', 'headShake',
+    'swing', 'tada', 'wobble', 'jello', 'heartBeat', 'backInDown', 'backInLeft',
+    'backInRight', 'backInUp', 'backOutDown', 'backOutLeft', 'backOutRight',
+    'backOutUp', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight',
+    'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight',
+    'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft',
+    'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig',
+    'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig',
+    'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip',
+    'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedInRight',
+    'lightSpeedInLeft', 'lightSpeedOutRight', 'lightSpeedOutLeft', 'rotateIn',
+    'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight',
+    'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft',
+    'rotateOutUpRight', 'hinge', 'jackInTheBox', 'rollIn', 'rollOut', 'zoomIn',
+    'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut',
+    'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'slideInDown',
+    'slideInLeft', 'slideInRight', 'slideInUp', 'slideOutDown', 'slideOutLeft',
+    'slideOutRight', 'slideOutUp'
+  ].sort() as AnimationType[];
 
-  type IconType = typeof icons;
-  type IconKey = keyof IconType;
-  type ContentType = 'text' | 'image' | 'icon';
+  // State variables
+  let selectedAnimations = $state<AnimationType[]>(['bounce']);
+  let previewText = $state<string>("Animation Preview");
+  let trigger = $state<AutoTriggerType>('click');
+  let duration = $state<string>('1s');
 
-  const iconList = Object.keys(icons) as IconKey[];
-  // random icons
-  const getRandomIcon = () => {
-    const randomIndex = Math.floor(Math.random() * iconList.length);
-    const randomIconName = iconList[randomIndex];
-    return icons[randomIconName] as Component;
-  };
-  let RandomIcon = $state(getRandomIcon());
+  let hideEnd = $state<boolean>(false);
+  let delay = $state<number>(0);
+  let repeat = $state<RepeatType>('1');
+  let pauseDuration = $state<number>(0);
 
-  // text generator
-  const myGenerator = new TextGenerator();
-  let randomText = $state(myGenerator.getGreetingWithQuestion());
-
-  // random image
-  let imgUrl = $state('');
-  imgUrl = `https://picsum.photos/200/200?${Date.now()}`;
-
-  const elements: ContentType[] = ['text', 'image', 'icon'];
-  let selectedType = $state<ContentType>('text');
-
-  let animationName: AnimationType | AnimationType[] = $state(['bounce']);
-  const handleClick = (animation: AnimationType | AnimationType[]) => {
-    animationName = animation;
-    if (isSidebarOpen) {
-      closeSidebar();
+  // Animation management functions
+  function addAnimation(): void {
+    if (selectedAnimations.length < MAX_ANIMATIONS) {
+      selectedAnimations = [...selectedAnimations, 'bounce'];
     }
-  };
-
-  const durations: string[] = ['1s', '2s', '3s', '500ms', '800ms'];
-  let animateDuration: string = $state('1s');
-  const delays: number[] = [0, 500, 1000, 1500, 2000, 2500];
-  let animateDelay: number = $state(0);
-  const repeats: RepeatType[] = ['1', '2', '3', 'infinite'];
-  let animateRepeat: RepeatType = $state('1');
-
-  const triggers = ['hover', 'click', 'both'];
-  let animateTrigger = $state('click');
-  let hideEnd = $state(false);
-  const handleHideEnd = () => {
-    hideEnd = !hideEnd;
-  };
-
-  // Convert animation names to quoted format for code generator
-  function convertAnimationNames(animationName: AnimationType | AnimationType[]): string {
-    // If it's an array, map and join
-    if (Array.isArray(animationName)) {
-      return animationName
-        .map(name => `"${name}"`)
-        .join(',');
-    }
-    // If it's a single value
-    return `"${animationName}"`;
   }
 
-  // code generator
-  let generatedCode = $derived(
-    (() => {
-      let props = [];
-      let element = 'Hello World!';
-      if (animateTrigger !== 'hover') props.push(` trigger="${animateTrigger}"`);
-      if (animationName[0] !== 'bounce') props.push(` animations=[${convertAnimationNames(animationName)}]`);
-      if ( typeof animationName === 'object') props.push(` hideBetween={true}`);
-      if (animateDelay !== 0) props.push(` delay="${animateDelay}"`);
-      if (animateDuration !== '1s') props.push(` duration="${animateDuration}"`);
-      if (animateRepeat !== '1') props.push(` repeat="${animateRepeat}"`);
-      if (hideEnd) props.push(` hideEnd={true}`);
-      if (selectedType === 'text') {
-        element = `${randomText}`;
-      } else if (selectedType === 'image') {
-        element = '<img src="/images/myimg.png" alt="Demo" width="150" height="150" />';
-      } else if (selectedType === 'icon') {
-        element = '<MyIcon color="blue" class="h-28 w-28 mx-auto" />';
-      }
-      const propsString = props.length > 0 ? props.map((prop) => `\n  ${prop}`).join('') + '\n' : '';
-      return `<Animate${propsString}>
-  ${element}
-</Animate>`;
-    })()
-  );
-  // end of code generator
+  function removeAnimation(index: number): void {
+    selectedAnimations = selectedAnimations.filter((_, i) => i !== index);
+    if (selectedAnimations.length === 0) {
+      selectedAnimations = ['bounce'];
+    }
+  }
 
-  // for interactive builder
-  let builderExpand = $state(false);
-  let showBuilderExpandButton = $derived(isGeneratedCodeOverflow(generatedCode));
-  const handleBuilderExpandClick = () => {
-    builderExpand = !builderExpand;
-  };
-  // sidebar
-  const sidebarUi = uiHelpers();
-  let isSidebarOpen = $state(false);
-  const closeSidebar = sidebarUi.close;
-  $effect(() => {
-    isSidebarOpen = sidebarUi.isOpen;
-    $inspect('animationName', typeof animationName, animationName);
-  });
+  let remainingAnimations = $derived(MAX_ANIMATIONS - selectedAnimations.length);
 </script>
 
-<SidebarButton onclick={sidebarUi.toggle} breakpoint="lg" class="mb-2" />
-<div class="mx-auto lg:pl-80">
-  <Sidebar
-    backdrop={false}
-    isOpen={isSidebarOpen}
-    {closeSidebar}
-    breakpoint="lg"
-    activeClass="flex items-center p-0.5 text-sm font-normal text-white dark:hover:text-white hover:text-gray-900 bg-primary-700 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:cursor-pointer"
-    nonActiveClass="p-0.5 hover:bg-gray-200 hover:cursor-pointer"
-    divClass="dark_bg_theme bg-gray-50"
-    class="dark_bg_theme h-screen border-r border-gray-50 lg:top-[58px] dark:border-gray-700 mb-8 w-80"
-  >
-    <SidebarGroup>
-      {#each Object.entries(animations) as [category, animationList]}
-        <h3 class="category-title my-1">{category}</h3>
-        {#each animationList as animation}
-          <SidebarItem onclick={() => handleClick(animation as AnimationType | AnimationType[])} label={animation as string} />
-        {/each}
-      {/each}
-    </SidebarGroup>
-  </Sidebar>
+<div class="container mx-auto p-4">
+  <H1>Animation Sequence Builder</H1>
+  
+  <!-- Preview Section -->
+  <div class="mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+    <div class="overflow-hidden h-72 flex items-center justify-center mb-4">
+      <Animate
+        animations={selectedAnimations}
+        {trigger}
+        {duration}
+        hideBetween={true}
+        {hideEnd}
+        {delay}
+        {repeat}
+        {pauseDuration}
+      >
+        <H2>{previewText}</H2>
+      </Animate>
+    </div>
+    <div class="flex justify-center mb-4">
+      <Input 
+        type="text" 
+        bind:value={previewText}
+        class="px-3 py-2 border rounded mr-2 w-64" 
+        placeholder="Enter preview text"
+      />
+    </div>
+  </div>
 
-  <div class="w-full max-w-4xl mx-auto p-4 space-y-6">
-    <H1>Animatation(s): <span class="text-2xl">{animationName}</span></H1>
-    <CodeWrapper>
-      <div class="overflow-hidden grid grid-cols-1 w-full gap-4 mb-4">
-        <div class="overflow-hidden flex flex-col justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animate trigger={animateTrigger as AutoTriggerType} animations={animationName} duration={animateDuration} delay={animateDelay} repeat={animateRepeat} hideBetween={true} hideEnd={hideEnd}>
-            {#if selectedType === 'text'}
-              <p class="text-3xl">{randomText}</p>
-            {:else if selectedType === 'image'}
-              <img src={imgUrl} alt="Demo" width="150" height="150" class="mx-auto" />
-            {:else if selectedType === 'icon'}
-              <RandomIcon color="blue" class="h-28 w-28 mx-auto" />
-            {/if}
-          </Animate>
-        </div>
-      </div>
+  <!-- Controls Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Trigger Selection -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="trigger">Trigger Type:</Label>
+      <Select 
+        bind:value={trigger}
+        class="w-full px-3 py-2 border rounded"
+      >
+        <option value="hover">Hover</option>
+        <option value="click">Click</option>
+        <option value="both">Both</option>
+        <option value="auto">Auto</option>
+      </Select>
+    </div>
 
-      <div class="mb-4 flex flex-wrap space-x-4">
-        <Label class="mb-4 w-full font-bold">Event</Label>
-        {#each elements as element}
-          <Radio labelClass="w-24 my-1" name="type" bind:group={selectedType} value={element}>{element}</Radio>
-        {/each}
-      </div>
-      <div class="mb-4 flex flex-wrap space-x-4">
-        <Label class="mb-4 w-full font-bold">Event</Label>
-        {#each triggers as trigger}
-          <Radio labelClass="w-24 my-1" name="event" bind:group={animateTrigger} value={trigger}>{trigger}</Radio>
-        {/each}
-      </div>
-      <div class="mb-4 flex flex-wrap space-x-4">
-        <Label class="mb-4 w-full font-bold">Duration: {animateDuration}</Label>
-        {#each durations as duration}
-          <Radio labelClass="w-24 my-1" name="duration" bind:group={animateDuration} value={duration}>{duration}</Radio>
-        {/each}
-      </div>
-      <div class="mb-4 flex flex-wrap space-x-4">
-        <Label class="mb-4 w-full font-bold">Delay: {animateDelay}</Label>
-        {#each delays as delay}
-          <Radio labelClass="w-24 my-1" name="delay" bind:group={animateDelay} value={delay}>{delay}</Radio>
-        {/each}
-      </div>
-      <div class="mb-4 flex flex-wrap space-x-4">
-        <Label class="mb-4 w-full font-bold">Repeat: {animateRepeat}</Label>
-        {#each repeats as repeat}
-          <Radio labelClass="w-24 my-1" name="repeat" bind:group={animateRepeat} value={repeat}>{repeat}</Radio>
-        {/each}
-      </div>
+    <!-- Duration Input -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="duration">Duration:</Label>
+      <Input 
+        type="text" 
+        bind:value={duration}
+        class="w-full px-3 py-2 border rounded"
+        placeholder="e.g., 1s or 1000ms"
+      />
+    </div>
 
-      <div class="flex flex-wrap justify-center gap-2 md:justify-start mb-4">
-        <Button class="w-48" color="blue" onclick={handleHideEnd}>{hideEnd ? 'Remove hideEnd' : 'Add hideEnd'}</Button>
-      </div>
+    <!-- Delay Input -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="delay">Delay (ms):</Label>
+      <Input 
+        type="number" 
+        bind:value={delay}
+        min="0"
+        class="w-full px-3 py-2 border rounded"
+      />
+    </div>
 
-      {#snippet codeblock()}
-        <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
-      {/snippet}
-    </CodeWrapper>
+    <!-- Pause Duration Input -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="pauseDuration">Pause Duration (ms):</Label>
+      <Input 
+        type="number" 
+        bind:value={pauseDuration}
+        min="0"
+        class="w-full px-3 py-2 border rounded"
+      />
+    </div>
+
+    <!-- Repeat Selection -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="repeat">Repeat:</Label>
+      <Select 
+        bind:value={repeat}
+        class="w-full px-3 py-2 border rounded"
+      >
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="infinite">Infinite</option>
+      </Select>
+    </div>
+
+    <!-- Visibility Options -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="visibility">Visibility Options:</Label>
+      <div class="space-x-4">
+        <Label class="inline-flex items-center">
+          <Checkbox
+            bind:checked={hideEnd}
+            class="form-checkbox"
+          />
+          <span class="ml-2">Hide End</span>
+        </Label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animation Sequence Builder -->
+  <div class="space-y-4">
+    <h2 class="text-xl font-bold mb-4">Animation Sequence</h2>
+    <span class="text-sm text-gray-600 dark:text-white">
+      {remainingAnimations} of {MAX_ANIMATIONS} animations remaining
+    </span>
+    {#each selectedAnimations as animation, index}
+      <div class="flex items-center space-x-2">
+        <span class="dark:text-white w-32 font-medium">Animation {index + 1}:</span>
+        <Select 
+          bind:value={selectedAnimations[index]}
+          class="flex-grow px-3 py-2 border rounded"
+        >
+          <option value="">Select an animation</option>
+          {#each animations as anim}
+            <option value={anim}>{anim}</option>
+          {/each}
+        </Select>
+        <button 
+          onclick={() => removeAnimation(index)}
+          class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          disabled={selectedAnimations.length === 1}
+        >
+          Remove
+        </button>
+      </div>
+    {/each}
+
+    <button 
+      onclick={addAnimation}
+      disabled={selectedAnimations.length >= MAX_ANIMATIONS}
+      class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+      Add Animation
+    </button>
   </div>
 </div>
