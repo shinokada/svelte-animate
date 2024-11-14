@@ -6,6 +6,8 @@
   let isAnimating = $state(false);
   let currentAnimationIndex = $state(0);
   let repeatCount = $state(0);
+  let hasCompletedAllRepeats = $state(false);
+  let hasInitialized = $state(false); 
 
   $effect(() => {
     prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -29,6 +31,8 @@
 
   function canStartNewAnimation() {
     if (isAnimating) return false;
+    // Don't start if we've completed all repeats
+    if (hasCompletedAllRepeats) return false; 
     if (repeat === 'infinite') return true;
     return repeatCount < totalRepeats;
   }
@@ -79,22 +83,23 @@
   }
 
   async function completeAnimationSequence() {
+    repeatCount++;
+    // Check if we've completed all repeats
+    if (repeat !== 'infinite' && repeatCount >= totalRepeats) {
+      hasCompletedAllRepeats = true;
+    }
+
     // Reset for next animation
     animationClass = 'animate__animated';
     isAnimating = false;
     currentAnimationIndex = 0;
-    repeatCount++;
 
-    // Update isVisible based on hideBetween and current animation index
-    if (hideBetween && repeatCount !== totalRepeats) {
+    if (hasCompletedAllRepeats) {
+      isVisible = !hideEnd;
+    } else if (hideBetween && repeatCount !== totalRepeats) {
       isVisible = false;
     } else {
-      if (hideEnd) {
-        isVisible = false;
-      } else {
-        isVisible = true;
-      }
-      // isVisible = true;
+      isVisible = !hideEnd;
     }
 
     // Announce completion
@@ -126,6 +131,8 @@
       // Reset repeat count when starting a new click-triggered sequence
       if (!isAnimating) {
         repeatCount = 0;
+        // Reset completion state
+        hasCompletedAllRepeats = false;  
         startAnimation();
       }
     }
@@ -135,6 +142,8 @@
     if (trigger === 'hover' || trigger === 'both') {
       if (!isAnimating) {
         repeatCount = 0;
+        // Reset completion state
+        hasCompletedAllRepeats = false;
         startAnimation();
       }
     }
@@ -146,6 +155,8 @@
       if (trigger === 'click' || trigger === 'both') {
         if (!isAnimating) {
           repeatCount = 0;
+          // Reset completion state
+          hasCompletedAllRepeats = false;
           startAnimation();
         }
       }
@@ -153,17 +164,23 @@
   }
 
   $effect(() => {
-    if (trigger === 'auto' && !prefersReducedMotion) {
+    if (!hasInitialized && trigger === 'auto' && !prefersReducedMotion) {
+      hasInitialized = true;
       repeatCount = 0;
+      // Reset completion state
+      hasCompletedAllRepeats = false;
       startAnimation();
     }
   });
 
   $effect(() => {
-    $inspect('animationClass', animationClass);
-    $inspect('currentAnimationIndex', currentAnimationIndex);
-    $inspect('repeatCount', repeatCount);
-    $inspect('totalRepeats', totalRepeats);
+    $inspect('Animation state:', {
+      isAnimating,
+      hasCompletedAllRepeats,
+      repeatCount,
+      totalRepeats,
+      animationClass,
+      currentAnimationIndex});
   });
 </script>
 

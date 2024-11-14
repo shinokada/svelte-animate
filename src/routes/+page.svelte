@@ -2,6 +2,9 @@
   import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
   import { H1, H2 } from 'runes-webkit';
   import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
+  import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
+  import { isGeneratedCodeOverflow } from './utils/helper.ts';
+  import { convertAnimationNames } from './utils/helper.ts';
   
   const MAX_ANIMATIONS = 10;
   const animations: AnimationType[] = [
@@ -51,6 +54,33 @@
   }
 
   let remainingAnimations = $derived(MAX_ANIMATIONS - selectedAnimations.length);
+
+  
+  // code generator
+  let generatedCode = $derived(
+    (() => {
+      let props = [];
+      if (trigger !== 'hover') props.push(` trigger="${trigger}"`);
+      if (selectedAnimations[0] !== 'bounce') props.push(` animations={[${convertAnimationNames(selectedAnimations)}]}`);
+      if ( typeof selectedAnimations === 'object') props.push(` hideBetween={true}`);
+      if (delay !== 0) props.push(` delay={${delay}}`);
+      if (pauseDuration !== 0) props.push(` pauseDuration={${pauseDuration}}`);
+      if (duration !== '1s') props.push(` duration="${duration}"`);
+      if (repeat !== '1') props.push(` repeat="${repeat}"`);
+      if (hideEnd) props.push(` hideEnd={true}`);
+      const propsString = props.length > 0 ? props.map((prop) => `\n  ${prop}`).join('') + '\n' : '';
+      return `<Animate${propsString}>
+  ${previewText}
+</Animate>`;
+    })()
+  );
+  // end of code generator
+  // for interactive builder
+  let builderExpand = $state(false);
+  let showBuilderExpandButton = $derived(isGeneratedCodeOverflow(generatedCode));
+  const handleBuilderExpandClick = () => {
+    builderExpand = !builderExpand;
+  };
 </script>
 
 <div class="container mx-auto p-4">
@@ -59,6 +89,7 @@
   <!-- Preview Section -->
   <div class="mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
     <div class="overflow-hidden h-72 flex items-center justify-center mb-4">
+      
       <Animate
         animations={selectedAnimations}
         {trigger}
@@ -69,7 +100,7 @@
         {repeat}
         {pauseDuration}
       >
-        <H2>{previewText}</H2>
+        <h2>{previewText}</h2>
       </Animate>
     </div>
     <div class="flex justify-center mb-4">
@@ -196,4 +227,6 @@
       Add Animation
     </button>
   </div>
+
+  <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
 </div>
