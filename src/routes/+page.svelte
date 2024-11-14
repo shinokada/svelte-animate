@@ -55,13 +55,26 @@
     hideEnd = !hideEnd;
   };
 
+  // Convert animation names to quoted format for code generator
+  function convertAnimationNames(animationName: AnimationType | AnimationType[]): string {
+    // If it's an array, map and join
+    if (Array.isArray(animationName)) {
+      return animationName
+        .map(name => `"${name}"`)
+        .join(',');
+    }
+    // If it's a single value
+    return `"${animationName}"`;
+  }
+
   // code generator
   let generatedCode = $derived(
     (() => {
       let props = [];
       let element = 'Hello World!';
       if (animateTrigger !== 'hover') props.push(` trigger="${animateTrigger}"`);
-      if (animationName[0] !== 'bounce') props.push(` animation=["${animationName}"]`);
+      if (animationName[0] !== 'bounce') props.push(` animations=[${convertAnimationNames(animationName)}]`);
+      if ( typeof animationName === 'object') props.push(` hideBetween={true}`);
       if (animateDelay !== 0) props.push(` delay="${animateDelay}"`);
       if (animateDuration !== '1s') props.push(` duration="${animateDuration}"`);
       if (animateRepeat !== '1') props.push(` repeat="${animateRepeat}"`);
@@ -93,6 +106,7 @@
   const closeSidebar = sidebarUi.close;
   $effect(() => {
     isSidebarOpen = sidebarUi.isOpen;
+    $inspect('animationName', typeof animationName, animationName);
   });
 </script>
 
