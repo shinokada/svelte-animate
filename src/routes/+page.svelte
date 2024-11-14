@@ -50,9 +50,9 @@
 
   const triggers = ['hover', 'click', 'both'];
   let animateTrigger = $state('click');
-  let hideAfter = $state(false);
-  const handleHideAfter = () => {
-    hideAfter = !hideAfter;
+  let hideEnd = $state(false);
+  const handleHideEnd = () => {
+    hideEnd = !hideEnd;
   };
 
   // code generator
@@ -65,7 +65,7 @@
       if (animateDelay !== 0) props.push(` delay="${animateDelay}"`);
       if (animateDuration !== '1s') props.push(` duration="${animateDuration}"`);
       if (animateRepeat !== '1') props.push(` repeat="${animateRepeat}"`);
-      if (hideAfter) props.push(` hideAfter={true}`);
+      if (hideEnd) props.push(` hideEnd={true}`);
       if (selectedType === 'text') {
         element = `${randomText}`;
       } else if (selectedType === 'image') {
@@ -123,7 +123,7 @@
     <CodeWrapper>
       <div class="overflow-hidden grid grid-cols-1 w-full gap-4 mb-4">
         <div class="overflow-hidden flex flex-col justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animate trigger={animateTrigger as AutoTriggerType} animations={animationName} duration={animateDuration} delay={animateDelay} repeat={animateRepeat} hideBetween={true}>
+          <Animate trigger={animateTrigger as AutoTriggerType} animations={animationName} duration={animateDuration} delay={animateDelay} repeat={animateRepeat} hideBetween={true} hideEnd={hideEnd}>
             {#if selectedType === 'text'}
               <p class="text-3xl">{randomText}</p>
             {:else if selectedType === 'image'}
@@ -167,7 +167,7 @@
       </div>
 
       <div class="flex flex-wrap justify-center gap-2 md:justify-start mb-4">
-        <Button class="w-48" color="blue" onclick={handleHideAfter}>{hideAfter ? 'Remove hideAfter' : 'Add hideAfter'}</Button>
+        <Button class="w-48" color="blue" onclick={handleHideEnd}>{hideEnd ? 'Remove hideEnd' : 'Add hideEnd'}</Button>
       </div>
 
       {#snippet codeblock()}
