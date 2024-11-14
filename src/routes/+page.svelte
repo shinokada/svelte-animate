@@ -1,6 +1,6 @@
 <script lang="ts">
   import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
-  import { H1, H2 } from 'runes-webkit';
+  import { H1, DocPage } from 'runes-webkit';
   import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
   import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
@@ -83,7 +83,7 @@
   };
 </script>
 
-<div class="container mx-auto p-4">
+<div class="max-w-4xl mx-auto p-4">
   <H1>Animation Sequence Builder</H1>
   
   <!-- Preview Section -->
