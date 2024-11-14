@@ -134,4 +134,4 @@
 
 {@render children()}
 
-<Footer {brand} {lis} divClass="lg:ml-80"/>
+<Footer {brand} {lis} divClass="lg:ml-auto max-w-5xl mx-auto"/>

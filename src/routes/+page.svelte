@@ -30,7 +30,7 @@
   // State variables
   let selectedAnimations = $state<AnimationType[]>(['bounce']);
   let previewText = $state<string>("Animation Preview");
-  let trigger = $state<AutoTriggerType>('click');
+  let trigger = $state<AutoTriggerType>('hover');
   let duration = $state<string>('1s');
 
   let hideEnd = $state<boolean>(false);
@@ -114,7 +114,7 @@
 
   <!-- Animation Sequence Builder -->
   <div class="space-y-4 mb-8">
-    <h2 class="text-xl font-bold mb-4">Animation Sequence</h2>
+    <h2>Animation Sequence</h2>
     <span class="text-sm text-gray-600 dark:text-white">
       {remainingAnimations} of {MAX_ANIMATIONS} animations remaining
     </span>
@@ -150,7 +150,7 @@
   </div>
 
   <!-- Controls Section -->
-  <h3>Controls</h3>
+  <h2>Controls</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <!-- Trigger Selection -->
     <div class="space-y-2">
@@ -228,6 +228,8 @@
     </div>
   </div>
 
-  <h3>Codes</h3>
-  <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
+  <h2>Codes</h2>
+  <div class="mb-32">
+    <DynamicCodeBlockHighlight handleExpandClick={handleBuilderExpandClick} expand={builderExpand} showExpandButton={showBuilderExpandButton} code={generatedCode} />
+  </div>
 </div>
