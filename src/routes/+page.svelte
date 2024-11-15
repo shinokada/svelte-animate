@@ -61,7 +61,7 @@
       let props = [];
       if (trigger !== 'hover') props.push(` trigger="${trigger}"`);
       if (selectedAnimations[0] !== 'bounce') props.push(` animations={[${convertAnimationNames(selectedAnimations)}]}`);
-      if ( typeof selectedAnimations === 'object') props.push(` hideBetween={true}`);
+      if ( selectedAnimations.length > 1) props.push(` hideBetween={true}`);
       if (delay !== 0) props.push(` delay={${delay}}`);
       if (pauseDuration !== 0) props.push(` pauseDuration={${pauseDuration}}`);
       if (duration !== '1s') props.push(` duration="${duration}"`);
