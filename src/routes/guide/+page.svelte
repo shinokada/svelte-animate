@@ -74,8 +74,8 @@
     <header class="mb-8">
       <H1>Svelte-Animate: Guide</H1>
       <P class="text-lg text-gray-700"
-        >A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed to work seamlessly with Svelte's latest features, including the ability to animate multiple effects
-        in a sequence.</P
+        >A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed
+        to work seamlessly with Svelte's latest features, including the ability to animate multiple effects in a sequence.</P
       >
     </header>
 

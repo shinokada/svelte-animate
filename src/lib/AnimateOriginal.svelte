@@ -134,7 +134,12 @@
     {@render children()}
   </button>
 {:else}
-  <span aria-label={`Animate child element with ${animation} effect`} aria-live="polite" class={getAnimationClasses()} style="display: {isVisible ? 'inline-block' : 'none'}; animation-duration: {duration};">
+  <span
+    aria-label={`Animate child element with ${animation} effect`}
+    aria-live="polite"
+    class={getAnimationClasses()}
+    style="display: {isVisible ? 'inline-block' : 'none'}; animation-duration: {duration};"
+  >
     {@render children()}
   </span>
 {/if}

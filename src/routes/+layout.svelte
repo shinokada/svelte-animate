@@ -36,7 +36,7 @@
 
   const lis: LiType[] = [
     { name: 'Guide', href: '/guide' },
-    { name: 'Animated icons', href: 'https://svelte-animated-icons.codewithshin.com/'}
+    { name: 'Animated icons', href: 'https://svelte-animated-icons.codewithshin.com/' }
   ];
   const brand = {
     name: 'codewithshin.com',
@@ -134,4 +134,4 @@
 
 {@render children()}
 
-<Footer {brand} {lis} divClass="lg:ml-auto max-w-5xl mx-auto"/>
+<Footer {brand} {lis} divClass="lg:ml-auto max-w-5xl mx-auto" />

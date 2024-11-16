@@ -59,9 +59,7 @@
   function convertAnimationNames(animationName: AnimationType | AnimationType[]): string {
     // If it's an array, map and join
     if (Array.isArray(animationName)) {
-      return animationName
-        .map(name => `"${name}"`)
-        .join(',');
+      return animationName.map((name) => `"${name}"`).join(',');
     }
     // If it's a single value
     return `"${animationName}"`;
@@ -74,7 +72,7 @@
       let element = 'Hello World!';
       if (animateTrigger !== 'hover') props.push(` trigger="${animateTrigger}"`);
       if (animationName[0] !== 'bounce') props.push(` animations=[${convertAnimationNames(animationName)}]`);
-      if ( typeof animationName === 'object') props.push(` hideBetween={true}`);
+      if (typeof animationName === 'object') props.push(` hideBetween={true}`);
       if (animateDelay !== 0) props.push(` delay="${animateDelay}"`);
       if (animateDuration !== '1s') props.push(` duration="${animateDuration}"`);
       if (animateRepeat !== '1') props.push(` repeat="${animateRepeat}"`);
@@ -137,7 +135,7 @@
     <CodeWrapper>
       <div class="overflow-hidden grid grid-cols-1 w-full gap-4 mb-4">
         <div class="overflow-hidden flex flex-col justify-center border dark:border-gray-600 rounded-lg h-60 min-w-64">
-          <Animate trigger={animateTrigger as AutoTriggerType} animations={animationName} duration={animateDuration} delay={animateDelay} repeat={animateRepeat} hideBetween={true} hideEnd={hideEnd}>
+          <Animate trigger={animateTrigger as AutoTriggerType} animations={animationName} duration={animateDuration} delay={animateDelay} repeat={animateRepeat} hideBetween={true} {hideEnd}>
             {#if selectedType === 'text'}
               <p class="text-3xl">{randomText}</p>
             {:else if selectedType === 'image'}

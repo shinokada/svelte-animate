@@ -1,6 +1,6 @@
 import type { Component } from 'svelte';
 import { type ListType, CogOutline, BadgeCheckOutline } from 'runes-webkit';
-import type { AnimationType } from "$lib"
+import type { AnimationType } from '$lib';
 
 export const newSidebarList: ListType[] = [
   {
@@ -106,14 +106,11 @@ export function getExampleFileName(selectedExample: string, exampleArr: { name: 
   return `${result}.svelte`;
 }
 
-
 // Convert animation names to quoted format for code generator
 export function convertAnimationNames(animationName: AnimationType | AnimationType[]): string {
   // If it's an array, map and join
   if (Array.isArray(animationName)) {
-    return animationName
-      .map(name => `"${name}"`)
-      .join(',');
+    return animationName.map((name) => `"${name}"`).join(',');
   }
   // If it's a single value
   return `"${animationName}"`;

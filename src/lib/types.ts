@@ -114,3 +114,24 @@ export interface EnhancedAnimationProps extends HTMLButtonAttributes {
   pauseDuration?: number;
   class?: string;
 }
+
+export interface AnimationConfig {
+  action: AnimationType;
+  duration?: string;
+  delay?: number;
+  pause?: number;
+}
+
+export interface AnimationProps extends HTMLButtonAttributes {
+  animations?: AnimationConfig[] | AnimationType[] | AnimationType;
+  trigger?: AutoTriggerType;
+  duration?: string; // default duration for all animations
+  children: Snippet;
+  hideBetween?: boolean;
+  hideEnd?: boolean;
+  delay?: number; // default delay for all animations
+  repeat?: RepeatType;
+  pauseDuration?: number; // default pause for all animations
+  class?: string;
+  debug?: boolean;
+}
