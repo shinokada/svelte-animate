@@ -3,7 +3,6 @@
   import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
   import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
-  import { convertAnimationNames } from './utils/helper.ts';
 
   const MAX_ANIMATIONS = 10;
   const animations: AnimationType[] = [
@@ -99,10 +98,24 @@
   ].sort() as AnimationType[];
 
   // State variables
-  let selectedAnimations = $state<AnimationType[]>(['bounce']);
+  let selectedAnimations = $state<
+    Array<{
+      action: AnimationType;
+      duration?: number;
+      delay?: number;
+      pause?: number;
+    }>
+  >([
+    {
+      action: 'bounce',
+      duration: 1000,
+      delay: 0,
+      pause: 0
+    }
+  ]);
   let previewText = $state<string>('Animation Preview');
   let trigger = $state<AutoTriggerType>('hover');
-  let duration = $state<string>('1s');
+  let duration = $state<number>(1000);
 
   let hideEnd = $state<boolean>(false);
   let delay = $state<number>(0);
@@ -112,14 +125,29 @@
   // Animation management functions
   function addAnimation(): void {
     if (selectedAnimations.length < MAX_ANIMATIONS) {
-      selectedAnimations = [...selectedAnimations, 'bounce'];
+      selectedAnimations = [
+        ...selectedAnimations,
+        {
+          action: 'bounce',
+          duration: duration,
+          delay: 0,
+          pause: 0
+        }
+      ];
     }
   }
 
   function removeAnimation(index: number): void {
     selectedAnimations = selectedAnimations.filter((_, i) => i !== index);
     if (selectedAnimations.length === 0) {
-      selectedAnimations = ['bounce'];
+      selectedAnimations = [
+        {
+          action: 'bounce',
+          duration: duration,
+          delay: 0,
+          pause: 0
+        }
+      ];
     }
   }
 
@@ -130,14 +158,25 @@
     (() => {
       let props = [];
       if (trigger !== 'hover') props.push(` trigger="${trigger}"`);
-      if (selectedAnimations[0] !== 'bounce') props.push(` animations={[${convertAnimationNames(selectedAnimations)}]}`);
-      if (selectedAnimations.length > 1) props.push(` hideBetween={true}`);
+      // Convert animations array to string with numeric duration
+      const animStr = selectedAnimations
+        .map((a) => {
+          let animProps = [`action: "${a.action}"`];
+          if (a.duration !== 1000) animProps.push(`duration: ${a.duration}`);
+          if (a.delay !== 0) animProps.push(`delay: ${a.delay}`);
+          if (a.pause !== 0) animProps.push(`pause: ${a.pause}`);
+          return `{ ${animProps.join(', ')} }`;
+        })
+        .join(',   \n');
+      props.push(` animations={[${animStr}]}`);
+
+      // Remove duration from global props since it's now per-animation
       if (delay !== 0) props.push(` delay={${delay}}`);
       if (pauseDuration !== 0) props.push(` pauseDuration={${pauseDuration}}`);
-      if (duration !== '1s') props.push(` duration="${duration}"`);
       if (repeat !== '1') props.push(` repeat="${repeat}"`);
       if (hideEnd) props.push(` hideEnd={true}`);
-      const propsString = props.length > 0 ? props.map((prop) => `\n  ${prop}`).join('') + '\n' : '';
+
+      const propsString = props.length > 0 ? props.map((prop) => `\n ${prop}`).join('') + '\n' : '';
       return `<Animate${propsString}>
   ${previewText}
 </Animate>`;
@@ -175,15 +214,41 @@
     </span>
     <!-- eslint-disable @typescript-eslint/no-unused-vars -->
     {#each selectedAnimations as animation, index}
-      <div class="flex items-center space-x-2">
-        <span class="dark:text-white w-32 font-medium">Animation {index + 1}:</span>
-        <Select bind:value={selectedAnimations[index]} class="flex-grow px-3 py-2 border rounded">
-          <option value="">Select an animation</option>
-          {#each animations as anim}
-            <option value={anim}>{anim}</option>
-          {/each}
-        </Select>
-        <button onclick={() => removeAnimation(index)} class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600" disabled={selectedAnimations.length === 1}> Remove </button>
+      <div class="border rounded-lg p-4 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="font-medium">Animation {index + 1}</span>
+          <button onclick={() => removeAnimation(index)} class="px-3 py-1 bg-red-500 text-white rounded" disabled={selectedAnimations.length === 1}> Remove </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Animation Type -->
+          <div>
+            <Label class="block text-sm font-medium mb-1">Animation Type</Label>
+            <Select bind:value={selectedAnimations[index].action} class="w-full px-3 py-2 border rounded">
+              {#each animations as anim}
+                <option value={anim}>{anim}</option>
+              {/each}
+            </Select>
+          </div>
+
+          <!-- Duration -->
+          <div>
+            <Label class="block text-sm font-medium mb-1">Duration (ms)</Label>
+            <Input type="number" bind:value={selectedAnimations[index].duration} class="w-full px-3 py-2 border rounded" min="0" placeholder="e.g. 1000" />
+          </div>
+
+          <!-- Delay -->
+          <div>
+            <Label class="block text-sm font-medium mb-1">Delay (ms)</Label>
+            <Input type="number" bind:value={selectedAnimations[index].delay} class="w-full px-3 py-2 border rounded" min="0" />
+          </div>
+
+          <!-- Pause -->
+          <div>
+            <Label class="block text-sm font-medium mb-1">Pause After (ms)</Label>
+            <Input type="number" bind:value={selectedAnimations[index].pause} class="w-full px-3 py-2 border rounded" min="0" />
+          </div>
+        </div>
       </div>
     {/each}
 
@@ -208,24 +273,6 @@
         <option value="both">Both</option>
         <option value="auto">Auto</option>
       </Select>
-    </div>
-
-    <!-- Duration Input -->
-    <div class="space-y-2">
-      <Label class="block font-medium" for="duration">Duration:</Label>
-      <Input type="text" bind:value={duration} class="w-full px-3 py-2 border rounded" placeholder="e.g., 1s or 1000ms" />
-    </div>
-
-    <!-- Delay Input -->
-    <div class="space-y-2">
-      <Label class="block font-medium" for="delay">Delay (ms):</Label>
-      <Input type="number" bind:value={delay} min="0" class="w-full px-3 py-2 border rounded" />
-    </div>
-
-    <!-- Pause Duration Input -->
-    <div class="space-y-2">
-      <Label class="block font-medium" for="pauseDuration">Pause Duration (ms):</Label>
-      <Input type="number" bind:value={pauseDuration} min="0" class="w-full px-3 py-2 border rounded" />
     </div>
 
     <!-- Repeat Selection -->

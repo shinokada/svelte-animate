@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type AnimationType, type AutoTriggerType, type RepeatType, Animations } from '$lib';
+  import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
   import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
   import DynamicCodeBlockHighlight from '../utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from '../utils/helper.ts';
@@ -176,10 +176,10 @@
       if (repeat !== '1') props.push(` repeat="${repeat}"`);
       if (hideEnd) props.push(` hideEnd={true}`);
 
-      const propsString = props.length > 0 ? props.map((prop) => `\n  ${prop}`).join('') + '\n' : '';
-      return `<Animations${propsString}>
-    ${previewText}
-  </Animations>`;
+      const propsString = props.length > 0 ? props.map((prop) => `\n ${prop}`).join('') + '\n' : '';
+      return `<Animate${propsString}>
+  ${previewText}
+</Animate>`;
     })()
   );
   // end of code generator
@@ -197,9 +197,9 @@
   <!-- Preview Section -->
   <div class="mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
     <div class="overflow-hidden h-72 flex items-center justify-center mb-4">
-      <Animations animations={selectedAnimations} {trigger} {duration} hideBetween={true} {hideEnd} {delay} {repeat} {pauseDuration}>
+      <Animate animations={selectedAnimations} {trigger} {duration} hideBetween={true} {hideEnd} {delay} {repeat} {pauseDuration}>
         <h2>{previewText}</h2>
-      </Animations>
+      </Animate>
     </div>
     <div class="flex justify-center mb-4">
       <Input type="text" bind:value={previewText} class="px-3 py-2 border rounded mr-2 w-64" placeholder="Enter preview text" />

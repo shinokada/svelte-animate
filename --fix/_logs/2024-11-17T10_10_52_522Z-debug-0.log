@@ -1,0 +1,37 @@
+0 verbose cli /Users/shinichiokada/.nvm/versions/node/v20.16.0/bin/node /Users/shinichiokada/.nvm/versions/node/v20.16.0/bin/npm
+1 info using npm@10.8.1
+2 info using node@v20.16.0
+3 silly config load:file:/Users/shinichiokada/.nvm/versions/node/v20.16.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/shinichiokada/Svelte/Runes/svelte-animate/.npmrc
+5 silly config load:file:/Users/shinichiokada/.npmrc
+6 silly config load:file:/Users/shinichiokada/.nvm/versions/node/v20.16.0/etc/npmrc
+7 verbose title npm run eslint
+8 verbose argv "run" "eslint" "--cache" "--fix"
+9 verbose logfile logs-max:10 dir:/Users/shinichiokada/Svelte/Runes/svelte-animate/--fix/_logs/2024-11-17T10_10_52_522Z-
+10 verbose logfile /Users/shinichiokada/Svelte/Runes/svelte-animate/--fix/_logs/2024-11-17T10_10_52_522Z-debug-0.log
+11 silly logfile done cleaning log files
+12 verbose stack Error: Missing script: "eslint"
+12 verbose stack
+12 verbose stack Did you mean this?
+12 verbose stack   npm run lint # run the "lint" package script
+12 verbose stack
+12 verbose stack To see a list of scripts, run:
+12 verbose stack   npm run
+12 verbose stack     at #run (/Users/shinichiokada/.nvm/versions/node/v20.16.0/lib/node_modules/npm/lib/commands/run-script.js:110:13)
+12 verbose stack     at async RunScript.exec (/Users/shinichiokada/.nvm/versions/node/v20.16.0/lib/node_modules/npm/lib/commands/run-script.js:39:7)
+12 verbose stack     at async Npm.exec (/Users/shinichiokada/.nvm/versions/node/v20.16.0/lib/node_modules/npm/lib/npm.js:207:9)
+12 verbose stack     at async module.exports (/Users/shinichiokada/.nvm/versions/node/v20.16.0/lib/node_modules/npm/lib/cli/entry.js:74:5)
+13 error Missing script: "eslint"
+13 error
+13 error Did you mean this?
+13 error   npm run lint # run the "lint" package script
+13 error
+13 error To see a list of scripts, run:
+13 error   npm run
+14 verbose cwd /Users/shinichiokada/Svelte/Runes/svelte-animate
+15 verbose os Darwin 24.1.0
+16 verbose node v20.16.0
+17 verbose npm  v10.8.1
+18 verbose exit 1
+19 verbose code 1
+20 error A complete log of this run can be found in: /Users/shinichiokada/Svelte/Runes/svelte-animate/--fix/_logs/2024-11-17T10_10_52_522Z-debug-0.log
