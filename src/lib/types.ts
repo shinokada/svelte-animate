@@ -134,4 +134,5 @@ export interface AnimationProps extends HTMLButtonAttributes {
   pauseDuration?: number; // default pause for all animations
   class?: string;
   debug?: boolean;
+  showReplayButton?: boolean;
 }

@@ -10,6 +10,7 @@
   let hasInitialized = $state(false);
   let animationLabel = $state('');
   let ariaAnnouncement = $state('');
+  let shouldShowReplayButton = $state(false);
 
   $effect(() => {
     prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,6 +26,7 @@
     duration = 1000,
     hideBetween = false,
     hideEnd = false,
+    showReplayButton = false,
     delay = 0,
     repeat = '1',
     pauseDuration = 0,
@@ -70,9 +72,17 @@
 
   function canStartNewAnimation() {
     if (isAnimating) return false;
-    if (hasCompletedAllRepeats) return false;
+    if (!shouldShowReplayButton && hasCompletedAllRepeats) return false;
     if (repeat === 'infinite') return true;
     return repeatCount < totalRepeats;
+  }
+
+  function resetAnimation() {
+    repeatCount = 0;
+    hasCompletedAllRepeats = false;
+    isVisible = true;
+    shouldShowReplayButton = false;
+    startAnimation();
   }
 
   async function startAnimation(startFromIndex = 0) {
@@ -121,8 +131,6 @@
 
   async function completeAnimationSequence() {
     repeatCount++;
-
-    // Reset for next animation
     animationClass = 'animate__animated';
     isAnimating = false;
     currentAnimationIndex = 0;
@@ -130,6 +138,7 @@
     if (repeat !== 'infinite' && repeatCount >= totalRepeats) {
       hasCompletedAllRepeats = true;
       isVisible = !hideEnd;
+      shouldShowReplayButton = hideEnd && showReplayButton;
     } else {
       if (hideBetween && repeatCount !== totalRepeats) {
         isVisible = false;
@@ -160,8 +169,8 @@
       // Reset repeat count when starting a new click-triggered sequence
       if (!isAnimating) {
         repeatCount = 0;
-        // Reset completion state
         hasCompletedAllRepeats = false;
+        shouldShowReplayButton = false;
         startAnimation();
       }
     }
@@ -173,6 +182,7 @@
         repeatCount = 0;
         // Reset completion state
         hasCompletedAllRepeats = false;
+        shouldShowReplayButton = false;
         startAnimation();
       }
     }
@@ -186,6 +196,7 @@
           repeatCount = 0;
           // Reset completion state
           hasCompletedAllRepeats = false;
+          shouldShowReplayButton = false;
           startAnimation();
         }
       }
@@ -196,8 +207,8 @@
     if (!hasInitialized && trigger === 'auto' && !prefersReducedMotion) {
       hasInitialized = true;
       repeatCount = 0;
-      // Reset completion state
       hasCompletedAllRepeats = false;
+      shouldShowReplayButton = false;
       startAnimation();
     }
   });
@@ -209,35 +220,57 @@
       repeatCount,
       totalRepeats,
       animationClass,
-      currentAnimationIndex
+      currentAnimationIndex,
+      showReplayButton
     });
   });
 </script>
 
+{#snippet showReplay()}
+  <button
+    type="button"
+    onclick={resetAnimation}
+    class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 text-white rounded transition-opacity"
+    style="opacity: {!isVisible ? 1 : 0}; pointer-events: {!isVisible ? 'auto' : 'none'}"
+  >
+    Show Again
+  </button>
+{/snippet}
+
 {#if prefersReducedMotion}
   {@render children()}
 {:else if trigger && trigger !== 'auto'}
-  <button
-    type="button"
-    aria-label={animationLabel}
-    aria-live="polite"
-    class="{animationClass} {className}"
-    style="opacity: {isVisible ? 1 : 0}; animation-duration: {getCurrentConfig().duration}ms; background: none; border: none; padding: 0; cursor: pointer;"
-    onclick={handleClick}
-    onmouseenter={handleMouseEnter}
-    onkeydown={handleKeyDown}
-  >
-    {@render children()}
-  </button>
+  <div class="relative">
+    <button
+      type="button"
+      aria-label={animationLabel}
+      aria-live="polite"
+      class="{animationClass} {className}"
+      style="opacity: {isVisible ? 1 : 0}; animation-duration: {getCurrentConfig().duration}ms; background: none; border: none; padding: 0; cursor: pointer;"
+      onclick={handleClick}
+      onmouseenter={handleMouseEnter}
+      onkeydown={handleKeyDown}
+    >
+      {@render children()}
+    </button>
+    {#if shouldShowReplayButton}
+      {@render showReplay()}
+    {/if}
+  </div>
 {:else}
-  <span
-    aria-label={`Animat child element with ${typeof animationsArray[currentAnimationIndex] === 'string' ? animationsArray[currentAnimationIndex] : animationsArray[currentAnimationIndex].action} effect`}
-    aria-live="polite"
-    class="{animationClass} {className}"
-    style="opacity: {isVisible ? 1 : 0}; animation-duration: {getCurrentConfig().duration};"
-  >
-    {@render children()}
-  </span>
+  <div class="relative">
+    <span
+      aria-label={`Animat child element with ${typeof animationsArray[currentAnimationIndex] === 'string' ? animationsArray[currentAnimationIndex] : animationsArray[currentAnimationIndex].action} effect`}
+      aria-live="polite"
+      class="{animationClass} {className}"
+      style="opacity: {isVisible ? 1 : 0}; animation-duration: {getCurrentConfig().duration};"
+    >
+      {@render children()}
+    </span>
+    {#if shouldShowReplayButton}
+      {@render showReplay()}
+    {/if}
+  </div>
 {/if}
 
 <div role="status" aria-live="polite" aria-atomic="true" class={debug ? 'debug-visible' : 'sr-only'}>
@@ -245,6 +278,23 @@
     <p>{ariaAnnouncement}</p>
   {/if}
 </div>
+
+<!--
+@component
+[Go to docs](https://svelte-animate.codewithshin.com/)
+## Props
+@prop children
+@prop animations = 'bounce'
+@prop trigger = 'hover'
+@prop duration = 1000
+@prop hideBetween = false
+@prop hideEnd = false
+@prop delay = 0
+@prop repeat = '1'
+@prop pauseDuration = 0
+@prop class: className = ''
+@prop debug = false
+-->
 
 <style>
   .sr-only {
@@ -270,20 +320,3 @@
     z-index: 9999;
   }
 </style>
-
-<!--
-@component
-[Go to docs](https://svelte-animate.codewithshin.com/)
-## Props
-@prop children
-@prop animations = 'bounce'
-@prop trigger = 'hover'
-@prop duration = 1000
-@prop hideBetween = false
-@prop hideEnd = false
-@prop delay = 0
-@prop repeat = '1'
-@prop pauseDuration = 0
-@prop class: className = ''
-@prop debug = false
--->

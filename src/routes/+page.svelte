@@ -118,6 +118,7 @@
   let duration = $state<number>(1000);
 
   let hideEnd = $state<boolean>(false);
+  let showReplayButton = $state<boolean>(false);
   let delay = $state<number>(0);
   let repeat = $state<RepeatType>('1');
   let pauseDuration = $state<number>(0);
@@ -175,6 +176,7 @@
       if (pauseDuration !== 0) props.push(` pauseDuration={${pauseDuration}}`);
       if (repeat !== '1') props.push(` repeat="${repeat}"`);
       if (hideEnd) props.push(` hideEnd={true}`);
+      if (hideEnd && showReplayButton) props.push(` showReplayButton={true}`);
 
       const propsString = props.length > 0 ? props.map((prop) => `\n ${prop}`).join('') + '\n' : '';
       return `<Animate${propsString}>
@@ -189,6 +191,17 @@
   const handleBuilderExpandClick = () => {
     builderExpand = !builderExpand;
   };
+
+  const handleHideEnd = () => {
+    if (hideEnd === false && showReplayButton === true) {
+      showReplayButton = false;
+    }
+  };
+  const handleShowReplayButton = () => {
+    if (hideEnd === false && showReplayButton === true) {
+      hideEnd = true;
+    }
+  };
 </script>
 
 <div class="max-w-4xl mx-auto p-4">
@@ -197,7 +210,7 @@
   <!-- Preview Section -->
   <div class="mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
     <div class="overflow-hidden h-72 flex items-center justify-center mb-4">
-      <Animate animations={selectedAnimations} {trigger} {duration} hideBetween={true} {hideEnd} {delay} {repeat} {pauseDuration}>
+      <Animate animations={selectedAnimations} {trigger} {duration} hideBetween={true} {hideEnd} {showReplayButton} {delay} {repeat} {pauseDuration}>
         <h2>{previewText}</h2>
       </Animate>
     </div>
@@ -291,8 +304,18 @@
       <Label class="block font-medium" for="visibility">Visibility Options:</Label>
       <div class="space-x-4">
         <Label class="inline-flex items-center">
-          <Checkbox bind:checked={hideEnd} class="form-checkbox" />
+          <Checkbox bind:checked={hideEnd} onchange={handleHideEnd} class="form-checkbox" />
           <span class="ml-2">Hide End</span>
+        </Label>
+      </div>
+    </div>
+    <!-- Show Replay Options -->
+    <div class="space-y-2">
+      <Label class="block font-medium" for="visibility">Show Replay Options:</Label>
+      <div class="space-x-4">
+        <Label class="inline-flex items-center">
+          <Checkbox bind:checked={showReplayButton} onchange={handleShowReplayButton} class="form-checkbox" />
+          <span class="ml-2">Show Replay Button</span>
         </Label>
       </div>
     </div>
