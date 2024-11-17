@@ -22,7 +22,7 @@
     children,
     animations = 'bounce',
     trigger = 'hover',
-    duration = '1s',
+    duration = 1000,
     hideBetween = false,
     hideEnd = false,
     delay = 0,
@@ -59,7 +59,7 @@
     return [`animate__animated`, `animate__${animation.action}`].join(' ');
   }
 
-  function getCurrentConfig(): { duration: string; delay: number; pause: number } {
+  function getCurrentConfig(): { duration: number; delay: number; pause: number } {
     const config = animationsArray[currentAnimationIndex];
     return {
       duration: config.duration || duration,
@@ -103,8 +103,7 @@
 
         // Wait for animation to complete
         await new Promise((resolve) => {
-          const durationMs = parseDuration(config.duration);
-          setTimeout(resolve, durationMs);
+          setTimeout(resolve, duration);
         });
 
         // Handle pause between animations
@@ -154,15 +153,6 @@
       await new Promise((resolve) => setTimeout(resolve, 10));
       startAnimation(0);
     }
-  }
-
-  function parseDuration(duration: string): number {
-    if (duration.endsWith('ms')) {
-      return parseInt(duration);
-    } else if (duration.endsWith('s')) {
-      return parseFloat(duration) * 1000;
-    }
-    return 1000; // Default to 1s
   }
 
   function handleClick() {
@@ -232,7 +222,7 @@
     aria-label={animationLabel}
     aria-live="polite"
     class="{animationClass} {className}"
-    style="opacity: {isVisible ? 1 : 0}; animation-duration: {getCurrentConfig().duration}; background: none; border: none; padding: 0; cursor: pointer;"
+    style="opacity: {isVisible ? 1 : 0}; animation-duration: {getCurrentConfig().duration}ms; background: none; border: none; padding: 0; cursor: pointer;"
     onclick={handleClick}
     onmouseenter={handleMouseEnter}
     onkeydown={handleKeyDown}
