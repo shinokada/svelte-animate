@@ -1,5 +1,11 @@
 # svelte-animate
 
+## 0.4.0
+
+### Minor Changes
+
+- feat: apply options to each animation
+
 ## 0.3.0
 
 ### Minor Changes

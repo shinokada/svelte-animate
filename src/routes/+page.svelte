@@ -214,9 +214,9 @@
     </span>
     <!-- eslint-disable @typescript-eslint/no-unused-vars -->
     {#each selectedAnimations as animation, index}
-      <div class="border rounded-lg p-4 space-y-4">
+      <div class="border border-gray-300 dark:border-gray-700 rounded-lg p-4 space-y-4">
         <div class="flex items-center justify-between">
-          <span class="font-medium">Animation {index + 1}</span>
+          <span class="font-medium dark:text-white">Animation {index + 1}</span>
           <button onclick={() => removeAnimation(index)} class="px-3 py-1 bg-red-500 text-white rounded" disabled={selectedAnimations.length === 1}> Remove </button>
         </div>
 
