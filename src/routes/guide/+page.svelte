@@ -1,6 +1,4 @@
 <script lang="ts">
-  // import { DocPage } from 'runes-webkit';
-  // import { page } from '$app/stores';
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
   import { P, List, Table } from 'svelte-5-ui-lib';
   import TypeList from '../../lib/types.ts?raw';
@@ -10,61 +8,74 @@
     import: 'default',
     eager: true
   });
+
   const tableItems = [
     { prop: 'children', type: 'Snippet', default: 'Required', description: 'The content to be animated' },
     {
       prop: 'animations',
-      type: 'AnimationType[] or AnimationType',
+      type: 'AnimationConfig[] | AnimationType[] | AnimationType',
       default: 'bounce',
-      description: 'The animation effect to apply'
+      description: 'The animation effects to apply'
     },
     {
       prop: 'trigger',
-      type: "'hover' | 'click' | 'both' | undefined",
+      type: "'hover' | 'click' | 'both' | 'auto'",
       default: 'hover',
       description: 'What triggers the animation'
     },
     {
       prop: 'duration',
-      type: 'string',
-      default: '1s',
-      description: 'Animation duration'
+      type: 'number',
+      default: '1000',
+      description: 'Default animation duration (ms)'
     },
     {
       prop: 'hideBetween',
       type: 'boolean',
       default: 'false',
-      description: 'Whether to hide the element after animation'
+      description: 'Whether to hide element between animations'
     },
     {
       prop: 'hideEnd',
       type: 'boolean',
       default: 'false',
-      description: 'Whether to hide the element after animation'
+      description: 'Whether to hide element after animation sequence'
     },
     {
       prop: 'delay',
       type: 'number',
       default: '0',
-      description: 'Animation delay'
+      description: 'Default delay before animations start (ms)'
     },
     {
       prop: 'repeat',
       type: "'1' | '2' | '3' | 'infinite'",
       default: '1',
-      description: 'Animation repeat'
+      description: 'Number of times to repeat the animation'
     },
     {
       prop: 'pauseDuration',
       type: 'number',
       default: '0',
-      description: 'Animation pause duration'
+      description: 'Default pause between animations (ms)'
     },
     {
       prop: 'class',
       type: 'string',
-      default: '',
-      description: 'Additional CSS classes'
+      default: "''",
+      description: 'Additional CSS classes for the container'
+    },
+    {
+      prop: 'debug',
+      type: 'boolean',
+      default: 'false',
+      description: 'Enable debug mode with visible status updates'
+    },
+    {
+      prop: 'showReplayButton',
+      type: 'boolean',
+      default: 'false',
+      description: 'Show replay button after animation ends'
     }
   ];
 </script>
@@ -73,18 +84,19 @@
   <div class="max-w-4xl mx-auto px-4 py-8">
     <header class="mb-8">
       <H1>Svelte-Animate: Guide</H1>
-      <P class="text-lg text-gray-700"
-        >A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed
-        to work seamlessly with Svelte's latest features, including the ability to animate multiple effects in a sequence.</P
-      >
+      <P class="text-lg text-gray-700">
+        A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed
+        to work seamlessly with Svelte's latest features, including the ability to animate multiple effects in a sequence.
+      </P>
     </header>
 
     <H2>Features</H2>
     <List class="list-none space-y-2">
       <li>🎯 Easy to use wrapper for Animate.css</li>
       <li>🎨 75+ animation effects out of the box</li>
-      <li>🎨 Ability to chain multiple animations in a sequence</li>
-      <li>🔄 Multiple trigger options (hover, click, or both)</li>
+      <li>🔄 Ability to chain multiple animations in a sequence</li>
+      <li>🔄 Multiple trigger options (hover, click, auto, or both)</li>
+      <li>⚡ Zero dependencies (except Animate.css)</li>
       <li>
         ♿ Accessibility features including:
         <ul class="ml-6 mt-2 space-y-1">
@@ -98,12 +110,14 @@
         ⚙️ Extensive animation customization:
         <ul class="ml-6 mt-2 space-y-1">
           <li>- Customizable duration</li>
-          <li>- Animation delay</li>
-          <li>- Animation speed control</li>
+          <li>- Animation delays</li>
+          <li>- Per-animation configuration</li>
           <li>- Repeat functionality</li>
         </ul>
       </li>
       <li>🎭 Optional hide-after-animation and hide-between-animations features</li>
+      <li>🔄 Optional replay button for ended animations</li>
+      <li>🐛 Debug mode for development</li>
     </List>
 
     <H2>Installation</H2>
@@ -117,6 +131,18 @@
 
     <H2>Props</H2>
     <Table {tableItems} />
+
+    <H2>Animation Configuration</H2>
+    <P>When using the animations prop with detailed configuration:</P>
+    <HighlightCompo
+      codeLang="ts"
+      code={`interface AnimationConfig {
+  action: AnimationType;    // The animation effect to apply
+  duration?: number;        // Duration for this specific animation
+  delay?: number;          // Delay before this animation starts
+  pause?: number;          // Pause after this animation
+}`}
+    />
 
     <H2>Accessibility Features</H2>
     <List class="list-none space-y-2">
@@ -141,7 +167,55 @@
     </List>
 
     <H2>Examples</H2>
-    <HighlightCompo codeLang="ts" code={modules['./md/examples.md'] as string} />
+    <H3>Basic Example</H3>
+    <HighlightCompo
+      codeLang="svelte"
+      code={`<Animate>
+  <button>Hover to bounce!</button>
+</Animate>`}
+    />
+
+    <H3>Click Animation with Delay</H3>
+    <HighlightCompo
+      codeLang="svelte"
+      code={`<Animate 
+  animations="rubberBand" 
+  trigger="click" 
+  delay={2000} 
+  duration={1000}
+>
+  <div>Click for a delayed effect!</div>
+</Animate>`}
+    />
+
+    <H3>Complex Animation Sequence</H3>
+    <HighlightCompo
+      codeLang="svelte"
+      code={`<Animate 
+  animations={[
+    { action: 'fadeIn', duration: 1000 },
+    { action: 'pulse', duration: 500, pause: 1000 },
+    { action: 'fadeOut', duration: 1000 }
+  ]} 
+  trigger="both"
+  repeat="3"
+  showReplayButton={true}
+>
+  <span>Complex animation sequence!</span>
+</Animate>`}
+    />
+
+    <H3>Debug Mode Example</H3>
+    <HighlightCompo
+      codeLang="svelte"
+      code={`<Animate 
+  animations="bounce" 
+  trigger="click" 
+  debug={true}
+>
+  <div>Watch the debug info in the corner!</div>
+</Animate>`}
+    />
 
     <H2>Animation Types</H2>
     <HighlightCompo codeLang="ts" code={TypeList as string} />

@@ -1,14 +1,15 @@
 # Svelte-Animate
 
+[Doc/demo](https://svelte-animate.codewithshin.com/)
+
 A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed to work seamlessly with Svelte's latest features, including the ability to animate multiple effects in a sequence.
 
 ## Features
 
 - 🎯 Easy to use wrapper for Animate.css
-- 🎨 75+ animation effects out of the box
+- 🎨 95+ animation effects out of the box
 - 🔄 Ability to chain multiple animations in a sequence
-- 🔄 Multiple trigger options (hover, click, or both)
-- ⚡ Zero dependencies (except Animate.css)
+- 🔄 Multiple trigger options (hover, click, auto, or both)
 - ♿ Comprehensive accessibility features including:
   - Keyboard support (Enter/Space for click triggers)
   - Screen reader announcements
@@ -17,9 +18,11 @@ A lightweight, accessible Svelte component wrapper for Animate.css that makes ad
 - ⚙️ Extensive animation customization:
   - Customizable duration
   - Animation delays
-  - Animation speed control
+  - Per-animation configuration
   - Repeat functionality
 - 🎭 Optional hide-after-animation and hide-between-animations features
+- 🔄 Optional replay button for ended animations
+- 🐛 Debug mode for development
 
 ## Installation
 
@@ -50,51 +53,53 @@ import {Animate} from 'svelte-animate';
 3. Advanced usage:
 
 ```svelte
-<Animate animation="fadeIn" trigger="click" duration="2s" delay="1s" speed="slow" repeat={2}>
+<Animate animations="fadeIn" trigger="click" duration={2000} delay={1000} repeat="2">
   <div>Click me for a customized animation experience!</div>
 </Animate>
 
-<Animate animations={['fadeIn', 'zoomOut']} trigger="click" duration="2s" delay="1s" speed="slow" repeat="2" hideBetween={true} hideEnd={true}>
+<Animate
+  animations={[
+    { action: 'fadeIn', duration: 1000, delay: 500 },
+    { action: 'zoomOut', duration: 2000, pause: 1000 }
+  ]}
+  trigger="click"
+  hideBetween={true}
+  hideEnd={true}
+  showReplayButton={true}
+>
   <div>Click me for a customized animation sequence!</div>
 </Animate>
 ```
 
 ## Props
 
-| Prop            | Type                                              | Default      | Description                                      |
-| --------------- | ------------------------------------------------- | ------------ | ------------------------------------------------ |
-| `children`      | `Snippet`                                         | _Required_   | The content to be animated                       |
-| `animations`    | `AnimationType[]` or `AnimationType`              | `['bounce']` | The animation effects to apply                   |
-| `trigger`       | `'hover'` \| `'click'` \| `'both'` \| `'auto'`    | `undefined`  | What triggers the animation                      |
-| `duration`      | `string`                                          | `'1s'`       | Animation duration (CSS time value)              |
-| `hideBetween`   | `boolean`                                         | `false`      | Whether to hide element between animations       |
-| `hideEnd`       | `boolean`                                         | `false`      | Whether to hide element after animation sequence |
-| `delay`         | `string`                                          | `undefined`  | Delay before first animation starts              |
-| `speed`         | `'slower'` \| `'slow'` \| `'fast'` \| `'faster'`  | `undefined`  | Animation speed modifier                         |
-| `repeat`        | `string` (`'1'`, `'2'`, `'3'`, ..., `'infinite'`) | `'1'`        | Number of times to repeat the animation          |
-| `pauseDuration` | `number`                                          | `0`          | Pause duration between animations (ms)           |
-| `class`         | `string`                                          | `''`         | Additional CSS classes for the container         |
+| Prop               | Type                                                        | Default    | Description                                      |
+| ------------------ | ----------------------------------------------------------- | ---------- | ------------------------------------------------ |
+| `children`         | `Snippet`                                                   | _Required_ | The content to be animated                       |
+| `animations`       | `AnimationConfig[]` \| `AnimationType[]` \| `AnimationType` | `'bounce'` | The animation effects to apply                   |
+| `trigger`          | `'hover'` \| `'click'` \| `'both'` \| `'auto'`              | `'hover'`  | What triggers the animation                      |
+| `duration`         | `number`                                                    | `1000`     | Default animation duration (ms)                  |
+| `hideBetween`      | `boolean`                                                   | `false`    | Whether to hide element between animations       |
+| `hideEnd`          | `boolean`                                                   | `false`    | Whether to hide element after animation sequence |
+| `delay`            | `number`                                                    | `0`        | Default delay before animations start (ms)       |
+| `repeat`           | `'1'` \| `'2'` \| `'3'` \| `'infinite'`                     | `'1'`      | Number of times to repeat the animation          |
+| `pauseDuration`    | `number`                                                    | `0`        | Default pause between animations (ms)            |
+| `class`            | `string`                                                    | `''`       | Additional CSS classes for the container         |
+| `debug`            | `boolean`                                                   | `false`    | Enable debug mode with visible status updates    |
+| `showReplayButton` | `boolean`                                                   | `false`    | Show replay button after animation ends          |
 
-## Accessibility Features
+### AnimationConfig Interface
 
-### Keyboard Support
+When using the `animations` prop with detailed configuration:
 
-- Full keyboard navigation support
-- Enter and Space keys trigger animations for click/both triggers
-- Proper focus management
-- Event prevention to avoid unexpected behavior
-
-### Screen Reader Support
-
-- Descriptive ARIA labels for animated elements
-- Animation completion announcements using aria-live regions
-- Clear state changes communication
-
-### Motion Preferences
-
-- Automatically detects and respects prefers-reduced-motion settings
-- Gracefully degrades to no animation when reduced motion is preferred
-- Maintains content visibility and functionality
+```typescript
+interface AnimationConfig {
+  action: AnimationType; // The animation effect to apply
+  duration?: number; // Duration for this specific animation
+  delay?: number; // Delay before this animation starts
+  pause?: number; // Pause after this animation
+}
+```
 
 ## Examples
 
@@ -106,27 +111,36 @@ import {Animate} from 'svelte-animate';
 </Animate>
 ```
 
-### Click Animation with Delay and Speed
+### Click Animation with Delay
 
 ```svelte
-<Animate animations="rubberBand" trigger="click" delay="2s" speed="slow">
-  <div>Click for a slow, delayed effect!</div>
+<Animate animations="rubberBand" trigger="click" delay={2000} duration={1000}>
+  <div>Click for a delayed effect!</div>
 </Animate>
 ```
 
-### Repeating Animation Sequence with Custom Duration
+### Complex Animation Sequence
 
 ```svelte
-<Animate animations={['pulse', 'tada']} trigger="both" duration="0.5s" repeat="3">
-  <span>I'll pulse and tada three times!</span>
+<Animate
+  animations={[
+    { action: 'fadeIn', duration: 1000 },
+    { action: 'pulse', duration: 500, pause: 1000 },
+    { action: 'fadeOut', duration: 1000 }
+  ]}
+  trigger="both"
+  repeat="3"
+  showReplayButton={true}
+>
+  <span>Complex animation sequence!</span>
 </Animate>
 ```
 
-### Entrance and Exit Animations with Hide Options
+### Debug Mode Example
 
 ```svelte
-<Animate animations={['fadeInUp', 'fadeOutDown']} trigger="click" hideBetween={true} hideEnd={true} duration="1.5s">
-  <div>I'll fade in, then out!</div>
+<Animate animations="bounce" trigger="click" debug={true}>
+  <div>Watch the debug info in the corner!</div>
 </Animate>
 ```
 
