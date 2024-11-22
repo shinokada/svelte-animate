@@ -8,6 +8,12 @@
   import { RunesMetaTags, deepMerge } from 'runes-meta-tags';
   import { Runatics } from 'runatics';
   import DynamicCodeBlockStyle from './utils/DynamicCodeBlockStyle.svelte';
+
+  let activeUrl = $state($page.url.pathname);
+  $effect(() => {
+    activeUrl = $page.url.pathname;
+  });
+
   type LiType = {
     name: string;
     href: string;
@@ -125,7 +131,7 @@
       </div>
     {/snippet}
     {#if lis}
-      <NavUl class={ulclass}>
+      <NavUl {activeUrl} class={ulclass}>
         {@render navLi(lis)}
       </NavUl>
     {/if}
