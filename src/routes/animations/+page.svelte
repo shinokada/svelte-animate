@@ -44,11 +44,11 @@
     </Animate>
   </div>
 
-  <div class="bg-gray-100 p-4 rounded">
-    <h2 class="font-semibold mb-2">Current Sequence:</h2>
-    <p class="italic">
+  <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+    <h2 class="font-semibold mb-2 dark:text-white">Current Sequence:</h2>
+    <P class="italic">
       {selectedAnimations.map((anim) => anim.action).join(' → ')}
-    </p>
+    </P>
   </div>
 
   <CodeWrapper class="mt-4">
