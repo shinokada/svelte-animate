@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
-  import { P, List, Table } from 'svelte-5-ui-lib';
+  import { P, List, Table, Li } from 'svelte-5-ui-lib';
   import TypeList from '../../lib/types.ts?raw';
 
   const modules = import.meta.glob('./md/*.md', {
@@ -84,40 +84,40 @@
   <div class="max-w-4xl mx-auto px-4 py-8">
     <header class="mb-8">
       <H1>Svelte-Animate: Guide</H1>
-      <P class="text-lg text-gray-700">
+      <P space="wider" class="text-lg text-gray-700">
         A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed
         to work seamlessly with Svelte's latest features, including the ability to animate multiple effects in a sequence.
       </P>
     </header>
 
     <H2>Features</H2>
-    <List class="list-none space-y-2">
-      <li>🎯 Easy to use wrapper for Animate.css</li>
-      <li>🎨 75+ animation effects out of the box</li>
-      <li>🔄 Ability to chain multiple animations in a sequence</li>
-      <li>🔄 Multiple trigger options (hover, click, auto, or both)</li>
-      <li>⚡ Zero dependencies (except Animate.css)</li>
-      <li>
+    <List class="list-none space-y-2" ctxClass="tracking-wider">
+      <Li>🎯 Easy to use wrapper for Animate.css</Li>
+      <Li>🎨 75+ animation effects out of the box</Li>
+      <Li>🔄 Ability to chain multiple animations in a sequence</Li>
+      <Li>🔄 Multiple trigger options (hover, click, auto, or both)</Li>
+      <Li>⚡ Zero dependencies (except Animate.css)</Li>
+      <Li>
         ♿ Accessibility features including:
-        <ul class="ml-6 mt-2 space-y-1">
-          <li>- Keyboard support (Enter/Space for click triggers)</li>
-          <li>- Screen reader announcements</li>
-          <li>- Respects prefers-reduced-motion</li>
-          <li>- ARIA attributes and live regions</li>
-        </ul>
-      </li>
-      <li>
+        <List class="ml-6 mt-2 space-y-1" ctxClass="tracking-wider">
+          <Li>- Keyboard support (Enter/Space for click triggers)</Li>
+          <Li>- Screen reader announcements</Li>
+          <Li>- Respects prefers-reduced-motion</Li>
+          <Li>- ARIA attributes and live regions</Li>
+        </List>
+      </Li>
+      <Li>
         ⚙️ Extensive animation customization:
-        <ul class="ml-6 mt-2 space-y-1">
-          <li>- Customizable duration</li>
-          <li>- Animation delays</li>
-          <li>- Per-animation configuration</li>
-          <li>- Repeat functionality</li>
-        </ul>
-      </li>
-      <li>🎭 Optional hide-after-animation and hide-between-animations features</li>
-      <li>🔄 Optional replay button for ended animations</li>
-      <li>🐛 Debug mode for development</li>
+        <List class="ml-6 mt-2 space-y-1" ctxClass="tracking-wider">
+          <Li>- Customizable duration</Li>
+          <Li>- Animation delays</Li>
+          <Li>- Per-animation configuration</Li>
+          <Li>- Repeat functionality</Li>
+        </List>
+      </Li>
+      <Li>🎭 Optional hide-after-animation and hide-between-animations features</Li>
+      <Li>🔄 Optional replay button for ended animations</Li>
+      <Li>🐛 Debug mode for development</Li>
     </List>
 
     <H2>Installation</H2>
@@ -133,7 +133,7 @@
     <Table {tableItems} />
 
     <H2>Animation Configuration</H2>
-    <P>When using the animations prop with detailed configuration:</P>
+    <P space="wider">When using the animations prop with detailed configuration:</P>
     <HighlightCompo
       codeLang="ts"
       code={`interface AnimationConfig {
@@ -145,25 +145,25 @@
     />
 
     <H2>Accessibility Features</H2>
-    <List class="list-none space-y-2">
-      <li>- Full keyboard navigation support</li>
-      <li>- Enter and Space keys trigger animations for click/both triggers</li>
-      <li>- Proper focus management</li>
-      <li>- Event prevention to avoid unexpected behavior</li>
+    <List class="list-none space-y-2" ctxClass="tracking-wider">
+      <Li>- Full keyboard navigation support</Li>
+      <Li>- Enter and Space keys trigger animations for click/both triggers</Li>
+      <Li>- Proper focus management</Li>
+      <Li>- Event prevention to avoid unexpected behavior</Li>
     </List>
 
     <H2>Screen Reader Support</H2>
-    <List class="list-none space-y-2">
-      <li>- Descriptive ARIA labels for animated elements</li>
-      <li>- Animation completion announcements using aria-live regions</li>
-      <li>- Clear state changes communication</li>
+    <List class="list-none space-y-2" ctxClass="tracking-wider">
+      <Li>- Descriptive ARIA labels for animated elements</Li>
+      <Li>- Animation completion announcements using aria-live regions</Li>
+      <Li>- Clear state changes communication</Li>
     </List>
 
     <H2>Motion Preferences</H2>
-    <List class="list-none space-y-2">
-      <li>- Automatically detects and respects prefers-reduced-motion settings</li>
-      <li>- Gracefully degrades to no animation when reduced motion is preferred</li>
-      <li>- Maintains content visibility and functionality</li>
+    <List class="list-none space-y-2" ctxClass="tracking-wider">
+      <Li>- Automatically detects and respects prefers-reduced-motion settings</Li>
+      <Li>- Gracefully degrades to no animation when reduced motion is preferred</Li>
+      <Li>- Maintains content visibility and functionality</Li>
     </List>
 
     <H2>Examples</H2>
