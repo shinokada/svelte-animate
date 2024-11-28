@@ -26,7 +26,7 @@
 
 <div class="container mx-auto p-6 max-w-2xl">
   <h1 class="text-3xl font-bold mb-6 text-center">Animation Combinations</h1>
-  <P>If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/blob/main/src/lib/predefined.ts">predefined.ts</A> and create a PR.</P>
+  <P space="wide">If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/blob/main/src/lib/predefined.ts">predefined.ts</A> and create a PR.</P>
   <div class="mb-6">
     <label for="animation-category" class="block mb-2 font-semibold"> Select Animation Category </label>
     <select id="animation-category" class="w-full p-2 border rounded" onchange={handleCategoryChange} value={selectedCategory}>
@@ -46,7 +46,7 @@
 
   <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
     <h2 class="text-2xl font-semibold m-2 dark:text-white">Current Sequence:</h2>
-    <P class="italic m-2">
+    <P space="wider" class="italic m-2">
       {selectedAnimations.map((anim) => anim.action).join(' → ')}
     </P>
   </div>
