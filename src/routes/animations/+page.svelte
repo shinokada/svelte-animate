@@ -45,8 +45,8 @@
   </div>
 
   <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-    <h2 class="font-semibold mb-2 dark:text-white">Current Sequence:</h2>
-    <P class="italic">
+    <h2 class="text-2xl font-semibold m-2 dark:text-white">Current Sequence:</h2>
+    <P class="italic m-2">
       {selectedAnimations.map((anim) => anim.action).join(' → ')}
     </P>
   </div>
