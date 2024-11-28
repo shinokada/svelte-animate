@@ -2,6 +2,7 @@
   import { Animate, predefined, type AnimationConfig } from "$lib";
   import CodeWrapper from "../utils/CodeWrapper.svelte";
   import HighlightCompo from "../utils/HighlightCompo.svelte";
+  import { A, P } from "svelte-5-ui-lib";
   
   let selectedCategory: keyof typeof predefined = $state('hesitantConfidence');
   let selectedAnimations: AnimationConfig[] = $derived(predefined[selectedCategory]);
@@ -16,8 +17,6 @@
     const props = [
       animationsProp,
       `trigger="hover"`,
-      `duration={1000}`,
-      `class="inline-block"`,
     ];
 
     const propsString = props.map((prop) => `  ${prop}`).join("\n");
@@ -28,7 +27,7 @@
 
 <div class="container mx-auto p-6 max-w-2xl">
   <h1 class="text-3xl font-bold mb-6 text-center">Animation Combinations</h1>
-  <p>If you want to add your animation, please add it to the predefined.ts and create a PR.</p>
+  <P>If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/blob/main/src/lib/predefined.ts">predefined.ts</A> and create a PR.</P>
   <div class="mb-6">
     <label for="animation-category" class="block mb-2 font-semibold">
       Select Animation Category
@@ -51,8 +50,6 @@
     <Animate 
       animations={selectedAnimations} 
       trigger="hover"
-      duration={1000}
-      class="inline-block"
     >
       <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
         Hover to animate
