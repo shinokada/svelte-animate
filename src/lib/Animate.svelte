@@ -31,11 +31,12 @@
     repeat = '1',
     pauseDuration = 0,
     class: className = '',
-    debug = false
+    debug = false,
+    hideFor = 0
   }: Props = $props();
 
   let animationClass = $state('animate__animated');
-  let isVisible = $state(true);
+  let isVisible = $state(hideFor === 0);
   let totalRepeats = $derived(parseInt(repeat) || 1);
 
   // Convert animations to normalized array of AnimationConfig
@@ -89,7 +90,14 @@
     if (!canStartNewAnimation()) return;
 
     isAnimating = true;
-    isVisible = true;
+
+    // Hide for the specified duration before starting animation
+    if (hideFor > 0) {
+      isVisible = false; // Hide initially
+      await new Promise((resolve) => setTimeout(resolve, hideFor));
+      isVisible = true; // Show after hideFor delay
+    }
+
     currentAnimationIndex = startFromIndex;
 
     animationLabel = `${animationsArray[currentAnimationIndex].action} animation in progress`;
@@ -113,7 +121,7 @@
 
         // Wait for animation to complete
         await new Promise((resolve) => {
-          setTimeout(resolve, duration);
+          setTimeout(resolve, config.duration);
         });
 
         // Handle pause between animations
@@ -128,6 +136,7 @@
       isAnimating = false;
     }
   }
+
 
   async function completeAnimationSequence() {
     repeatCount++;
@@ -202,6 +211,18 @@
       }
     }
   }
+
+  $effect(() => {
+    if (hideFor > 0) {
+      isVisible = false;
+
+      // Use a separate async function to handle the delay
+      (async () => {
+        await new Promise((resolve) => setTimeout(resolve, hideFor));
+        isVisible = true;
+      })();
+    }
+  });
 
   $effect(() => {
     if (!hasInitialized && trigger === 'auto' && !prefersReducedMotion) {
