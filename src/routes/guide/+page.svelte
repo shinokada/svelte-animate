@@ -85,12 +85,12 @@
     <header class="mb-8">
       <H1>Svelte-Animate: Guide</H1>
       <P space="wider" class="text-lg text-gray-700">
-        A lightweight, accessible Svelte component wrapper for Animate.css that makes adding animations to your Svelte applications simple and intuitive. Built with accessibility in mind and designed
-        to work seamlessly with Svelte's latest features, including the ability to animate multiple effects in a sequence.
+        Svelte Animate is a lightweight, accessible Svelte component that wraps Animate.css, simplifying animation integration in Svelte applications. It offers advanced features like: Sequential animation effects, Configurable trigger modes (hover, click, auto), Accessibility-first design, Reduced motion support, Flexible repeat and timing controls.
+Designed for Svelte's latest features, it provides more sophisticated animation capabilities than standard Svelte transitions.
       </P>
     </header>
 
-    <H2>Features</H2>
+    <H2>Feature Details</H2>
     <List class="list-none space-y-2" ctxClass="tracking-wider">
       <Li>🎯 Easy to use wrapper for Animate.css</Li>
       <Li>🎨 75+ animation effects out of the box</Li>
