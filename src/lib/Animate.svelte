@@ -31,12 +31,11 @@
     repeat = '1',
     pauseDuration = 0,
     class: className = '',
-    debug = false,
-    hideFor = 0
+    debug = false
   }: Props = $props();
 
   let animationClass = $state('animate__animated');
-  let isVisible = $state(hideFor === 0);
+  let isVisible = $state(true);
   let totalRepeats = $derived(parseInt(repeat) || 1);
 
   // Convert animations to normalized array of AnimationConfig
@@ -90,14 +89,7 @@
     if (!canStartNewAnimation()) return;
 
     isAnimating = true;
-
-    // Hide for the specified duration before starting animation
-    if (hideFor > 0) {
-      isVisible = false; // Hide initially
-      await new Promise((resolve) => setTimeout(resolve, hideFor));
-      isVisible = true; // Show after hideFor delay
-    }
-
+    isVisible = true;
     currentAnimationIndex = startFromIndex;
 
     animationLabel = `${animationsArray[currentAnimationIndex].action} animation in progress`;
@@ -121,7 +113,7 @@
 
         // Wait for animation to complete
         await new Promise((resolve) => {
-          setTimeout(resolve, config.duration);
+          setTimeout(resolve, duration);
         });
 
         // Handle pause between animations
@@ -136,7 +128,6 @@
       isAnimating = false;
     }
   }
-
 
   async function completeAnimationSequence() {
     repeatCount++;
@@ -211,18 +202,6 @@
       }
     }
   }
-
-  $effect(() => {
-    if (hideFor > 0) {
-      isVisible = false;
-
-      // Use a separate async function to handle the delay
-      (async () => {
-        await new Promise((resolve) => setTimeout(resolve, hideFor));
-        isVisible = true;
-      })();
-    }
-  });
 
   $effect(() => {
     if (!hasInitialized && trigger === 'auto' && !prefersReducedMotion) {
@@ -324,21 +303,3 @@
     z-index: 9999;
   }
 </style>
-
-<!--
-@component
-[Go to docs](https://svelte-animate.codewithshin.com/)
-## Props
-@prop children
-@prop animations = 'bounce'
-@prop trigger = 'hover'
-@prop duration = 1000
-@prop hideBetween = false
-@prop hideEnd = false
-@prop showReplayButton = false
-@prop delay = 0
-@prop repeat = '1'
-@prop pauseDuration = 0
-@prop class: className = ''
-@prop debug = false
--->
