@@ -42,6 +42,7 @@
 
   const lis: LiType[] = [
     { name: 'Guide', href: '/guide' },
+    { name: 'Animator', href: '/animator' },
     { name: 'Animations', href: '/animations' },
     { name: 'Animated icons', href: 'https://svelte-animated-icons.codewithshin.com/' }
   ];

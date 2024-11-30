@@ -64,10 +64,10 @@
     return `animate__animated animate__${animAction}`;
   }
 
-  function getCurrentConfig(index: number): { 
-    duration: number; 
-    delay: number; 
-    pause: number 
+  function getCurrentConfig(index: number): {
+    duration: number;
+    delay: number;
+    pause: number;
   } {
     const config = animationsArray[index];
     return {
@@ -95,7 +95,7 @@
     if (hideFor > 0) {
       isVisible = false;
       logDebug(`Hiding for ${hideFor}ms`);
-      await new Promise(resolve => setTimeout(resolve, hideFor));
+      await new Promise((resolve) => setTimeout(resolve, hideFor));
     }
 
     isAnimating = true;
@@ -111,14 +111,14 @@
         // Apply initial delay if it's the first animation
         if (config.delay > 0) {
           logDebug(`Applying initial delay of ${config.delay}ms`);
-          await new Promise(resolve => setTimeout(resolve, config.delay));
+          await new Promise((resolve) => setTimeout(resolve, config.delay));
         }
 
         // Hide between animations if enabled
         if (i > 0 && hideBetween) {
           logDebug('Hiding between animations');
           isVisible = false;
-          await new Promise(resolve => setTimeout(resolve, 300)); // Brief hide interval
+          await new Promise((resolve) => setTimeout(resolve, 300)); // Brief hide interval
         }
 
         // Ensure visibility
@@ -126,19 +126,19 @@
 
         // Reset animation
         animationClass = '';
-        await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise((resolve) => requestAnimationFrame(resolve));
 
         // Apply animation
         animationClass = getAnimationClasses(currentAnimation);
         logDebug(`Applying animation: ${animationClass}`);
-        
+
         // Wait for animation duration
-        await new Promise(resolve => setTimeout(resolve, config.duration));
+        await new Promise((resolve) => setTimeout(resolve, config.duration));
 
         // Pause between animations if specified
         if (i < animationsArray.length - 1 && config.pause > 0) {
           logDebug(`Pausing for ${config.pause}ms between animations`);
-          await new Promise(resolve => setTimeout(resolve, config.pause));
+          await new Promise((resolve) => setTimeout(resolve, config.pause));
         }
       }
 
@@ -146,7 +146,7 @@
       logDebug(`Repeat count: ${repeatCount}`);
 
       // Short pause between repetitions
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     // Final state
@@ -187,9 +187,7 @@
   </span>
 
   {#if debug}
-    <div 
-      class="absolute bottom-0 left-0 right-0 bg-gray-100 text-xs p-2 max-h-32 overflow-y-auto"
-    >
+    <div class="absolute bottom-0 left-0 right-0 bg-gray-100 text-xs p-2 max-h-32 overflow-y-auto">
       <h4>Debug Info:</h4>
       {#each debugInfo as info}
         <p>{info}</p>
@@ -197,3 +195,22 @@
     </div>
   {/if}
 {/if}
+
+<!--
+@component
+[Go to docs](https://svelte-animate.codewithshin.com/)
+## Props
+@prop children
+@prop animations = 'zoomInRight'
+@prop trigger = 'hover'
+@prop duration = 1000
+@prop repeat = '1'
+@prop hideFor = 0
+@prop hideEnd = false
+@prop hideBetween = false
+@prop showReplayButton = false
+@prop delay = 0
+@prop pauseDuration = 0
+@prop class: className = ''
+@prop debug = false
+-->

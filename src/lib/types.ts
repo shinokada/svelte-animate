@@ -135,5 +135,5 @@ export interface AnimationProps extends HTMLButtonAttributes {
   class?: string;
   debug?: boolean;
   showReplayButton?: boolean;
-  hideFor?: number; 
+  hideFor?: number;
 }

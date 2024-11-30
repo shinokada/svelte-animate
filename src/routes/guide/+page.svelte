@@ -85,8 +85,9 @@
     <header class="mb-8">
       <H1>Svelte-Animate: Guide</H1>
       <P space="wider" class="text-lg text-gray-700">
-        Svelte Animate is a lightweight, accessible Svelte component that wraps Animate.css, simplifying animation integration in Svelte applications. It offers advanced features like: Sequential animation effects, Configurable trigger modes (hover, click, auto), Accessibility-first design, Reduced motion support, Flexible repeat and timing controls.
-Designed for Svelte's latest features, it provides more sophisticated animation capabilities than standard Svelte transitions.
+        Svelte Animate is a lightweight, accessible Svelte component that wraps Animate.css, simplifying animation integration in Svelte applications. It offers advanced features like: Sequential
+        animation effects, Configurable trigger modes (hover, click, auto), Accessibility-first design, Reduced motion support, Flexible repeat and timing controls. Designed for Svelte's latest
+        features, it provides more sophisticated animation capabilities than standard Svelte transitions.
       </P>
     </header>
 
