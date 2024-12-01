@@ -35,7 +35,7 @@
       return url.startsWith(allowedUrl);
     });
   }
-  let urlsToIncludeSwitcher = ['/', '/animations', '/guide'];
+  let urlsToIncludeSwitcher = ['/', '/animations', '/guide', '/animator'];
   let include = $derived(isIncluded(currentUrl, urlsToIncludeSwitcher));
 
   // const hasPath = (key: string) => currentUrl.includes(key);

@@ -1,32 +1,69 @@
 <script lang="ts">
-  import { Animator } from '$lib';
+  import type { Component } from 'svelte';
+  import { type AnimationType, Animator } from '$lib';
+  import { Input, Select, Label, Checkbox, Radio, uiHelpers } from 'svelte-5-ui-lib';
+  import DynamicCodeBlockHighlight from '../utils/DynamicCodeBlockHighlight.svelte';
+  import { isGeneratedCodeOverflow } from '../utils/helper.ts';
+  import CodeWrapper from '../utils/CodeWrapper.svelte';
+  import HighlightCompo from '../utils/HighlightCompo.svelte';
+  import { isSvelteOverflow, getExampleFileName } from "../utils/helper";
+
+  import * as ExampleComponents from "./examples";
+  const exampleModules = import.meta.glob("./examples/*.svelte", {
+    query: "?raw",
+    import: "default",
+    eager: true
+  }) as Record<string, string>;
+
+  const exampleArr = [
+    { name: "North", component: ExampleComponents.North },
+    { name: "Example1", component: ExampleComponents.Example1 },
+  ];
+  let selectedExample: string | number = $state(exampleArr[0].name);
+  let svelteCode = $derived(getExampleFileName(selectedExample, exampleArr));
+
+  function findObject(arr: { name: string; component: Component }[], name: string) {
+    const matchingObject = arr.find((obj) => obj.name === name);
+    return matchingObject ? matchingObject.component : null;
+  }
+  const SelectedComponent = $derived(findObject(exampleArr, selectedExample));
+  // end of dynamic svelte component
+  let codeBlock = uiHelpers();
+  let expand = $state(false);
+  let showExpandButton = $derived(isSvelteOverflow(svelteCode, exampleModules));
+  const handleExpandClick = () => {
+    expand = !expand;
+  };
+  $effect(() => {
+    expand = codeBlock.isOpen;
+  });
+
 </script>
 
-<div class="max-w-6xl mx-auto">
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <h1>Animator</h1>
-    <div class="relative flex items-center justify-center h-96">
-      <Animator class="absolute" animations={[{ action: 'rotateInUpRight' }]} trigger="auto" hideEnd={true}>
-        <h1 class="text-4xl font-bold text-blue-600">Svelte Animate</h1>
-      </Animator>
-      <Animator class="absolute" animations={[{ action: 'fadeInUp' }]} hideFor={1500} trigger="auto" hideEnd={true}>
-        <h2 class="text-4xl text-green-500">Powerful Animations</h2>
-      </Animator>
-      <Animator class="absolute" animations={[{ action: 'bounce' }]} hideFor={3000} trigger="auto" hideEnd={true}>
-        <p class="text-4xl text-purple-600">Smooth Transitions</p>
-      </Animator>
-      <Animator class="absolute" animations={[{ action: 'lightSpeedInLeft' }]} hideFor={4000} trigger="auto" hideEnd={true}>
-        <h3 class="text-3xl text-red-500">Customizable Effects</h3>
-      </Animator>
-      <Animator class="absolute" animations={[{ action: 'zoomInDown' }]} hideFor={5500} trigger="auto" hideEnd={true}>
-        <p class="text-3xl text-orange-500">Easy to Use</p>
-      </Animator>
-      <Animator class="absolute" animations={[{ action: 'slideInRight' }]} hideFor={7000} trigger="auto" hideEnd={true}>
-        <h4 class="text-4xl text-teal-600">Responsive Design</h4>
-      </Animator>
-      <Animator class="absolute" animations={[{ action: 'rotateInUpRight' }]} trigger="auto" hideFor={8000}>
-        <h1 class="text-4xl font-bold text-blue-600">Svelte Animate</h1>
-      </Animator>
-    </div>
+<div class="max-w-4xl mx-auto p-4">
+  <h1>Animator</h1>
+
+  <h2>Examples</h2>
+
+<CodeWrapper>
+  <div class="mb-12 flex flex-wrap">
+    <Label class="mb-4 w-full font-bold">Example</Label>
+    {#each exampleArr as style}
+      <Radio labelClass="w-24 my-1" onclick={() => (expand = false)} name="block_style" bind:group={selectedExample} value={style.name}>{style.name}</Radio>
+    {/each}
   </div>
+  <SelectedComponent />
+  {#snippet codeblock()}
+    <DynamicCodeBlockHighlight replaceLib {handleExpandClick} {expand} {showExpandButton} code={exampleModules[`./examples/${svelteCode}`] as string} />
+  {/snippet}
+</CodeWrapper>
+
+  <CodeWrapper>
+    <ExampleComponents.Example1 />
+    {#snippet codeblock()}
+      <HighlightCompo codeLang="ts" code={exampleModules["./examples/Example1.svelte"] as string} />
+    {/snippet}
+  </CodeWrapper>
+
+  
 </div>

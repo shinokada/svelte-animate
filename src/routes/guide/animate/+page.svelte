@@ -1,7 +1,7 @@
 <script lang="ts">
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
   import { P, List, Table, Li } from 'svelte-5-ui-lib';
-  import TypeList from '../../lib/types.ts?raw';
+  import TypeList from '../../../lib/types.ts?raw';
 
   const modules = import.meta.glob('./md/*.md', {
     query: '?raw',
@@ -83,7 +83,7 @@
 <div class="max-w-6xl mx-auto">
   <div class="max-w-4xl mx-auto px-4 py-8">
     <header class="mb-8">
-      <H1>Svelte-Animate: Guide</H1>
+      <H1>Animate Component</H1>
       <P space="wider" class="text-lg text-gray-700">
         Svelte Animate is a lightweight, accessible Svelte component that wraps Animate.css, simplifying animation integration in Svelte applications. It offers advanced features like: Sequential
         animation effects, Configurable trigger modes (hover, click, auto), Accessibility-first design, Reduced motion support, Flexible repeat and timing controls. Designed for Svelte's latest
@@ -220,5 +220,11 @@
 
     <H2>Animation Types</H2>
     <HighlightCompo codeLang="ts" code={TypeList as string} />
+
+    <footer class="mt-12 pt-8 border-t border-gray-200">
+      <p class="text-center text-gray-600">
+        MIT License | Powered by <a href="https://animate.style/" class="text-blue-600 hover:underline">Animate.css</a>
+      </p>
+    </footer>
   </div>
 </div>
