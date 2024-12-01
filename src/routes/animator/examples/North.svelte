@@ -21,11 +21,11 @@
         <h3 class="text-5xl text-amber-600">Delightful</h3>
       </Animator>
 
-      <Animator class="absolute" animations={[{ action: 'jackInTheBox' }]} trigger="auto" hideEnd={true} duration={1500} hideFor={7000}>
+      <Animator class="absolute" animations={[{ action: 'jackInTheBox' }]} trigger="auto" hideEnd={true} duration={2000} hideFor={7000}>
         <p class="text-5xl text-cyan-300">to be Svelte's North Star</p>
       </Animator>
 
-      <Animator class="absolute" animations={[{ action: 'fadeInUp' }]} trigger="auto" hideFor={9000}>
+      <Animator class="absolute" animations={[{ action: 'fadeInUp' }]} trigger="auto" hideFor={9500}>
         <p class="text-4xl text-white text-center">"Svelte exists to help us make better software." - Rich Harris</p>
       </Animator>
     </div>

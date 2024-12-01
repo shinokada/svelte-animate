@@ -57,13 +57,5 @@
     <DynamicCodeBlockHighlight replaceLib {handleExpandClick} {expand} {showExpandButton} code={exampleModules[`./examples/${svelteCode}`] as string} />
   {/snippet}
 </CodeWrapper>
-
-  <CodeWrapper>
-    <ExampleComponents.Example1 />
-    {#snippet codeblock()}
-      <HighlightCompo codeLang="ts" code={exampleModules["./examples/Example1.svelte"] as string} />
-    {/snippet}
-  </CodeWrapper>
-
   
 </div>
