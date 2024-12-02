@@ -137,3 +137,17 @@ export interface AnimationProps extends HTMLButtonAttributes {
   showReplayButton?: boolean;
   hideFor?: number;
 }
+
+export interface AnimatorProps extends HTMLButtonAttributes {
+  animations?: AnimationConfig[] | AnimationType[] | AnimationType;
+  trigger?: AutoTriggerType;
+  duration?: number;
+  children: Snippet;
+  hideBetween?: boolean;
+  hideEnd?: boolean;
+  delay?: number; // default delay for all animations
+  pauseDuration?: number; // default pause for all animations
+  class?: string;
+  debug?: boolean;
+  hideFor?: number;
+}

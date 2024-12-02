@@ -1,11 +1,10 @@
 <script lang="ts">
   import 'animate.css';
-  import type { AnimationProps as Props, AnimationType, AnimationConfig } from './types.ts';
+  import type { AnimatorProps as Props, AnimationType, AnimationConfig } from './types.ts';
 
   let prefersReducedMotion = $state(false);
   let isAnimating = $state(false);
   let currentAnimationIndex = $state(0);
-  let repeatCount = $state(0);
   let hasInitialized = $state(false);
   let debugInfo = $state<string[]>([]);
 
@@ -14,11 +13,9 @@
     animations = 'zoomInRight',
     trigger = 'hover',
     duration = 1000,
-    repeat = '1',
     hideFor = 0,
     hideEnd = false,
     hideBetween = false,
-    showReplayButton = false,
     delay = 0,
     pauseDuration = 0,
     class: className = '',
@@ -27,7 +24,6 @@
 
   let animationClass = $state('');
   let isVisible = $state(false);
-  let totalRepeats = $derived(parseInt(repeat) || 1);
   let ariaAnnouncement = $state('');
 
   // Convert animations to normalized array of AnimationConfig
@@ -77,12 +73,6 @@
     };
   }
 
-  async function resetAnimation() {
-    logDebug('Resetting animation');
-    repeatCount = 0;
-    startAnimation();
-  }
-
   async function startAnimation() {
     if (prefersReducedMotion || isAnimating) {
       logDebug(`Animation start blocked. Reduced motion: ${prefersReducedMotion}, Already animating: ${isAnimating}`);
@@ -100,54 +90,48 @@
 
     isAnimating = true;
     isVisible = true;
-    repeatCount = 0;
     ariaAnnouncement = 'Animation started';
 
-    while (repeatCount < (repeat === 'infinite' ? Infinity : totalRepeats)) {
-      for (let i = 0; i < animationsArray.length; i++) {
-        const currentAnimation = animationsArray[i];
-        const config = getCurrentConfig(i);
+    for (let i = 0; i < animationsArray.length; i++) {
+      const currentAnimation = animationsArray[i];
+      const config = getCurrentConfig(i);
 
-        // Apply initial delay if it's the first animation
-        if (config.delay > 0) {
-          logDebug(`Applying initial delay of ${config.delay}ms`);
-          await new Promise((resolve) => setTimeout(resolve, config.delay));
-        }
-
-        // Hide between animations if enabled
-        if (i > 0 && hideBetween) {
-          logDebug('Hiding between animations');
-          isVisible = false;
-          await new Promise((resolve) => setTimeout(resolve, 300)); // Brief hide interval
-        }
-
-        // Ensure visibility
-        isVisible = true;
-
-        // Reset animation
-        animationClass = '';
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-
-        // Apply animation
-        animationClass = getAnimationClasses(currentAnimation);
-        logDebug(`Applying animation: ${animationClass}`);
-
-        // Wait for animation duration
-        await new Promise((resolve) => setTimeout(resolve, config.duration));
-
-        // Pause between animations if specified
-        if (i < animationsArray.length - 1 && config.pause > 0) {
-          logDebug(`Pausing for ${config.pause}ms between animations`);
-          await new Promise((resolve) => setTimeout(resolve, config.pause));
-        }
+      // Apply initial delay if it's the first animation
+      if (config.delay > 0) {
+        logDebug(`Applying initial delay of ${config.delay}ms`);
+        await new Promise((resolve) => setTimeout(resolve, config.delay));
       }
 
-      repeatCount++;
-      logDebug(`Repeat count: ${repeatCount}`);
+      // Hide between animations if enabled
+      if (i > 0 && hideBetween) {
+        logDebug('Hiding between animations');
+        isVisible = false;
+        await new Promise((resolve) => setTimeout(resolve, 300)); // Brief hide interval
+      }
 
-      // Short pause between repetitions
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Ensure visibility
+      isVisible = true;
+
+      // Reset animation
+      animationClass = '';
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      // Apply animation
+      animationClass = getAnimationClasses(currentAnimation);
+      logDebug(`Applying animation: ${animationClass}`);
+
+      // Wait for animation duration
+      await new Promise((resolve) => setTimeout(resolve, config.duration));
+
+      // Pause between animations if specified
+      if (i < animationsArray.length - 1 && config.pause > 0) {
+        logDebug(`Pausing for ${config.pause}ms between animations`);
+        await new Promise((resolve) => setTimeout(resolve, config.pause));
+      }
     }
+
+    // Short pause between repetitions
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Final state
     isAnimating = false;

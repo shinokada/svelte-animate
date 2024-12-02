@@ -25,7 +25,7 @@
 </script>
 
 <div class="container mx-auto p-6 max-w-2xl">
-  <h1 class="text-3xl font-bold mb-6 text-center">Animation Combinations</h1>
+  <h1 class="text-3xl font-bold mb-6 text-center">Predefined Animation</h1>
   <P space="wide">If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/blob/main/src/lib/predefined.ts">predefined.ts</A> and create a PR.</P>
   <div class="mb-6">
     <label for="animation-category" class="block mb-2 font-semibold"> Select Animation Category </label>

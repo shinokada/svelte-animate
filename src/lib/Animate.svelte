@@ -279,6 +279,24 @@
   {/if}
 </div>
 
+<!--
+@component
+[Go to docs](https://svelte-animate.codewithshin.com/)
+## Props
+@prop children
+@prop animations = 'bounce'
+@prop trigger = 'hover'
+@prop duration = 1000
+@prop hideBetween = false
+@prop hideEnd = false
+@prop showReplayButton = false
+@prop delay = 0
+@prop repeat = '1'
+@prop pauseDuration = 0
+@prop class: className = ''
+@prop debug = false
+-->
+
 <style>
   .sr-only {
     position: absolute;
@@ -303,21 +321,3 @@
     z-index: 9999;
   }
 </style>
-
-<!--
-@component
-[Go to docs](https://svelte-animate.codewithshin.com/)
-## Props
-@prop children
-@prop animations = 'bounce'
-@prop trigger = 'hover'
-@prop duration = 1000
-@prop hideBetween = false
-@prop hideEnd = false
-@prop showReplayButton = false
-@prop delay = 0
-@prop repeat = '1'
-@prop pauseDuration = 0
-@prop class: className = ''
-@prop debug = false
--->

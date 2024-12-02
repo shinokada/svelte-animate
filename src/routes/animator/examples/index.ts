@@ -1,2 +1,3 @@
-export { default as Example1 } from './Example1.svelte';
-export { default as North } from './North.svelte';
+export { default as SvelteAnimate } from './SvelteAnimate.svelte';
+export { default as NorthStar } from './NorthStar.svelte';
+export { default as Impressed } from './Impressed.svelte';
