@@ -1,6 +1,7 @@
 <script lang="ts">
   import 'animate.css';
   import type { AnimatorProps as Props, AnimationType, AnimationConfig } from './types.ts';
+  import { getContext, hasContext } from 'svelte';
 
   let prefersReducedMotion = $state(false);
   let isAnimating = $state(false);
@@ -13,6 +14,32 @@
   let animationClass = $state('');
   let isVisible = $state(false);
   let ariaAnnouncement = $state('');
+
+  let actionStart = $state();
+  const ctxAction = getContext<{ action: boolean }>('actionContext');
+  if (hasContext('actionContext')) {
+    actionStart = ctxAction.action;
+  } else {
+    actionStart = action;
+  }
+  // const ctxAction = getContext<{ action: boolean } | undefined>('actionContext');
+  // let actionStart = $state(ctxAction?.action ?? action);
+
+  $effect(() => {
+    $inspect('ctxAction, actionStart', ctxAction, actionStart);
+    // Update actionStart if context changes
+    actionStart = ctxAction?.action ?? action;
+    // if (hasContext('actionContext')) {
+    //   actionStart = ctxAction.action;
+    // } else {
+    //   actionStart = action;
+    // }
+    // Trigger animation if action is true
+    if (actionStart && !hasInitialized) {
+      hasInitialized = true;
+      startAnimation();
+    }
+  });
 
   // Convert animations to normalized array of AnimationConfig
   let animationsArray = $derived.by((): AnimationConfig[] => {
@@ -62,6 +89,7 @@
   }
 
   async function startAnimation() {
+    if (!actionStart) return;
     if (prefersReducedMotion || isAnimating) {
       logDebug(`Animation start blocked. Reduced motion: ${prefersReducedMotion}, Already animating: ${isAnimating}`);
       return;
@@ -166,20 +194,3 @@
     </div>
   {/if}
 {/if}
-
-<!--
-@component
-[Go to docs](https://svelte-animate.codewithshin.com/)
-## Props
-@prop children
-@prop animations = 'zoomInRight'
-@prop duration = 1000
-@prop repeat = '1'
-@prop hideFor = 0
-@prop hideEnd = false
-@prop showReplayButton = false
-@prop delay = 0
-@prop pauseDuration = 0
-@prop class: className = ''
-@prop debug = false
--->

@@ -13,6 +13,7 @@
   }) as Record<string, string>;
 
   const exampleArr = [
+    { name: "Action start", component: ExampleComponents.ActionStart },
     { name: 'North star', component: ExampleComponents.NorthStar },
     { name: 'Svelte animate', component: ExampleComponents.SvelteAnimate },
     { name: 'Impressed', component: ExampleComponents.Impressed }
