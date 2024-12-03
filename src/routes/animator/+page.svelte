@@ -39,7 +39,7 @@
 
 <div class="max-w-4xl mx-auto p-4">
   <h1>Animator</h1>
-  <P>If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/blob/main/src/lib/animator.ts">animator.ts</A> and create a PR.</P>
+  <P>If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/tree/main/src/routes/animator/examples">animator.ts</A> and create a PR.</P>
   <CodeWrapper>
     <div class="mb-12 flex flex-wrap">
       <Label class="mb-4 w-full font-bold">Examples</Label>
