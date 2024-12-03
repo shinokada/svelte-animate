@@ -8,19 +8,7 @@
   let hasInitialized = $state(false);
   let debugInfo = $state<string[]>([]);
 
-  let {
-    children,
-    animations = 'zoomInRight',
-    trigger = 'hover',
-    duration = 1000,
-    hideFor = 0,
-    hideEnd = false,
-    hideBetween = false,
-    delay = 0,
-    pauseDuration = 0,
-    class: className = '',
-    debug = false
-  }: Props = $props();
+  let { children, animations = 'zoomInRight', duration = 1000, hideFor = 0, hideEnd = false, delay = 0, pauseDuration = 0, class: className = '', debug = false, action = true }: Props = $props();
 
   let animationClass = $state('');
   let isVisible = $state(false);
@@ -79,7 +67,7 @@
       return;
     }
 
-    logDebug(`Starting animation sequence: hideFor=${hideFor}, hideEnd=${hideEnd}, hideBetween=${hideBetween}`);
+    logDebug(`Starting animation sequence: hideFor=${hideFor}, hideEnd=${hideEnd}`);
 
     // Initial hide if hideFor is set
     if (hideFor > 0) {
@@ -103,10 +91,10 @@
       }
 
       // Hide between animations if enabled
-      if (i > 0 && hideBetween) {
+      if (i > 0) {
         logDebug('Hiding between animations');
         isVisible = false;
-        await new Promise((resolve) => setTimeout(resolve, 300)); // Brief hide interval
+        await new Promise((resolve) => setTimeout(resolve, 300)); //
       }
 
       // Ensure visibility
@@ -145,9 +133,8 @@
     }
   }
 
-  // Auto-start effect for 'auto' trigger
   $effect(() => {
-    if (!hasInitialized && trigger === 'auto') {
+    if (!hasInitialized && action === true) {
       hasInitialized = true;
       startAnimation();
     }
@@ -186,12 +173,10 @@
 ## Props
 @prop children
 @prop animations = 'zoomInRight'
-@prop trigger = 'hover'
 @prop duration = 1000
 @prop repeat = '1'
 @prop hideFor = 0
 @prop hideEnd = false
-@prop hideBetween = false
 @prop showReplayButton = false
 @prop delay = 0
 @prop pauseDuration = 0

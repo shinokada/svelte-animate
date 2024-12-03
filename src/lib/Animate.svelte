@@ -24,7 +24,6 @@
     animations = 'bounce',
     trigger = 'hover',
     duration = 1000,
-    hideBetween = false,
     hideEnd = false,
     showReplayButton = false,
     delay = 0,
@@ -140,7 +139,7 @@
       isVisible = !hideEnd;
       shouldShowReplayButton = hideEnd && showReplayButton;
     } else {
-      if (hideBetween && repeatCount !== totalRepeats) {
+      if (repeatCount !== totalRepeats) {
         isVisible = false;
       } else {
         isVisible = !hideEnd;
@@ -287,7 +286,6 @@
 @prop animations = 'bounce'
 @prop trigger = 'hover'
 @prop duration = 1000
-@prop hideBetween = false
 @prop hideEnd = false
 @prop showReplayButton = false
 @prop delay = 0

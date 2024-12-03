@@ -210,7 +210,7 @@
   <!-- Preview Section -->
   <div class="mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
     <div class="overflow-hidden h-72 flex items-center justify-center mb-4">
-      <Animate animations={selectedAnimations} {trigger} {duration} hideBetween={true} {hideEnd} {showReplayButton} {delay} {repeat} {pauseDuration}>
+      <Animate animations={selectedAnimations} {trigger} {duration} {hideEnd} {showReplayButton} {delay} {repeat} {pauseDuration}>
         <h2>{previewText}</h2>
       </Animate>
     </div>

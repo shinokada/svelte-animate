@@ -15,7 +15,7 @@
   const exampleArr = [
     { name: 'North star', component: ExampleComponents.NorthStar },
     { name: 'Svelte animate', component: ExampleComponents.SvelteAnimate },
-    { name: 'Impressed', component: ExampleComponents.Impressed },
+    { name: 'Impressed', component: ExampleComponents.Impressed }
   ];
   let selectedExample: string | number = $state(exampleArr[0].name);
   let svelteCode = $derived(getExampleFileName(selectedExample, exampleArr));
