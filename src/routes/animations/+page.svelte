@@ -2,7 +2,7 @@
   import { Animate, predefined, type AnimationConfig } from '$lib';
   import CodeWrapper from '../utils/CodeWrapper.svelte';
   import HighlightCompo from '../utils/HighlightCompo.svelte';
-  import { A, P } from 'svelte-5-ui-lib';
+  import { A, P } from 'flowbite-svelte';
 
   let selectedCategory: keyof typeof predefined = $state('hesitantConfidence');
   let selectedAnimations: AnimationConfig[] = $derived(predefined[selectedCategory]);

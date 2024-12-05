@@ -68,7 +68,7 @@ export function copyToClipboard(text: string): Promise<void> {
 }
 
 export function replaceLibImport(componentString: string): string {
-  return componentString.replace(/from "\$lib"/g, "from 'svelte-5-ui-lib'");
+  return componentString.replace(/from "\$lib"/g, "from 'flowbite-svelte'");
 }
 
 export const isGeneratedCodeOverflow = (code: string): boolean => {

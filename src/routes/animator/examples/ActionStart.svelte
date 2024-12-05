@@ -1,15 +1,23 @@
 <script lang="ts">
-  import { Animator, Controler } from '$lib';
-  import { Button } from "svelte-5-ui-lib";
-  let actionStatus = $state(false);
-  const changeAction = () => {
-    actionStatus = !actionStatus;
-  }
+  import { Animator, Controler, controlHelpers } from '$lib';
+  import { Button } from "flowbite-svelte";
+  // let actionStatus = $state(false);
+  // const changeAction = () => {
+  //   actionStatus = !actionStatus;
+  // }
+
+  const controller = controlHelpers();
+  let actionStatus = $state(false)
+  const toggleControl = controller.toggle;
+  const endControl = controller.end;
+  $effect(() => {
+    actionStatus = controller.isStarted;
+  })
 </script>
 
 <div class="max-w-6xl mx-auto">
   <div class="max-w-4xl mx-auto px-4 py-8">
-    <Button onclick={changeAction}>{actionStatus ? 'Stop' : 'Start'}</Button>
+    <Button onclick={toggleControl}>{actionStatus ? 'Stop' : 'Start'}</Button>
     <div class="relative flex items-center justify-center h-96">
       <Controler action={actionStatus}>
         <Animator class="absolute h-full w-full bg-[url('/images/tech.avif')] text-center" animations={[{ action: 'jackInTheBox' }]} duration={2000} hideEnd={true}>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
-  import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
+  import { Input, Select, Label, Checkbox } from 'flowbite-svelte';
   import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
 
