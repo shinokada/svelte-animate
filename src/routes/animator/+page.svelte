@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Component } from 'svelte';
-  import { Label, Radio, uiHelpers, P, A } from 'svelte-5-ui-lib';
+  import { Label, Radio, uiHelpers, P, A } from 'flowbite-svelte';
   import DynamicCodeBlockHighlight from '../utils/DynamicCodeBlockHighlight.svelte';
   import CodeWrapper from '../utils/CodeWrapper.svelte';
   import { isSvelteOverflow, getExampleFileName } from '../utils/helper';

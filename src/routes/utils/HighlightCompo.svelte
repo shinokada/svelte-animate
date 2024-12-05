@@ -1,7 +1,7 @@
 <script lang="ts">
   import { HighlightSvelte, Highlight } from 'svelte-rune-highlight';
   import markdown from 'svelte-rune-highlight/languages/markdown';
-  import { Button, Badge } from 'svelte-5-ui-lib';
+  import { Button, Badge } from 'flowbite-svelte';
   import { copyToClipboard, replaceLibImport } from './helper';
   import { highlightcompo } from './theme';
 
