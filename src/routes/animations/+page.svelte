@@ -28,8 +28,8 @@
   <h1 class="text-3xl font-bold mb-6 text-center">Predefined Animation</h1>
   <P space="wide">If you want to add your animation, please add it to <A href="https://github.com/shinokada/svelte-animate/blob/main/src/lib/predefined.ts">predefined.ts</A> and create a PR.</P>
   <div class="mb-6">
-    <label for="animation-category" class="block mb-2 font-semibold"> Select Animation Category </label>
-    <select id="animation-category" class="w-full p-2 border rounded" onchange={handleCategoryChange} value={selectedCategory}>
+    <label for="animation-category" class="block mb-2 font-semibold dark:text-white"> Select Animation Category </label>
+    <select id="animation-category" class="w-full p-2 border rounded dark:bg-white" onchange={handleCategoryChange} value={selectedCategory}>
       {#each Object.keys(predefined) as category}
         <option value={category}>
           {category.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}

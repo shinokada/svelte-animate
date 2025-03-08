@@ -1,4 +1,4 @@
-import type { AnimationConfig } from './types';
+import type { AnimationConfig } from './types.ts';
 
 export const predefined = {
   // Emotional Journey

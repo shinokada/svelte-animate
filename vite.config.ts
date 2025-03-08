@@ -1,5 +1,7 @@
-import { defineConfig } from 'vitest/config';
+import tailwindcss from '@tailwindcss/vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 import pkg from './package.json' with { type: 'json' };
 import sveltePackage from './node_modules/svelte/package.json' with { type: 'json' };
 import svelteKitPackage from './node_modules/@sveltejs/kit/package.json' with { type: 'json' };
@@ -10,12 +12,8 @@ import runesmetatagsPackage from './node_modules/runes-meta-tags/package.json' w
 import runaticsPackage from './node_modules/runatics/package.json' with { type: 'json' };
 
 export default defineConfig({
-  plugins: [sveltekit()],
-
-  test: {
-    include: ['src/**/*.{test,spec}.{js,ts}']
-  },
-  define: {
+	plugins: [sveltekit(), tailwindcss()],
+	define: {
     __NAME__: JSON.stringify(pkg.name),
     __DESCRIPTION__: JSON.stringify(pkg.description),
     __VERSION__: JSON.stringify(pkg.version),
@@ -27,5 +25,32 @@ export default defineConfig({
     __SVELTE_RUNE_HIGHLIGHT_VERSION__: JSON.stringify(svelterunehighlightPackage.version),
     __FLOWBITE_SVELTE_VERSION__: JSON.stringify(flowbiteSveltePackage.version),
     __VITE_VERSION__: JSON.stringify(vitePackage.version)
-  }
+  },
+	test: {
+		workspace: [
+			{
+				extends: './vite.config.ts',
+				plugins: [svelteTesting()],
+
+				test: {
+					name: 'client',
+					environment: 'jsdom',
+					clearMocks: true,
+					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					exclude: ['src/lib/server/**'],
+					setupFiles: ['./vitest-setup-client.ts']
+				}
+			},
+			{
+				extends: './vite.config.ts',
+
+				test: {
+					name: 'server',
+					environment: 'node',
+					include: ['src/**/*.{test,spec}.{js,ts}'],
+					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+				}
+			}
+		]
+	}
 });

@@ -33,7 +33,7 @@
   });
 </script>
 
-<select class="w-32 border border-gray-200 p-1 text-gray-800 md:w-36 dark:text-gray-800" bind:value={selected}>
+<select class="w-32 border border-gray-200 p-1 text-gray-800 md:w-36 dark:text-gray-800 dark:bg-white" bind:value={selected}>
   {#each styles as theme}
     <option value={theme.value}>{theme.value}</option>
   {/each}
