@@ -4,7 +4,7 @@
   import type { Component } from 'svelte';
   import { page } from '$app/stores';
   import { Footer, removeHyphensAndCapitalize, DotsHorizontalOutline, GithubSolid, random_tailwind_color, XSolid, Bluesky } from 'runes-webkit';
-  import { Navbar, NavLi, NavBrand, NavUl, uiHelpers, Darkmode, Dropdown, DropdownUl, DropdownLi } from 'flowbite-svelte';
+  import { Navbar, NavLi, NavBrand, NavUl, uiHelpers, Darkmode, Dropdown, DropdownUl, DropdownLi } from 'svelte-5-ui-lib';
   import { RunesMetaTags, deepMerge } from 'runes-meta-tags';
   import { Runatics } from 'runatics';
   import DynamicCodeBlockStyle from './utils/DynamicCodeBlockStyle.svelte';

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
-  import { P, List, Table, Li } from 'flowbite-svelte';
+  import { P, List, Table, Li } from 'svelte-5-ui-lib';
   import TypeList from '../../../lib/types.ts?raw';
 
   const modules = import.meta.glob('./md/*.md', {
