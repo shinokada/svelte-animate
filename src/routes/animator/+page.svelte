@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Component } from 'svelte';
-  import { Label, Radio, uiHelpers, P, A } from 'svelte-5-ui-lib';
+  import { Label, Radio, uiHelpers, P, A } from 'flowbite-svelte';
   import DynamicCodeBlockHighlight from '../utils/DynamicCodeBlockHighlight.svelte';
   import CodeWrapper from '../utils/CodeWrapper.svelte';
   import { isSvelteOverflow, getExampleFileName } from '../utils/helper';
@@ -44,7 +44,7 @@
     <div class="mb-12 flex flex-wrap">
       <Label class="mb-4 w-full font-bold">Examples</Label>
       {#each exampleArr as style}
-        <Radio labelClass="w-40 my-1" onclick={() => (expand = false)} name="block_style" bind:group={selectedExample} value={style.name}>{style.name}</Radio>
+        <Radio classes={{ label: "w-40 my-1" }} onclick={() => (expand = false)} name="block_style" bind:group={selectedExample} value={style.name}>{style.name}</Radio>
       {/each}
     </div>
     <SelectedComponent />

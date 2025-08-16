@@ -62,7 +62,7 @@
       }
 
       for (let i = startFromIndex; i < animationsArray.length; i++) {
-        console.log('i', i);
+        // console.log('i', i);
         if (!isAnimating) break; // Allow for interruption
 
         currentAnimationIndex = i;

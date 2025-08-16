@@ -48,12 +48,12 @@
 
   const handleEvent = () => {
     if (!visible) return; // Prevent multiple triggers
-    console.log('Hiding SVG');
+    // console.log('Hiding SVG');
     // Step 1: Instantly hide the SVG (using fade with duration: 0)
     visible = false;
     // Step 2: Wait for pauseDuration
     setTimeout(() => {
-      console.log('Showing SVG with animation');
+      // console.log('Showing SVG with animation');
       // Step 3: Enable draw animation for the reappearance
       shouldAnimate = true;
       // Step 4: Show SVG, which will trigger the draw animation

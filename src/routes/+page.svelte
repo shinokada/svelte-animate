@@ -1,6 +1,6 @@
 <script lang="ts">
   import { type AnimationType, type AutoTriggerType, type RepeatType, Animate } from '$lib';
-  import { Input, Select, Label, Checkbox } from 'svelte-5-ui-lib';
+  import { Input, Select, Label, Checkbox } from 'flowbite-svelte';
   import DynamicCodeBlockHighlight from './utils/DynamicCodeBlockHighlight.svelte';
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
 
@@ -215,7 +215,7 @@
       </Animate>
     </div>
     <div class="flex justify-center mb-4">
-      <Input type="text" bind:value={previewText} class="px-3 py-2 border rounded mr-2 w-64" placeholder="Enter preview text" />
+      <Input type="text" bind:value={previewText} class="px-3 py-2 mr-2 w-64" placeholder="Enter preview text" />
     </div>
   </div>
 
@@ -237,7 +237,7 @@
           <!-- Animation Type -->
           <div>
             <Label class="block text-sm font-medium mb-1">Animation Type</Label>
-            <Select bind:value={selectedAnimations[index].action} class="w-full px-3 py-2 border rounded">
+            <Select bind:value={selectedAnimations[index].action} class="w-full">
               {#each animations as anim}
                 <option value={anim}>{anim}</option>
               {/each}
@@ -247,19 +247,19 @@
           <!-- Duration -->
           <div>
             <Label class="block text-sm font-medium mb-1">Duration (ms)</Label>
-            <Input type="number" bind:value={selectedAnimations[index].duration} class="w-full px-3 py-2 border rounded" min="0" placeholder="e.g. 1000" />
+            <Input type="number" bind:value={selectedAnimations[index].duration} class="w-full px-3 py-2" min="0" placeholder="e.g. 1000" />
           </div>
 
           <!-- Delay -->
           <div>
             <Label class="block text-sm font-medium mb-1">Delay (ms)</Label>
-            <Input type="number" bind:value={selectedAnimations[index].delay} class="w-full px-3 py-2 border rounded" min="0" />
+            <Input type="number" bind:value={selectedAnimations[index].delay} class="w-full px-3 py-2" min="0" />
           </div>
 
           <!-- Pause -->
           <div>
             <Label class="block text-sm font-medium mb-1">Pause After (ms)</Label>
-            <Input type="number" bind:value={selectedAnimations[index].pause} class="w-full px-3 py-2 border rounded" min="0" />
+            <Input type="number" bind:value={selectedAnimations[index].pause} class="w-full px-3 py-2" min="0" />
           </div>
         </div>
       </div>
@@ -280,7 +280,7 @@
     <!-- Trigger Selection -->
     <div class="space-y-2">
       <Label class="block font-medium" for="trigger">Trigger Type:</Label>
-      <Select bind:value={trigger} class="w-full px-3 py-2 border rounded">
+      <Select bind:value={trigger} class="w-full px-3 py-2">
         <option value="hover">Hover</option>
         <option value="click">Click</option>
         <option value="both">Both</option>
@@ -291,7 +291,7 @@
     <!-- Repeat Selection -->
     <div class="space-y-2">
       <Label class="block font-medium" for="repeat">Repeat:</Label>
-      <Select bind:value={repeat} class="w-full px-3 py-2 border rounded">
+      <Select bind:value={repeat} class="w-full px-3 py-2">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>

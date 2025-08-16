@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Animate, predefined, type AnimationConfig } from '$lib';
   import CodeWrapper from '../utils/CodeWrapper.svelte';
-  import HighlightCompo from '../utils/HighlightCompo.svelte';
-  import { A, P } from 'svelte-5-ui-lib';
+  // import HighlightCompo from '../utils/HighlightCompo.svelte';
+  import { A, P } from 'flowbite-svelte';
+  import { HighlightCompo } from 'runes-webkit';
 
   let selectedCategory: keyof typeof predefined = $state('hesitantConfidence');
   let selectedAnimations: AnimationConfig[] = $derived(predefined[selectedCategory]);
@@ -53,7 +54,7 @@
 
   <CodeWrapper class="mt-4">
     {#snippet codeblock()}
-      <HighlightCompo code={generatedCode} class="mt-0" />
+      <HighlightCompo code={generatedCode} class="mt-0"  clipboardClass="top-2"/>
     {/snippet}
   </CodeWrapper>
 </div>

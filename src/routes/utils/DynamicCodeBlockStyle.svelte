@@ -1,11 +1,14 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { toUpperSnakeCase } from 'runes-webkit';
+  interface Props {
+    class?: string;
+  }
+  let { class: className }: Props = $props();
   const stylesImport = import.meta.glob('./highlight/styles/*.css');
   /*eslint no-undef: "off"*/
-  const localStorageName = toUpperSnakeCase(__NAME__) + '_CODE_BLOCK_STYLE';
+  const localStorageName = __NAME__.replace(/[\s-]/g, '_').toUpperCase() + '_CODE_BLOCK_STYLE';
 
-  let selected: string = $state(browser ? (localStorage.getItem(localStorageName) ?? 'tokyo-night-dark') : 'tokyo-night-dark');
+  let selected = $state(browser && (localStorage.getItem(localStorageName) ?? 'material-darker'));
 
   const styles = Object.entries(stylesImport).map(([path]) => ({
     value: path.slice(path.lastIndexOf('/') + 1, -4),
@@ -22,8 +25,8 @@
       link.href = css.default;
       document.head.append(link);
     })();
-    if (browser) {
-      // get selected style from localStorage
+    if (browser && selected) {
+      // set selected style to localStorage
       localStorage.setItem(localStorageName, selected);
     }
     return () => {
@@ -33,15 +36,11 @@
   });
 </script>
 
-<select class="w-32 border border-gray-200 p-1 text-gray-800 md:w-36 dark:text-gray-800 dark:bg-white" bind:value={selected}>
+<select
+  class="w-32 border border-gray-200 p-1 text-gray-800 md:w-36 dark:bg-white dark:text-gray-800 {className}"
+  bind:value={selected}
+>
   {#each styles as theme}
     <option value={theme.value}>{theme.value}</option>
   {/each}
 </select>
-
-<!--
-@component
-[Go to docs](https://runes-webkit.codewithshin.com/)
-## Props
-@props: 
--->

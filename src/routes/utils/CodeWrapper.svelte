@@ -7,9 +7,11 @@
     codeblock?: Snippet;
     innerClass?: string;
     class?: string;
+    codeClass?: string;
   }
-  let { children, codeblock, innerClass, class: classname }: Props = $props();
+  let { children, codeblock, innerClass, codeClass, class: classname }: Props = $props();
   const { base, inner } = $derived(codewrapper());
+  const codeCls = children ? 'border-t border-gray-600' : '';
 </script>
 
 <div class={base({ class: classname })}>
@@ -19,6 +21,8 @@
     </div>
   {/if}
   {#if codeblock}
-    {@render codeblock()}
+    <div class="{codeCls} {codeClass}">
+      {@render codeblock()}
+    </div>
   {/if}
 </div>

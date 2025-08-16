@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
-  import { P, List, Table, Li } from 'svelte-5-ui-lib';
+  import { P, List, Table, Li } from 'flowbite-svelte';
   import TypeList from '../../../lib/types.ts?raw';
 
   const modules = import.meta.glob('./md/*.md', {
@@ -122,16 +122,16 @@
     </List>
 
     <H2>Installation</H2>
-    <HighlightCompo codeLang="ts" code={modules['./md/installation.md'] as string} />
+    <HighlightCompo codeLang="ts" code={modules['./md/installation.md'] as string} clipboardClass="top-2" />
 
     <H2>Usage</H2>
     <H3>Basic usage</H3>
-    <HighlightCompo codeLang="ts" code={modules['./md/usage.md'] as string} />
+    <HighlightCompo codeLang="ts" code={modules['./md/usage.md'] as string} clipboardClass="top-2" />
     <H3>Custom usage</H3>
-    <HighlightCompo codeLang="ts" code={modules['./md/custom-usage.md'] as string} />
+    <HighlightCompo codeLang="ts" code={modules['./md/custom-usage.md'] as string} clipboardClass="top-2" />
 
     <H2>Props</H2>
-    <Table {tableItems} />
+    <Table items={tableItems} hoverable/>
 
     <H2>Animation Configuration</H2>
     <P space="wider">When using the animations prop with detailed configuration:</P>
