@@ -47,7 +47,7 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate>
-  <div>This will bounce on hover!</div>
+	<div>This will bounce on hover!</div>
 </Animate>
 ```
 
@@ -55,20 +55,20 @@ import {Animate} from 'svelte-animate';
 
 ```svelte
 <Animate animations="fadeIn" trigger="click" duration={2000} delay={1000} repeat="2">
-  <div>Click me for a customized animation experience!</div>
+	<div>Click me for a customized animation experience!</div>
 </Animate>
 
 <Animate
-  animations={[
-    { action: 'fadeIn', duration: 1000, delay: 500 },
-    { action: 'zoomOut', duration: 2000, pause: 1000 }
-  ]}
-  trigger="click"
-  hideBetween={true}
-  hideEnd={true}
-  showReplayButton={true}
+	animations={[
+		{ action: 'fadeIn', duration: 1000, delay: 500 },
+		{ action: 'zoomOut', duration: 2000, pause: 1000 }
+	]}
+	trigger="click"
+	hideBetween={true}
+	hideEnd={true}
+	showReplayButton={true}
 >
-  <div>Click me for a customized animation sequence!</div>
+	<div>Click me for a customized animation sequence!</div>
 </Animate>
 ```
 
@@ -95,10 +95,10 @@ When using the `animations` prop with detailed configuration:
 
 ```typescript
 interface AnimationConfig {
-  action: AnimationType; // The animation effect to apply
-  duration?: number; // Duration for this specific animation
-  delay?: number; // Delay before this animation starts
-  pause?: number; // Pause after this animation
+	action: AnimationType; // The animation effect to apply
+	duration?: number; // Duration for this specific animation
+	delay?: number; // Delay before this animation starts
+	pause?: number; // Pause after this animation
 }
 ```
 
@@ -108,7 +108,7 @@ interface AnimationConfig {
 
 ```svelte
 <Animate>
-  <button>Hover to bounce!</button>
+	<button>Hover to bounce!</button>
 </Animate>
 ```
 
@@ -116,7 +116,7 @@ interface AnimationConfig {
 
 ```svelte
 <Animate animations="rubberBand" trigger="click" delay={2000} duration={1000}>
-  <div>Click for a delayed effect!</div>
+	<div>Click for a delayed effect!</div>
 </Animate>
 ```
 
@@ -124,16 +124,16 @@ interface AnimationConfig {
 
 ```svelte
 <Animate
-  animations={[
-    { action: 'fadeIn', duration: 1000 },
-    { action: 'pulse', duration: 500, pause: 1000 },
-    { action: 'fadeOut', duration: 1000 }
-  ]}
-  trigger="both"
-  repeat="3"
-  showReplayButton={true}
+	animations={[
+		{ action: 'fadeIn', duration: 1000 },
+		{ action: 'pulse', duration: 500, pause: 1000 },
+		{ action: 'fadeOut', duration: 1000 }
+	]}
+	trigger="both"
+	repeat="3"
+	showReplayButton={true}
 >
-  <span>Complex animation sequence!</span>
+	<span>Complex animation sequence!</span>
 </Animate>
 ```
 
@@ -141,7 +141,7 @@ interface AnimationConfig {
 
 ```svelte
 <Animate animations="bounce" trigger="click" debug={true}>
-  <div>Watch the debug info in the corner!</div>
+	<div>Watch the debug info in the corner!</div>
 </Animate>
 ```
 

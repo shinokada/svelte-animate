@@ -1,5 +1,11 @@
 # svelte-animate
 
+## 0.6.1
+
+### Patch Changes
+
+- chore: dependencies update
+
 ## 0.6.0
 
 ### Minor Changes

@@ -14,22 +14,22 @@ import runaticsPackage from './node_modules/runatics/package.json' with { type: 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	define: {
-    __NAME__: JSON.stringify(pkg.name),
-    __DESCRIPTION__: JSON.stringify(pkg.description),
-    __VERSION__: JSON.stringify(pkg.version),
-    __GITHUBURL__: JSON.stringify(pkg.repository.url),
-    __RUNATICS_VERSION__: JSON.stringify(runaticsPackage.version),
-    __RUNES_METATAGS_VERSION__: JSON.stringify(runesmetatagsPackage.version),
-    __SVELTE_VERSION__: JSON.stringify(sveltePackage.version),
-    __SVELTEKIT_VERSION__: JSON.stringify(svelteKitPackage.version),
-    __SVELTE_RUNE_HIGHLIGHT_VERSION__: JSON.stringify(svelterunehighlightPackage.version),
-    __VITE_VERSION__: JSON.stringify(vitePackage.version)
+		__NAME__: JSON.stringify(pkg.name),
+		__DESCRIPTION__: JSON.stringify(pkg.description),
+		__VERSION__: JSON.stringify(pkg.version),
+		__GITHUBURL__: JSON.stringify(pkg.repository.url),
+		__RUNATICS_VERSION__: JSON.stringify(runaticsPackage.version),
+		__RUNES_METATAGS_VERSION__: JSON.stringify(runesmetatagsPackage.version),
+		__SVELTE_VERSION__: JSON.stringify(sveltePackage.version),
+		__SVELTEKIT_VERSION__: JSON.stringify(svelteKitPackage.version),
+		__SVELTE_RUNE_HIGHLIGHT_VERSION__: JSON.stringify(svelterunehighlightPackage.version),
+		__VITE_VERSION__: JSON.stringify(vitePackage.version)
 	},
 	resolve: {
-    alias: {
-      'svelte-animate': path.resolve(process.cwd(), './src/lib/index.ts')
-    }
-  },
+		alias: {
+			'svelte-animate': path.resolve(process.cwd(), './src/lib/index.ts')
+		}
+	},
 	test: {
 		workspace: [
 			{

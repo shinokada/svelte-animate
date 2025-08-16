@@ -5,11 +5,11 @@
 	import TypeList from '../../lib/types.ts?raw';
 
 	import * as ExampleComponents from './examples';
-  const exampleModules = import.meta.glob('./examples/*.*', {
-    query: '?raw',
-    import: 'default',
-    eager: true
-  }) as Record<string, string>;
+	const exampleModules = import.meta.glob('./examples/*.*', {
+		query: '?raw',
+		import: 'default',
+		eager: true
+	}) as Record<string, string>;
 
 	const tableItems = [
 		{
@@ -135,7 +135,11 @@
 		<CodeWrapper>
 			<ExampleComponents.Usage />
 			{#snippet codeblock()}
-				<HighlightCompo codeLang="ts" code={exampleModules['./examples/Usage.svelte'] as string} clipboardClass="top-2" />
+				<HighlightCompo
+					codeLang="ts"
+					code={exampleModules['./examples/Usage.svelte'] as string}
+					clipboardClass="top-2"
+				/>
 			{/snippet}
 		</CodeWrapper>
 
@@ -143,7 +147,11 @@
 		<CodeWrapper innerClass="flex flex-col max-w-96 mx-auto justify-center">
 			<ExampleComponents.CustomUsage />
 			{#snippet codeblock()}
-				<HighlightCompo codeLang="ts" code={exampleModules['./examples/CustomUsage.svelte'] as string} clipboardClass="top-2" />
+				<HighlightCompo
+					codeLang="ts"
+					code={exampleModules['./examples/CustomUsage.svelte'] as string}
+					clipboardClass="top-2"
+				/>
 			{/snippet}
 		</CodeWrapper>
 
@@ -160,7 +168,8 @@
   delay?: number;          // Delay before this animation starts
   pause?: number;          // Pause after this animation
 }`}
-	clipboardClass="top-2" />
+			clipboardClass="top-2"
+		/>
 
 		<H2>Accessibility Features</H2>
 		<List class="list-none space-y-2" ctxClass="tracking-wider">
@@ -191,7 +200,8 @@
 			code={`<Animate>
   <button>Hover to bounce!</button>
 </Animate>`}
-		clipboardClass="top-2" />
+			clipboardClass="top-2"
+		/>
 
 		<H3>Click Animation with Delay</H3>
 		<HighlightCompo
@@ -204,7 +214,8 @@
 >
   <div>Click for a delayed effect!</div>
 </Animate>`}
-		clipboardClass="top-2" />
+			clipboardClass="top-2"
+		/>
 
 		<H3>Complex Animation Sequence</H3>
 		<HighlightCompo
@@ -221,7 +232,8 @@
 >
   <span>Complex animation sequence!</span>
 </Animate>`}
-		clipboardClass="top-2" />
+			clipboardClass="top-2"
+		/>
 
 		<H3>Debug Mode Example</H3>
 		<HighlightCompo
@@ -233,7 +245,8 @@
 >
   <div>Watch the debug info in the corner!</div>
 </Animate>`}
-		clipboardClass="top-2" />
+			clipboardClass="top-2"
+		/>
 
 		<H2>Animation Types</H2>
 		<HighlightCompo codeLang="ts" code={TypeList as string} clipboardClass="top-2" />
