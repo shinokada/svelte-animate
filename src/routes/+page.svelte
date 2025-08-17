@@ -241,7 +241,7 @@
 		</span>
 		<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 		{#each selectedAnimations as animation, index}
-			<div class="space-y-4 rounded-lg border border-gray-300 p-4 dark:border-gray-700">
+			<div class="space-y-4 rounded-lg border border-gray-300 p-8 mt-4 dark:border-gray-700">
 				<div class="flex items-center justify-between">
 					<span class="font-medium dark:text-white">Animation {index + 1}</span>
 					<button

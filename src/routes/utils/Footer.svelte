@@ -3,7 +3,7 @@
 </script>
 
 <Footer
-	class="rounded-none border-t border-gray-200 shadow-none dark:border-gray-600 dark:bg-gray-900"
+	class="rounded-none border-t border-gray-200 shadow-none dark:border-gray-600 dark:bg-gray-950"
 	footerType="logo"
 >
 	<div class="mx-auto max-w-7xl sm:flex sm:items-center sm:justify-between">
