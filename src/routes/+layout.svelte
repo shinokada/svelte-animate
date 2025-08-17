@@ -69,7 +69,7 @@
 	navContainerClass="lg:justify-between"
 >
 	<NavBrand href="/">
-		<span class="self-center text-2xl font-semibold whitespace-nowrap lg:text-3xl dark:text-white"
+		<span class="text-primary-900 dark:text-primary-500 self-center text-2xl font-semibold whitespace-nowrap lg:text-3xl"
 			>Svelte Animate</span
 		>
 	</NavBrand>
