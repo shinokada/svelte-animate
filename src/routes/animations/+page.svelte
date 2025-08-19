@@ -66,7 +66,7 @@
 
 	<CodeWrapper class="mt-4">
 		{#snippet codeblock()}
-			<HighlightCompo code={generatedCode} class="mt-0" clipboardClass="top-2" />
+			<HighlightCompo code={generatedCode} class="mt-0"  />
 		{/snippet}
 	</CodeWrapper>
 </div>

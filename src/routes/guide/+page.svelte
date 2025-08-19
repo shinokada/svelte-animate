@@ -127,7 +127,7 @@
 		<HighlightCompo
 			codeLang="ts"
 			code={exampleModules['./examples/installation.md'] as string}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H2>Usage</H2>
@@ -138,7 +138,7 @@
 				<HighlightCompo
 					codeLang="ts"
 					code={exampleModules['./examples/Usage.svelte'] as string}
-					clipboardClass="top-2"
+					
 				/>
 			{/snippet}
 		</CodeWrapper>
@@ -150,7 +150,7 @@
 				<HighlightCompo
 					codeLang="ts"
 					code={exampleModules['./examples/CustomUsage.svelte'] as string}
-					clipboardClass="top-2"
+					
 				/>
 			{/snippet}
 		</CodeWrapper>
@@ -168,7 +168,7 @@
   delay?: number;          // Delay before this animation starts
   pause?: number;          // Pause after this animation
 }`}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H2>Accessibility Features</H2>
@@ -200,7 +200,7 @@
 			code={`<Animate>
   <button>Hover to bounce!</button>
 </Animate>`}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H3>Click Animation with Delay</H3>
@@ -214,7 +214,7 @@
 >
   <div>Click for a delayed effect!</div>
 </Animate>`}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H3>Complex Animation Sequence</H3>
@@ -232,7 +232,7 @@
 >
   <span>Complex animation sequence!</span>
 </Animate>`}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H3>Debug Mode Example</H3>
@@ -245,10 +245,10 @@
 >
   <div>Watch the debug info in the corner!</div>
 </Animate>`}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H2>Animation Types</H2>
-		<HighlightCompo codeLang="ts" code={TypeList as string} clipboardClass="top-2" />
+		<HighlightCompo codeLang="ts" code={TypeList as string}  />
 	</div>
 </div>

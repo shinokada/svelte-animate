@@ -133,7 +133,7 @@
 		<HighlightCompo
 			codeLang="ts"
 			code={modules['./md/installation.md'] as string}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H2>Usage</H2>
@@ -141,13 +141,13 @@
 		<HighlightCompo
 			codeLang="ts"
 			code={modules['./md/usage.md'] as string}
-			clipboardClass="top-2"
+			
 		/>
 		<H3>Custom usage</H3>
 		<HighlightCompo
 			codeLang="ts"
 			code={modules['./md/custom-usage.md'] as string}
-			clipboardClass="top-2"
+			
 		/>
 
 		<H2>Props</H2>
