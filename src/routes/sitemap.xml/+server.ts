@@ -17,6 +17,16 @@ const pages: Page[] = [
 		loc: 'guide',
 		changefreq: 'weekly',
 		priority: '0.5'
+	},
+	{
+		loc: 'animator',
+		changefreq: 'weekly',
+		priority: '0.5'
+	},
+	{
+		loc: 'animations',
+		changefreq: 'weekly',
+		priority: '0.5'
 	}
 ];
 
