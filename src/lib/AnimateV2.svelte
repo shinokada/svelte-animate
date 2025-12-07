@@ -1,229 +1,228 @@
 <script lang="ts">
-	import 'animate.css';
-	import type { EnhancedAnimationProps as Props, AnimationType } from './types.ts';
+  import 'animate.css';
+  import type { EnhancedAnimationProps as Props, AnimationType } from './types.ts';
 
-	let prefersReducedMotion = $state();
-	let isAnimating = $state(false);
-	let currentAnimationIndex = $state(0);
-	let repeatCount = $state(0);
-	let hasCompletedAllRepeats = $state(false);
-	let hasInitialized = $state(false);
+  // Derived state for reduced motion preference (SSR-safe)
+  let prefersReducedMotion = $derived(
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
-	$effect(() => {
-		prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (prefersReducedMotion) {
-			animationClass = '';
-		}
-	});
+  let isAnimating = $state(false);
+  let currentAnimationIndex = $state(0);
+  let repeatCount = $state(0);
+  let hasCompletedAllRepeats = $state(false);
+  let announcement = $state('');
 
-	let {
-		children,
-		animations = 'bounce',
-		trigger = 'hover',
-		duration = '1s',
-		hideBetween = false,
-		hideEnd = false,
-		delay = 0,
-		repeat = '1',
-		pauseDuration = 0,
-		class: className = ''
-	}: Props = $props();
+  let {
+    children,
+    animations = 'bounce',
+    trigger = 'hover',
+    duration = '1s',
+    hideBetween = false,
+    hideEnd = false,
+    delay = 0,
+    repeat = '1',
+    pauseDuration = 0,
+    class: className = ''
+  }: Props = $props();
 
-	let animationClass = $state('animate__animated');
-	let isVisible = $state(true);
-	let totalRepeats = $derived(parseInt(repeat) || 1);
+  let animationClass = $state('animate__animated');
+  let isVisible = $state(true);
+  let totalRepeats = $derived(parseInt(repeat) || 1);
 
-	let animationsArray: AnimationType[] = $derived(
-		Array.isArray(animations) ? animations : [animations as AnimationType]
-	);
+  let animationsArray: AnimationType[] = $derived(
+    Array.isArray(animations) ? animations : [animations as AnimationType]
+  );
 
-	function getAnimationClasses(animation: AnimationType) {
-		const classes = [`animate__animated`, `animate__${animation}`];
-		return classes.join(' ');
-	}
+  // Derived current animation label
+  let currentAnimationLabel = $derived(
+    `Animate child element with ${animationsArray[currentAnimationIndex]} effect`
+  );
 
-	function canStartNewAnimation() {
-		if (isAnimating) return false;
-		// Don't start if we've completed all repeats
-		if (hasCompletedAllRepeats) return false;
-		if (repeat === 'infinite') return true;
-		return repeatCount < totalRepeats;
-	}
+  function getAnimationClasses(animation: AnimationType) {
+    const classes = [`animate__animated`, `animate__${animation}`];
+    return classes.join(' ');
+  }
 
-	async function startAnimation(startFromIndex = 0) {
-		if (!canStartNewAnimation()) return;
+  function parseDuration(duration: string): number {
+    if (duration.endsWith('ms')) {
+      return parseInt(duration);
+    } else if (duration.endsWith('s')) {
+      return parseFloat(duration) * 1000;
+    }
+    return 1000; // Default to 1s
+  }
 
-		isAnimating = true;
-		isVisible = true;
-		currentAnimationIndex = startFromIndex;
+  function canStartNewAnimation() {
+    if (isAnimating) return false;
+    if (hasCompletedAllRepeats) return false;
+    if (repeat === 'infinite') return true;
+    return repeatCount < totalRepeats;
+  }
 
-		try {
-			// Handle initial delay if it's the first animation
-			if (delay > 0 && startFromIndex === 0) {
-				await new Promise((resolve) => setTimeout(resolve, delay));
-			}
+  async function startAnimation(startFromIndex = 0) {
+    if (!canStartNewAnimation() || prefersReducedMotion) return;
 
-			for (let i = startFromIndex; i < animationsArray.length; i++) {
-				// console.log('i', i);
-				if (!isAnimating) break; // Allow for interruption
+    isAnimating = true;
+    isVisible = true;
+    currentAnimationIndex = startFromIndex;
 
-				currentAnimationIndex = i;
+    try {
+      // Handle initial delay if it's the first animation
+      if (delay > 0 && startFromIndex === 0) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
 
-				// Remove animation classes
-				animationClass = '';
-				// Force a browser reflow
-				await new Promise((resolve) => setTimeout(resolve, 1));
-				// Add animation classes back
-				animationClass = getAnimationClasses(animationsArray[i]);
+      for (let i = startFromIndex; i < animationsArray.length; i++) {
+        if (!isAnimating) break; // Allow for interruption
 
-				// Wait for animation to complete
-				await new Promise((resolve) => {
-					const durationMs = parseDuration(duration);
-					setTimeout(resolve, durationMs);
-				});
+        currentAnimationIndex = i;
 
-				// Add pause between animations if not the last animation
-				if (i < animationsArray.length - 1 && pauseDuration > 0) {
-					await new Promise((resolve) => setTimeout(resolve, pauseDuration));
-				}
-			}
+        // Remove animation classes
+        animationClass = '';
+        // Force a browser reflow
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        // Add animation classes back
+        animationClass = getAnimationClasses(animationsArray[i]);
 
-			await completeAnimationSequence();
-		} catch (error) {
-			console.error('Animation error:', error);
-			isAnimating = false;
-		}
-	}
+        // Wait for animation to complete
+        await new Promise((resolve) => {
+          const durationMs = parseDuration(duration);
+          setTimeout(resolve, durationMs);
+        });
 
-	async function completeAnimationSequence() {
-		repeatCount++;
-		// Check if we've completed all repeats
-		if (repeat !== 'infinite' && repeatCount >= totalRepeats) {
-			hasCompletedAllRepeats = true;
-		}
+        // Add pause between animations if not the last animation
+        if (i < animationsArray.length - 1 && pauseDuration > 0) {
+          await new Promise((resolve) => setTimeout(resolve, pauseDuration));
+        }
+      }
 
-		// Reset for next animation
-		animationClass = 'animate__animated';
-		isAnimating = false;
-		currentAnimationIndex = 0;
+      await completeAnimationSequence();
+    } catch (error) {
+      console.error('Animation error:', error);
+      isAnimating = false;
+    }
+  }
 
-		if (hasCompletedAllRepeats) {
-			isVisible = !hideEnd;
-		} else if (hideBetween && repeatCount !== totalRepeats) {
-			isVisible = false;
-		} else {
-			isVisible = !hideEnd;
-		}
+  async function completeAnimationSequence() {
+    repeatCount++;
+    // Check if we've completed all repeats
+    if (repeat !== 'infinite' && repeatCount >= totalRepeats) {
+      hasCompletedAllRepeats = true;
+    }
 
-		// Announce completion
-		const announcement = document.createElement('div');
-		announcement.setAttribute('aria-live', 'polite');
-		announcement.textContent = 'Animation sequence complete';
-		document.body.appendChild(announcement);
-		setTimeout(() => announcement.remove(), 1000);
+    // Reset for next animation
+    animationClass = 'animate__animated';
+    isAnimating = false;
+    currentAnimationIndex = 0;
 
-		// Start next repetition if needed
-		if (canStartNewAnimation()) {
-			// Add a small delay before starting the next sequence
-			await new Promise((resolve) => setTimeout(resolve, 10));
-			startAnimation(0);
-		}
-	}
+    if (hasCompletedAllRepeats) {
+      isVisible = !hideEnd;
+    } else if (hideBetween && repeatCount !== totalRepeats) {
+      isVisible = false;
+    } else {
+      isVisible = !hideEnd;
+    }
 
-	function parseDuration(duration: string): number {
-		if (duration.endsWith('ms')) {
-			return parseInt(duration);
-		} else if (duration.endsWith('s')) {
-			return parseFloat(duration) * 1000;
-		}
-		return 1000; // Default to 1s
-	}
+    // Announce completion
+    announcement = 'Animation sequence complete';
 
-	function handleClick() {
-		if (trigger === 'click' || trigger === 'both') {
-			// Reset repeat count when starting a new click-triggered sequence
-			if (!isAnimating) {
-				repeatCount = 0;
-				// Reset completion state
-				hasCompletedAllRepeats = false;
-				startAnimation();
-			}
-		}
-	}
+    // Start next repetition if needed
+    if (canStartNewAnimation()) {
+      // Add a small delay before starting the next sequence
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      startAnimation(0);
+    }
+  }
 
-	function handleMouseEnter() {
-		if (trigger === 'hover' || trigger === 'both') {
-			if (!isAnimating) {
-				repeatCount = 0;
-				// Reset completion state
-				hasCompletedAllRepeats = false;
-				startAnimation();
-			}
-		}
-	}
+  function handleClick() {
+    if (trigger === 'click' || trigger === 'both') {
+      if (!isAnimating) {
+        repeatCount = 0;
+        hasCompletedAllRepeats = false;
+        startAnimation();
+      }
+    }
+  }
 
-	function handleKeyDown(event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			if (trigger === 'click' || trigger === 'both') {
-				if (!isAnimating) {
-					repeatCount = 0;
-					// Reset completion state
-					hasCompletedAllRepeats = false;
-					startAnimation();
-				}
-			}
-		}
-	}
+  function handleMouseEnter() {
+    if (trigger === 'hover' || trigger === 'both') {
+      if (!isAnimating) {
+        repeatCount = 0;
+        hasCompletedAllRepeats = false;
+        startAnimation();
+      }
+    }
+  }
 
-	$effect(() => {
-		if (!hasInitialized && trigger === 'auto' && !prefersReducedMotion) {
-			hasInitialized = true;
-			repeatCount = 0;
-			// Reset completion state
-			hasCompletedAllRepeats = false;
-			startAnimation();
-		}
-	});
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (trigger === 'click' || trigger === 'both') {
+        if (!isAnimating) {
+          repeatCount = 0;
+          hasCompletedAllRepeats = false;
+          startAnimation();
+        }
+      }
+    } else if (event.key === 'Escape' && isAnimating) {
+      // Allow stopping animation with Escape key
+      isAnimating = false;
+    }
+  }
 
-	$effect(() => {
-		$inspect('Animation state:', {
-			isAnimating,
-			hasCompletedAllRepeats,
-			repeatCount,
-			totalRepeats,
-			animationClass,
-			currentAnimationIndex
-		});
-	});
+  // Auto-trigger animation on mount
+  $effect(() => {
+    if (trigger === 'auto' && !prefersReducedMotion) {
+      repeatCount = 0;
+      hasCompletedAllRepeats = false;
+      startAnimation();
+    }
+  });
+
+  // Clear announcement after delay
+  $effect(() => {
+    if (announcement) {
+      const timer = setTimeout(() => {
+        announcement = '';
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  });
 </script>
 
 {#if prefersReducedMotion}
-	{@render children()}
+  {@render children()}
 {:else if trigger && trigger !== 'auto'}
-	<button
-		type="button"
-		aria-label={`Animate child element with ${animationsArray[currentAnimationIndex]} effect`}
-		aria-live="polite"
-		class="{animationClass} {className}"
-		style="opacity: {isVisible
-			? 1
-			: 0}; animation-duration: {duration}; background: none; border: none; padding: 0; cursor: pointer;"
-		onclick={handleClick}
-		onmouseenter={handleMouseEnter}
-		onkeydown={handleKeyDown}
-	>
-		{@render children()}
-	</button>
+  <button
+    type="button"
+    aria-label={currentAnimationLabel}
+    aria-live="polite"
+    class="{animationClass} {className}"
+    style="opacity: {isVisible
+      ? 1
+      : 0}; animation-duration: {duration}; background: none; border: none; padding: 0; cursor: pointer;"
+    onclick={handleClick}
+    onmouseenter={handleMouseEnter}
+    onkeydown={handleKeyDown}
+  >
+    {@render children()}
+  </button>
 {:else}
-	<span
-		aria-label={`Animate child element with ${animationsArray[currentAnimationIndex]} effect`}
-		aria-live="polite"
-		class="{animationClass} {className}"
-		style="opacity: {isVisible ? 1 : 0}; animation-duration: {duration};"
-	>
-		{@render children()}
-	</span>
+  <span
+    aria-label={currentAnimationLabel}
+    aria-live="polite"
+    class="{animationClass} {className}"
+    style="opacity: {isVisible ? 1 : 0}; animation-duration: {duration};"
+  >
+    {@render children()}
+  </span>
+{/if}
+
+{#if announcement}
+  <div role="status" aria-live="polite" class="sr-only">
+    <p>{announcement}</p>
+  </div>
 {/if}
 
 <!--
@@ -241,3 +240,17 @@
 @prop pauseDuration = 0
 @prop class: className = ''
 -->
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
