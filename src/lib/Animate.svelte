@@ -2,10 +2,8 @@
   import 'animate.css';
   import type { AnimationProps as Props, AnimationType, AnimationConfig } from './types.ts';
 
-  // Derived state for reduced motion preference (SSR-safe)
-  let prefersReducedMotion = $derived(
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
+  // State for reduced motion preference (SSR-safe)
+  let prefersReducedMotion = $state(false);
 
   let isAnimating = $state(false);
   let currentAnimationIndex = $state(0);
@@ -47,9 +45,7 @@
       const normalized = animations
         .filter(Boolean)
         .map((anim) =>
-          typeof anim === 'string'
-            ? { action: anim as AnimationType }
-            : (anim as AnimationConfig)
+          typeof anim === 'string' ? { action: anim as AnimationType } : (anim as AnimationConfig)
         );
 
       return normalized.length ? normalized : [{ action: 'bounce' }];
@@ -63,15 +59,21 @@
     return [{ action: 'bounce' }];
   });
 
-  // Derived current animation config
+  // Derived current animation config with bounds checking
   let currentConfig = $derived.by(() => {
-    const config = animationsArray[currentAnimationIndex];
+    const safeIndex = Math.min(currentAnimationIndex, animationsArray.length - 1);
+    const config = animationsArray[safeIndex];
     return {
       duration: config.duration ?? duration,
-      delay: currentAnimationIndex === 0 ? (config.delay ?? delay) : (config.delay ?? 0),
+      delay: safeIndex === 0 ? (config.delay ?? delay) : (config.delay ?? 0),
       pause: config.pause ?? pauseDuration
     };
   });
+
+  // Derived current action for aria-label with bounds checking
+  let currentAction = $derived(
+    animationsArray[Math.min(currentAnimationIndex, animationsArray.length - 1)]?.action ?? 'bounce'
+  );
 
   function getAnimationClasses(animation: AnimationConfig | AnimationType): string {
     if (typeof animation === 'string') {
@@ -211,10 +213,14 @@
     try {
       await new Promise((resolve, reject) => {
         const timeout = setTimeout(resolve, 100);
-        signal?.addEventListener('abort', () => {
-          clearTimeout(timeout);
-          reject(new DOMException('Animation aborted', 'AbortError'));
-        }, { once: true });
+        signal?.addEventListener(
+          'abort',
+          () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Animation aborted', 'AbortError'));
+          },
+          { once: true }
+        );
       });
 
       if (signal?.aborted) return;
@@ -227,10 +233,14 @@
       if (canStartNewAnimation()) {
         await new Promise((resolve, reject) => {
           const timeout = setTimeout(resolve, 10);
-          signal?.addEventListener('abort', () => {
-            clearTimeout(timeout);
-            reject(new DOMException('Animation aborted', 'AbortError'));
-          }, { once: true });
+          signal?.addEventListener(
+            'abort',
+            () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            },
+            { once: true }
+          );
         });
 
         if (signal?.aborted) return;
@@ -285,6 +295,13 @@
       isAnimating = false;
     }
   }
+
+  // Initialize reduced motion preference on client
+  $effect(() => {
+    if (typeof window !== 'undefined') {
+      prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+  });
 
   // Auto-trigger animation on mount
   $effect(() => {
@@ -352,7 +369,7 @@
 {:else}
   <div class="relative">
     <span
-      aria-label={`Animate child element with ${animationsArray[currentAnimationIndex].action} effect`}
+      aria-label={`Animate child element with ${currentAction} effect`}
       aria-live="polite"
       class="{animationClass} {className}"
       style="opacity: {isVisible ? 1 : 0}; animation-duration: {currentConfig.duration}ms;"
