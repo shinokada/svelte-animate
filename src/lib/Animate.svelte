@@ -253,7 +253,7 @@
 {:else}
   <div class="relative">
     <span
-      aria-label={`Animate child element with ${typeof animationsArray[currentAnimationIndex] === 'string' ? animationsArray[currentAnimationIndex] : animationsArray[currentAnimationIndex].action} effect`}
+      aria-label={`Animate child element with ${animationsArray[currentAnimationIndex].action} effect`}
       aria-live="polite"
       class="{animationClass} {className}"
       style="opacity: {isVisible ? 1 : 0}; animation-duration: {currentConfig.duration}ms;"

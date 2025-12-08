@@ -30,7 +30,7 @@
   let expand = $derived(codeBlock.isOpen);
   let showExpandButton = $derived(isSvelteOverflow(svelteCode, exampleModules));
   const handleExpandClick = () => {
-    expand = !expand;
+    codeBlock.toggle();
   };
 </script>
 
@@ -48,7 +48,7 @@
       {#each exampleArr as style, i (i)}
         <Radio
           classes={{ label: 'w-40 my-1' }}
-          onclick={() => (expand = false)}
+          onclick={() => codeBlock.close()}
           name="block_style"
           bind:group={selectedExample}
           value={style.name}>{style.name}</Radio

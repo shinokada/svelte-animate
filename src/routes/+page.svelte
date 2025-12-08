@@ -5,6 +5,7 @@
   import { isGeneratedCodeOverflow } from './utils/helper.ts';
 
   const MAX_ANIMATIONS = 10;
+  let nextAnimationId = 0;
   const animations: AnimationType[] = [
     'bounce',
     'flash',
@@ -100,6 +101,7 @@
   // State variables
   let selectedAnimations = $state<
     Array<{
+      id: number;
       action: AnimationType;
       duration?: number;
       delay?: number;
@@ -107,6 +109,7 @@
     }>
   >([
     {
+      id: nextAnimationId++,
       action: 'bounce',
       duration: 1000,
       delay: 0,
@@ -129,6 +132,7 @@
       selectedAnimations = [
         ...selectedAnimations,
         {
+          id: nextAnimationId++,
           action: 'bounce',
           duration: duration,
           delay: 0,
@@ -143,6 +147,7 @@
     if (selectedAnimations.length === 0) {
       selectedAnimations = [
         {
+          id: nextAnimationId++,
           action: 'bounce',
           duration: duration,
           delay: 0,
@@ -240,7 +245,7 @@
       {remainingAnimations} of {MAX_ANIMATIONS} animations remaining
     </span>
     <!-- eslint-disable @typescript-eslint/no-unused-vars -->
-    {#each selectedAnimations as animation, index (index)}
+    {#each selectedAnimations as animation, index (animation.id)}
       <div class="mt-4 space-y-4 rounded-lg border border-gray-300 p-8 dark:border-gray-700">
         <div class="flex items-center justify-between">
           <span class="font-medium dark:text-white">Animation {index + 1}</span>

@@ -97,14 +97,10 @@ export function getExampleFileName(
   exampleArr: { name: string }[]
 ): string {
   const foundExample = exampleArr.find((example) => example.name === selectedExample);
-
-  if (!foundExample) {
-    // If the selectedExample is not in the array, default to the first example
-    selectedExample = exampleArr[0].name || '';
-  }
+  const exampleName = foundExample?.name ?? exampleArr[0]?.name ?? selectedExample;
 
   // Convert the selected example to PascalCase
-  const result = selectedExample
+  const result = exampleName
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('');

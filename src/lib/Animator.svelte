@@ -11,6 +11,7 @@
   let currentAnimationIndex = $state(0);
   let hasInitialized = $state(false);
   let debugInfo = $state<string[]>([]);
+  let animationTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
   let {
     children,
@@ -88,6 +89,12 @@
         `Animation start blocked. Reduced motion: ${prefersReducedMotion}, Already animating: ${isAnimating}`
       );
       return;
+    }
+
+    // Clear any existing timeout to prevent memory leaks
+    if (animationTimeoutId) {
+      clearTimeout(animationTimeoutId);
+      animationTimeoutId = undefined;
     }
 
     logDebug(`Starting animation sequence: hideFor=${hideFor}, hideEnd=${hideEnd}`);
@@ -173,6 +180,15 @@
       }, 1000);
       return () => clearTimeout(timer);
     }
+  });
+
+  // Cleanup animation timeout on unmount
+  $effect(() => {
+    return () => {
+      if (animationTimeoutId) {
+        clearTimeout(animationTimeoutId);
+      }
+    };
   });
 </script>
 
