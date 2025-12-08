@@ -173,6 +173,7 @@
 
   async function completeAnimationSequence() {
     if (abortController?.signal.aborted) return;
+    const signal = abortController?.signal;
 
     repeatCount++;
     animationClass = 'animate__animated';
@@ -193,15 +194,41 @@
 
     animationLabel = '';
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    ariaAnnouncement = hasCompletedAllRepeats
-      ? 'All animations complete'
-      : 'Animation sequence complete';
+    try {
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(resolve, 100);
+        signal?.addEventListener('abort', () => {
+          clearTimeout(timeout);
+          reject(new DOMException('Animation aborted', 'AbortError'));
+        }, { once: true });
+      });
 
-    // Start next repetition if needed
-    if (canStartNewAnimation()) {
-      await new Promise((resolve) => setTimeout(resolve, 10));
-      startAnimation(0);
+      if (signal?.aborted) return;
+
+      ariaAnnouncement = hasCompletedAllRepeats
+        ? 'All animations complete'
+        : 'Animation sequence complete';
+
+      // Start next repetition if needed
+      if (canStartNewAnimation()) {
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, 10);
+          signal?.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Animation aborted', 'AbortError'));
+          }, { once: true });
+        });
+
+        if (signal?.aborted) return;
+
+        startAnimation(0);
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        // Sequence was aborted, silently exit
+        return;
+      }
+      throw error;
     }
   }
 
