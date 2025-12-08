@@ -107,10 +107,14 @@
         if (currentConfig.delay > 0) {
           await new Promise((resolve, reject) => {
             const timeout = setTimeout(resolve, currentConfig.delay);
-            signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Animation aborted', 'AbortError'));
-            });
+            signal.addEventListener(
+              'abort',
+              () => {
+                clearTimeout(timeout);
+                reject(new DOMException('Animation aborted', 'AbortError'));
+              },
+              { once: true }
+            );
           });
         }
 
@@ -124,10 +128,14 @@
         // Wait for animation to complete
         await new Promise((resolve, reject) => {
           const timeout = setTimeout(resolve, currentConfig.duration);
-          signal.addEventListener('abort', () => {
-            clearTimeout(timeout);
-            reject(new DOMException('Animation aborted', 'AbortError'));
-          });
+          signal.addEventListener(
+            'abort',
+            () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            },
+            { once: true }
+          );
         });
 
         if (signal.aborted) break;
@@ -136,10 +144,14 @@
         if (i < animationsArray.length - 1 && currentConfig.pause > 0) {
           await new Promise((resolve, reject) => {
             const timeout = setTimeout(resolve, currentConfig.pause);
-            signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Animation aborted', 'AbortError'));
-            });
+            signal.addEventListener(
+              'abort',
+              () => {
+                clearTimeout(timeout);
+                reject(new DOMException('Animation aborted', 'AbortError'));
+              },
+              { once: true }
+            );
           });
         }
       }
@@ -228,6 +240,7 @@
       }
     } else if (event.key === 'Escape' && isAnimating) {
       // Allow stopping animation with Escape key
+      abortController?.abort();
       isAnimating = false;
     }
   }

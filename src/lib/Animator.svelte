@@ -98,10 +98,14 @@
         logDebug(`Hiding for ${hideFor}ms`);
         await new Promise((resolve, reject) => {
           const timeout = setTimeout(resolve, hideFor);
-          signal.addEventListener('abort', () => {
-            clearTimeout(timeout);
-            reject(new DOMException('Animation aborted', 'AbortError'));
-          });
+          signal.addEventListener(
+            'abort',
+            () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            },
+            { once: true }
+          );
         });
       }
 
@@ -123,10 +127,14 @@
           logDebug(`Applying initial delay of ${config.delay}ms`);
           await new Promise((resolve, reject) => {
             const timeout = setTimeout(resolve, config.delay);
-            signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Animation aborted', 'AbortError'));
-            });
+            signal.addEventListener(
+              'abort',
+              () => {
+                clearTimeout(timeout);
+                reject(new DOMException('Animation aborted', 'AbortError'));
+              },
+              { once: true }
+            );
           });
         }
 
@@ -138,10 +146,14 @@
           isVisible = false;
           await new Promise((resolve, reject) => {
             const timeout = setTimeout(resolve, 300);
-            signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Animation aborted', 'AbortError'));
-            });
+            signal.addEventListener(
+              'abort',
+              () => {
+                clearTimeout(timeout);
+                reject(new DOMException('Animation aborted', 'AbortError'));
+              },
+              { once: true }
+            );
           });
         }
 
@@ -161,10 +173,14 @@
         // Wait for animation duration
         await new Promise((resolve, reject) => {
           const timeout = setTimeout(resolve, config.duration);
-          signal.addEventListener('abort', () => {
-            clearTimeout(timeout);
-            reject(new DOMException('Animation aborted', 'AbortError'));
-          });
+          signal.addEventListener(
+            'abort',
+            () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            },
+            { once: true }
+          );
         });
 
         if (signal.aborted) break;
@@ -174,10 +190,14 @@
           logDebug(`Pausing for ${config.pause}ms between animations`);
           await new Promise((resolve, reject) => {
             const timeout = setTimeout(resolve, config.pause);
-            signal.addEventListener('abort', () => {
-              clearTimeout(timeout);
-              reject(new DOMException('Animation aborted', 'AbortError'));
-            });
+            signal.addEventListener(
+              'abort',
+              () => {
+                clearTimeout(timeout);
+                reject(new DOMException('Animation aborted', 'AbortError'));
+              },
+              { once: true }
+            );
           });
         }
       }
@@ -187,10 +207,14 @@
       // Short pause between repetitions
       await new Promise((resolve, reject) => {
         const timeout = setTimeout(resolve, 500);
-        signal.addEventListener('abort', () => {
-          clearTimeout(timeout);
-          reject(new DOMException('Animation aborted', 'AbortError'));
-        });
+        signal.addEventListener(
+          'abort',
+          () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Animation aborted', 'AbortError'));
+          },
+          { once: true }
+        );
       });
 
       if (signal.aborted) return;
