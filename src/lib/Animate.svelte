@@ -117,10 +117,17 @@
 
         currentAnimationIndex = i;
 
-        // Handle delay using current config
-        if (currentConfig.delay > 0) {
+        // Capture config for this iteration to ensure consistent timing
+        const stepConfig = {
+          duration: currentConfig.duration,
+          delay: currentConfig.delay,
+          pause: currentConfig.pause
+        };
+
+        // Handle delay using captured config
+        if (stepConfig.delay > 0) {
           await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, currentConfig.delay);
+            const timeout = setTimeout(resolve, stepConfig.delay);
             signal.addEventListener(
               'abort',
               () => {
@@ -141,7 +148,7 @@
 
         // Wait for animation to complete
         await new Promise((resolve, reject) => {
-          const timeout = setTimeout(resolve, currentConfig.duration);
+          const timeout = setTimeout(resolve, stepConfig.duration);
           signal.addEventListener(
             'abort',
             () => {
@@ -155,9 +162,9 @@
         if (signal.aborted) break;
 
         // Handle pause between animations
-        if (i < animationsArray.length - 1 && currentConfig.pause > 0) {
+        if (i < animationsArray.length - 1 && stepConfig.pause > 0) {
           await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, currentConfig.pause);
+            const timeout = setTimeout(resolve, stepConfig.pause);
             signal.addEventListener(
               'abort',
               () => {
