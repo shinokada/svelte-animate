@@ -33,21 +33,33 @@
 
   let animationClass = $state('animate__animated');
   let isVisible = $state(true);
-  let totalRepeats = $derived(parseInt(repeat) || 1);
+  let totalRepeats = $derived(
+    repeat === 'infinite' ? Infinity : Math.max(1, Number.parseInt(String(repeat), 10) || 1)
+  );
 
   // Convert animations to normalized array of AnimationConfig
   let animationsArray = $derived.by((): AnimationConfig[] => {
     if (typeof animations === 'string') {
       return [{ action: animations as AnimationType }];
     }
+
     if (Array.isArray(animations)) {
-      return animations.map((anim) => {
-        if (typeof anim === 'string') {
-          return { action: anim as AnimationType };
-        }
-        return anim as AnimationConfig;
-      });
+      const normalized = animations
+        .filter(Boolean)
+        .map((anim) =>
+          typeof anim === 'string'
+            ? { action: anim as AnimationType }
+            : (anim as AnimationConfig)
+        );
+
+      return normalized.length ? normalized : [{ action: 'bounce' }];
     }
+
+    // Support a single config object as well
+    if (animations && typeof animations === 'object') {
+      return [animations as AnimationConfig];
+    }
+
     return [{ action: 'bounce' }];
   });
 
@@ -55,7 +67,7 @@
   let currentConfig = $derived.by(() => {
     const config = animationsArray[currentAnimationIndex];
     return {
-      duration: config.duration || duration,
+      duration: config.duration ?? duration,
       delay: currentAnimationIndex === 0 ? (config.delay ?? delay) : (config.delay ?? 0),
       pause: config.pause ?? pauseDuration
     };
@@ -180,16 +192,18 @@
     isAnimating = false;
     currentAnimationIndex = 0;
 
-    if (repeat !== 'infinite' && repeatCount >= totalRepeats) {
+    if (repeat === 'infinite') {
+      // Keep the element visible for infinite loops
+      hasCompletedAllRepeats = false;
+      isVisible = true;
+      shouldShowReplayButton = false;
+    } else if (repeatCount >= totalRepeats) {
       hasCompletedAllRepeats = true;
       isVisible = !hideEnd;
       shouldShowReplayButton = hideEnd && showReplayButton;
     } else {
-      if (repeatCount !== totalRepeats) {
-        isVisible = false;
-      } else {
-        isVisible = !hideEnd;
-      }
+      // Mid-sequence repeat for finite counts: brief hide is OK if desired
+      isVisible = false;
     }
 
     animationLabel = '';
