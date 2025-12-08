@@ -262,8 +262,8 @@
           <!-- Animation Type -->
           <div>
             <Label class="mb-1 block text-sm font-medium">Animation Type</Label>
-            <Select bind:value={selectedAnimations[index].action} class="w-full">
-              {#each animations as anim, index (index)}
+            <Select bind:value={animation.action} class="w-full">
+              {#each animations as anim, animIndex (animIndex)}
                 <option value={anim}>{anim}</option>
               {/each}
             </Select>
@@ -274,7 +274,7 @@
             <Label class="mb-1 block text-sm font-medium">Duration (ms)</Label>
             <Input
               type="number"
-              bind:value={selectedAnimations[index].duration}
+              bind:value={animation.duration}
               class="w-full px-3 py-2"
               min="0"
               placeholder="e.g. 1000"
@@ -284,23 +284,13 @@
           <!-- Delay -->
           <div>
             <Label class="mb-1 block text-sm font-medium">Delay (ms)</Label>
-            <Input
-              type="number"
-              bind:value={selectedAnimations[index].delay}
-              class="w-full px-3 py-2"
-              min="0"
-            />
+            <Input type="number" bind:value={animation.delay} class="w-full px-3 py-2" min="0" />
           </div>
 
           <!-- Pause -->
           <div>
             <Label class="mb-1 block text-sm font-medium">Pause After (ms)</Label>
-            <Input
-              type="number"
-              bind:value={selectedAnimations[index].pause}
-              class="w-full px-3 py-2"
-              min="0"
-            />
+            <Input type="number" bind:value={animation.pause} class="w-full px-3 py-2" min="0" />
           </div>
         </div>
       </div>

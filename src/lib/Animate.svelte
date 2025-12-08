@@ -14,6 +14,8 @@
   let animationLabel = $state('');
   let ariaAnnouncement = $state('');
   let shouldShowReplayButton = $state(false);
+  let hasAutoTriggered = $state(false);
+  let abortController: AbortController | undefined;
 
   let {
     children,
@@ -84,6 +86,11 @@
   async function startAnimation(startFromIndex = 0) {
     if (!canStartNewAnimation() || prefersReducedMotion) return;
 
+    // Abort any existing animation sequence
+    abortController?.abort();
+    abortController = new AbortController();
+    const signal = abortController.signal;
+
     isAnimating = true;
     isVisible = true;
     currentAnimationIndex = startFromIndex;
@@ -92,14 +99,22 @@
 
     try {
       for (let i = startFromIndex; i < animationsArray.length; i++) {
-        if (!isAnimating) break;
+        if (!isAnimating || signal.aborted) break;
 
         currentAnimationIndex = i;
 
         // Handle delay using current config
         if (currentConfig.delay > 0) {
-          await new Promise((resolve) => setTimeout(resolve, currentConfig.delay));
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(resolve, currentConfig.delay);
+            signal.addEventListener('abort', () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            });
+          });
         }
+
+        if (signal.aborted) break;
 
         // Reset and start animation
         animationClass = '';
@@ -107,24 +122,46 @@
         animationClass = getAnimationClasses(animationsArray[i]);
 
         // Wait for animation to complete
-        await new Promise((resolve) => {
-          setTimeout(resolve, currentConfig.duration);
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, currentConfig.duration);
+          signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Animation aborted', 'AbortError'));
+          });
         });
+
+        if (signal.aborted) break;
 
         // Handle pause between animations
         if (i < animationsArray.length - 1 && currentConfig.pause > 0) {
-          await new Promise((resolve) => setTimeout(resolve, currentConfig.pause));
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(resolve, currentConfig.pause);
+            signal.addEventListener('abort', () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            });
+          });
         }
       }
 
-      await completeAnimationSequence();
+      if (!signal.aborted) {
+        await completeAnimationSequence();
+      }
     } catch (error) {
-      console.error('Animation error:', error);
-      isAnimating = false;
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        // Animation was aborted, clean up
+        isAnimating = false;
+        animationClass = 'animate__animated';
+      } else {
+        console.error('Animation error:', error);
+        isAnimating = false;
+      }
     }
   }
 
   async function completeAnimationSequence() {
+    if (abortController?.signal.aborted) return;
+
     repeatCount++;
     animationClass = 'animate__animated';
     isAnimating = false;
@@ -197,7 +234,8 @@
 
   // Auto-trigger animation on mount
   $effect(() => {
-    if (trigger === 'auto' && !prefersReducedMotion) {
+    if (trigger === 'auto' && !prefersReducedMotion && !hasAutoTriggered) {
+      hasAutoTriggered = true;
       repeatCount = 0;
       hasCompletedAllRepeats = false;
       shouldShowReplayButton = false;
@@ -213,6 +251,13 @@
       }, 3000);
       return () => clearTimeout(timer);
     }
+  });
+
+  // Cleanup on unmount
+  $effect(() => {
+    return () => {
+      abortController?.abort();
+    };
   });
 </script>
 

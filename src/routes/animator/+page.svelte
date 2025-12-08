@@ -45,7 +45,7 @@
   <CodeWrapper>
     <div class="mb-12 flex flex-wrap">
       <Label class="mb-4 w-full font-bold">Examples</Label>
-      {#each exampleArr as style, i (i)}
+      {#each exampleArr as style (style.name)}
         <Radio
           classes={{ label: 'w-40 my-1' }}
           onclick={() => codeBlock.close()}

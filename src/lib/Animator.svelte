@@ -11,7 +11,7 @@
   let currentAnimationIndex = $state(0);
   let hasInitialized = $state(false);
   let debugInfo = $state<string[]>([]);
-  let animationTimeoutId: ReturnType<typeof setTimeout> | undefined;
+  let abortController: AbortController | undefined;
 
   let {
     children,
@@ -46,16 +46,6 @@
     return [{ action: 'zoomInRight' }];
   });
 
-  // Derived current animation config for display
-  let currentConfig = $derived.by(() => {
-    const config = animationsArray[currentAnimationIndex];
-    return {
-      duration: (config as AnimationConfig).duration || duration,
-      delay: currentAnimationIndex === 0 ? delay : 0,
-      pause: pauseDuration
-    };
-  });
-
   // Helper to get config for a specific index
   function getConfigForIndex(index: number): {
     duration: number;
@@ -69,6 +59,9 @@
       pause: pauseDuration
     };
   }
+
+  // Derived current animation config for display
+  let currentConfig = $derived(getConfigForIndex(currentAnimationIndex));
 
   function logDebug(message: string) {
     if (debug) {
@@ -91,76 +84,137 @@
       return;
     }
 
-    // Clear any existing timeout to prevent memory leaks
-    if (animationTimeoutId) {
-      clearTimeout(animationTimeoutId);
-      animationTimeoutId = undefined;
-    }
+    // Abort any existing animation sequence
+    abortController?.abort();
+    abortController = new AbortController();
+    const signal = abortController.signal;
 
     logDebug(`Starting animation sequence: hideFor=${hideFor}, hideEnd=${hideEnd}`);
 
-    // Initial hide if hideFor is set
-    if (hideFor > 0) {
-      isVisible = false;
-      logDebug(`Hiding for ${hideFor}ms`);
-      await new Promise((resolve) => setTimeout(resolve, hideFor));
-    }
-
-    isAnimating = true;
-    isVisible = true;
-    ariaAnnouncement = 'Animation started';
-
-    for (let i = 0; i < animationsArray.length; i++) {
-      const currentAnimation = animationsArray[i];
-      currentAnimationIndex = i;
-      const config = getConfigForIndex(i);
-
-      // Apply initial delay if it's the first animation
-      if (config.delay > 0) {
-        logDebug(`Applying initial delay of ${config.delay}ms`);
-        await new Promise((resolve) => setTimeout(resolve, config.delay));
-      }
-
-      // Hide between animations if enabled
-      if (i > 0) {
-        logDebug('Hiding between animations');
+    try {
+      // Initial hide if hideFor is set
+      if (hideFor > 0) {
         isVisible = false;
-        await new Promise((resolve) => setTimeout(resolve, 300));
+        logDebug(`Hiding for ${hideFor}ms`);
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, hideFor);
+          signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Animation aborted', 'AbortError'));
+          });
+        });
       }
 
-      // Ensure visibility
+      if (signal.aborted) return;
+
+      isAnimating = true;
       isVisible = true;
+      ariaAnnouncement = 'Animation started';
 
-      // Reset animation
-      animationClass = '';
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      for (let i = 0; i < animationsArray.length; i++) {
+        if (signal.aborted) break;
 
-      // Apply animation
-      animationClass = getAnimationClasses(currentAnimation);
-      logDebug(`Applying animation: ${animationClass}`);
+        const currentAnimation = animationsArray[i];
+        currentAnimationIndex = i;
+        const config = getConfigForIndex(i);
 
-      // Wait for animation duration
-      await new Promise((resolve) => setTimeout(resolve, config.duration));
+        // Apply initial delay if it's the first animation
+        if (config.delay > 0) {
+          logDebug(`Applying initial delay of ${config.delay}ms`);
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(resolve, config.delay);
+            signal.addEventListener('abort', () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            });
+          });
+        }
 
-      // Pause between animations if specified
-      if (i < animationsArray.length - 1 && config.pause > 0) {
-        logDebug(`Pausing for ${config.pause}ms between animations`);
-        await new Promise((resolve) => setTimeout(resolve, config.pause));
+        if (signal.aborted) break;
+
+        // Hide between animations if enabled
+        if (i > 0) {
+          logDebug('Hiding between animations');
+          isVisible = false;
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(resolve, 300);
+            signal.addEventListener('abort', () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            });
+          });
+        }
+
+        if (signal.aborted) break;
+
+        // Ensure visibility
+        isVisible = true;
+
+        // Reset animation
+        animationClass = '';
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        // Apply animation
+        animationClass = getAnimationClasses(currentAnimation);
+        logDebug(`Applying animation: ${animationClass}`);
+
+        // Wait for animation duration
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(resolve, config.duration);
+          signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new DOMException('Animation aborted', 'AbortError'));
+          });
+        });
+
+        if (signal.aborted) break;
+
+        // Pause between animations if specified
+        if (i < animationsArray.length - 1 && config.pause > 0) {
+          logDebug(`Pausing for ${config.pause}ms between animations`);
+          await new Promise((resolve, reject) => {
+            const timeout = setTimeout(resolve, config.pause);
+            signal.addEventListener('abort', () => {
+              clearTimeout(timeout);
+              reject(new DOMException('Animation aborted', 'AbortError'));
+            });
+          });
+        }
       }
-    }
 
-    // Short pause between repetitions
-    await new Promise((resolve) => setTimeout(resolve, 500));
+      if (signal.aborted) return;
 
-    // Final state
-    isAnimating = false;
-    animationClass = '';
-    ariaAnnouncement = 'Animation completed';
+      // Short pause between repetitions
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(resolve, 500);
+        signal.addEventListener('abort', () => {
+          clearTimeout(timeout);
+          reject(new DOMException('Animation aborted', 'AbortError'));
+        });
+      });
 
-    // Handle hideEnd
-    if (hideEnd) {
-      logDebug('Hiding at end of animation');
-      isVisible = false;
+      if (signal.aborted) return;
+
+      // Final state
+      isAnimating = false;
+      animationClass = '';
+      ariaAnnouncement = 'Animation completed';
+
+      // Handle hideEnd
+      if (hideEnd) {
+        logDebug('Hiding at end of animation');
+        isVisible = false;
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        // Animation was aborted, clean up
+        logDebug('Animation aborted');
+        isAnimating = false;
+        animationClass = '';
+      } else {
+        console.error('Animation error:', error);
+        isAnimating = false;
+      }
     }
   }
 
@@ -182,12 +236,10 @@
     }
   });
 
-  // Cleanup animation timeout on unmount
+  // Cleanup on unmount
   $effect(() => {
     return () => {
-      if (animationTimeoutId) {
-        clearTimeout(animationTimeoutId);
-      }
+      abortController?.abort();
     };
   });
 </script>

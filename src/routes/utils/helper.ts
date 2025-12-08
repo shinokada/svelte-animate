@@ -62,7 +62,7 @@ export function copyToClipboard(text: string): Promise<void> {
       console.log('Text copied to clipboard');
     })
     .catch((err) => {
-      console.error('Failed to copy: ', err);
+      console.error('Failed to copy text to clipboard:', err);
       throw err; // Re-throw the error so the caller can handle it if needed
     });
 }
