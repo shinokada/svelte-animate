@@ -100,6 +100,9 @@
   async function startAnimation(startFromIndex = 0) {
     if (!canStartNewAnimation() || prefersReducedMotion) return;
 
+    // Clamp startFromIndex to valid range
+    const safeStartIndex = Math.max(0, Math.min(startFromIndex, animationsArray.length - 1));
+
     // Abort any existing animation sequence
     abortController?.abort();
     abortController = new AbortController();
@@ -107,12 +110,12 @@
 
     isAnimating = true;
     isVisible = true;
-    currentAnimationIndex = startFromIndex;
+    currentAnimationIndex = safeStartIndex;
 
-    animationLabel = `${animationsArray[currentAnimationIndex].action} animation in progress`;
+    animationLabel = `${animationsArray[safeStartIndex].action} animation in progress`;
 
     try {
-      for (let i = startFromIndex; i < animationsArray.length; i++) {
+      for (let i = safeStartIndex; i < animationsArray.length; i++) {
         if (!isAnimating || signal.aborted) break;
 
         currentAnimationIndex = i;
@@ -303,10 +306,23 @@
     }
   }
 
-  // Initialize reduced motion preference on client
+  // Initialize and monitor reduced motion preference on client
   $effect(() => {
     if (typeof window !== 'undefined') {
-      prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      prefersReducedMotion = mediaQuery.matches;
+
+      const handleChange = (event: MediaQueryListEvent) => {
+        prefersReducedMotion = event.matches;
+        // Stop any running animation if user enables reduced motion
+        if (event.matches && isAnimating) {
+          abortController?.abort();
+          isAnimating = false;
+        }
+      };
+
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
     }
   });
 
