@@ -1,5 +1,17 @@
 # svelte-animate
 
+## 0.6.2
+
+### Patch Changes
+
+- fix: Indentation (tabs → spaces)
+  - fix: adds MCP/server docs/config
+  - fix: updates linting/prettier settings
+  - fix: bumps package versions
+  - fix: refactors core animation components to use AbortController and Svelte 5 derived patterns
+  - fix: removes legacy animation components
+  - applies wide formatting updates across many CSS/theme files
+
 ## 0.6.1
 
 ### Patch Changes

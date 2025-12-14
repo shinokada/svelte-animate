@@ -13,7 +13,7 @@
     DropdownItem,
     NavHamburger
   } from 'flowbite-svelte';
-  import { RunesMetaTags, deepMerge } from 'runes-meta-tags';
+  import { MetaTags, deepMerge } from 'runes-meta-tags';
   import { Runatics } from 'runatics';
   import DynamicCodeBlockStyle from './utils/DynamicCodeBlockStyle.svelte';
 
@@ -36,7 +36,7 @@
 </script>
 
 <Runatics {analyticsId} />
-<RunesMetaTags {...metaTags} />
+<MetaTags {...metaTags} />
 
 <Navbar
   breakpoint="lg"

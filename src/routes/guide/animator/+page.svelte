@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { HighlightCompo, H1, H2, H3 } from 'runes-webkit';
+  import { H1, H2, H3 } from 'runes-webkit';
+  import { HighlightCompo } from 'svelte-rune-highlight';
   import { P, List, Table, Li } from 'flowbite-svelte';
   import TypeList from '../../../lib/types.ts?raw';
 
@@ -130,13 +131,13 @@
     </List>
 
     <H2>Installation</H2>
-    <HighlightCompo codeLang="ts" code={modules['./md/installation.md'] as string} />
+    <HighlightCompo lang="ts" code={modules['./md/installation.md'] as string} />
 
     <H2>Usage</H2>
     <H3>Basic usage</H3>
-    <HighlightCompo codeLang="ts" code={modules['./md/usage.md'] as string} />
+    <HighlightCompo lang="ts" code={modules['./md/usage.md'] as string} />
     <H3>Custom usage</H3>
-    <HighlightCompo codeLang="ts" code={modules['./md/custom-usage.md'] as string} />
+    <HighlightCompo lang="ts" code={modules['./md/custom-usage.md'] as string} />
 
     <H2>Props</H2>
     <Table items={tableItems} hoverable />
@@ -144,7 +145,7 @@
     <H2>Animation Configuration</H2>
     <P space="wider">When using the animations prop with detailed configuration:</P>
     <HighlightCompo
-      codeLang="ts"
+      lang="ts"
       code={`interface AnimationConfig {
   action: AnimationType;    // The animation effect to apply
   duration?: number;        // Duration for this specific animation
@@ -178,7 +179,7 @@
     <H2>Examples</H2>
     <H3>Basic Example</H3>
     <HighlightCompo
-      codeLang="svelte"
+      lang="svelte"
       code={`<Animate>
   <button>Hover to bounce!</button>
 </Animate>`}
@@ -186,7 +187,7 @@
 
     <H3>Click Animation with Delay</H3>
     <HighlightCompo
-      codeLang="svelte"
+      lang="svelte"
       code={`<Animate 
   animations="rubberBand" 
   trigger="click" 
@@ -199,7 +200,7 @@
 
     <H3>Complex Animation Sequence</H3>
     <HighlightCompo
-      codeLang="svelte"
+      lang="svelte"
       code={`<Animate 
   animations={[
     { action: 'fadeIn', duration: 1000 },
@@ -216,7 +217,7 @@
 
     <H3>Debug Mode Example</H3>
     <HighlightCompo
-      codeLang="svelte"
+      lang="svelte"
       code={`<Animate 
   animations="bounce" 
   trigger="click" 
@@ -227,7 +228,7 @@
     />
 
     <H2>Animation Types</H2>
-    <HighlightCompo codeLang="ts" code={TypeList as string} />
+    <HighlightCompo lang="ts" code={TypeList as string} />
 
     <footer class="mt-12 border-t border-gray-200 pt-8">
       <p class="text-center text-gray-600">

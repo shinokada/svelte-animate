@@ -3,7 +3,7 @@
   import CodeWrapper from '../utils/CodeWrapper.svelte';
   // import HighlightCompo from '../utils/HighlightCompo.svelte';
   import { A, P } from 'flowbite-svelte';
-  import { HighlightCompo } from 'runes-webkit';
+  import { HighlightCompo } from 'svelte-rune-highlight';
 
   let selectedCategory: keyof typeof predefined = $state('hesitantConfidence');
   let selectedAnimations: AnimationConfig[] = $derived(predefined[selectedCategory]);
