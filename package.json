@@ -70,7 +70,7 @@
     }
   },
   "peerDependencies": {
-    "svelte": "^5.56.9"
+    "svelte": "^5.0.0"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.1",
@@ -101,7 +101,7 @@
     "runatics": "^0.3.0",
     "runes-meta-tags": "^0.5.1",
     "runes-webkit": "^0.12.1",
-    "svelte": "^5.56.9",
+    "svelte": "^5.56.10",
     "svelte-check": "^4.7.6",
     "svelte-lib-helpers": "^0.4.31",
     "svelte-rune-highlight": "^0.12.1",
